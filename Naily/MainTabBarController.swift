@@ -14,10 +14,10 @@ class MainTabBarController: UITabBarController {
         super.viewDidLoad()
         
         viewControllers = [
-            createViewController(viewController: UIViewController(), title: "customer", imageName: "customer"),
-            createViewController(viewController: UIViewController(), title: "search", imageName: "search"),
-            createViewController(viewController: UIViewController(), title: "analysis", imageName: "analysis"),
-            createViewController(viewController: UIViewController(), title: "setting", imageName: "settings"),
+            createViewController(viewController: CustomerCollectionViewController(), title: "Customer", imageName: "customer"),
+            createViewController(viewController: UIViewController(), title: "Calender", imageName: "calendar"),
+            createViewController(viewController: UIViewController(), title: "Analysis", imageName: "analysis"),
+            createViewController(viewController: UIViewController(), title: "Setting", imageName: "settings"),
             
         ]
         
