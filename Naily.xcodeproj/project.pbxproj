@@ -15,6 +15,7 @@
 		437A75BA229FCA760032E371 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 437A75B9229FCA760032E371 /* Assets.xcassets */; };
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
 		43A2F47622A488FB003A07ED /* ClientItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47522A488FB003A07ED /* ClientItem.swift */; };
+		43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		437A75B9229FCA760032E371 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewCell.swift; sourceTree = "<group>"; };
 		43A2F47522A488FB003A07ED /* ClientItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ClientItem.swift; path = ../ClientItem.swift; sourceTree = "<group>"; };
+		43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClientViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +48,7 @@
 			children = (
 				4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */,
 				43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */,
+				43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */,
 			);
 			path = Customer;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */,
 				4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */,
 				437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */,
+				43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,7 +23,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.sectionHeadersPinToVisibleBounds = true
         
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = #colorLiteral(red: 0.9714308743, green: 0.9107530561, blue: 1, alpha: 1)
         
     }
     
@@ -37,6 +37,20 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
         self.collectionView!.register(CustomerCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         self.collectionView!.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         nameSort(clientItem: clientItems)
+        setRightAddButton()
+        
+    }
+    
+    // MARK: helper methods
+    private func setRightAddButton() {
+        let addButton = UIBarButtonItem(image: UIImage(named: "add-contact"), style: .plain, target: self, action: #selector(navigateAddClient))
+        navigationItem.rightBarButtonItem = addButton
+    }
+    
+    @objc func navigateAddClient() {
+        let addVC = AddClientViewController()
+        let addNVC = LightStatusNavigationController(rootViewController: addVC)
+        present(addNVC, animated: true, completion: nil)
     }
 
 
@@ -55,10 +69,9 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CustomerCollectionViewCell
+        
         // sorted by name
-        
         cell.clientItem = nameSortedClientList[indexPath.section][indexPath.row]
-        
         return cell
     }
     
@@ -84,6 +97,14 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
+    }
+    
+    
+    
     
     private var clientItems = [
         ClientItem(image: #imageLiteral(resourceName: "attractive-beautiful-beauty-1024311"), clientName: "Mery Jane", lastVisitDate: "2019/05/20"),
@@ -116,6 +137,8 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
 }
 
+
+
 class SectionHeader: UICollectionReusableView {
     
     let headerLable: UILabel = {
@@ -131,7 +154,7 @@ class SectionHeader: UICollectionReusableView {
         addSubview(headerLable)
         backgroundColor = .white
         headerLable.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        headerLable.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        headerLable.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

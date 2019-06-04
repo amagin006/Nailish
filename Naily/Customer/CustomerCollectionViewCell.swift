@@ -25,6 +25,8 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         labelStackView.axis = .horizontal
         labelStackView.alignment = .center
+        labelStackView.distribution = .fill
+        
         labelStackView.spacing = 10
         
         addSubview(labelStackView)
