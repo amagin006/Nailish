@@ -23,7 +23,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.sectionHeadersPinToVisibleBounds = true
         
-        collectionView.backgroundColor = #colorLiteral(red: 0.9714308743, green: 0.9107530561, blue: 1, alpha: 1)
+        collectionView.backgroundColor = .white
         
     }
     
@@ -76,7 +76,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 30)
+        return CGSize(width: view.frame.width * 0.9, height: 30)
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -91,7 +91,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 80)
+        return CGSize(width: view.frame.width * 0.9, height: 80)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -99,7 +99,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        print("pressed cell \(indexPath)")
         
     }
     

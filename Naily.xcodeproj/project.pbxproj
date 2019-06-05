@@ -16,6 +16,7 @@
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
 		43A2F47622A488FB003A07ED /* ClientItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47522A488FB003A07ED /* ClientItem.swift */; };
 		43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */; };
+		43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49E22A7B315003A07ED /* MyTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewCell.swift; sourceTree = "<group>"; };
 		43A2F47522A488FB003A07ED /* ClientItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ClientItem.swift; path = ../ClientItem.swift; sourceTree = "<group>"; };
 		43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClientViewController.swift; sourceTree = "<group>"; };
+		43A2F49E22A7B315003A07ED /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 				437A75B0229FAC010032E371 /* Info.plist */,
 				437A75B7229FBF8B0032E371 /* MainTabBarController.swift */,
 				43A2F47722A48904003A07ED /* Model */,
+				43A2F4A022A7B31A003A07ED /* HelperExtentions */,
 			);
 			path = Naily;
 			sourceTree = "<group>";
@@ -98,6 +101,14 @@
 				43A2F47522A488FB003A07ED /* ClientItem.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		43A2F4A022A7B31A003A07ED /* HelperExtentions */ = {
+			isa = PBXGroup;
+			children = (
+				43A2F49E22A7B315003A07ED /* MyTextField.swift */,
+			);
+			path = HelperExtentions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43A2F47622A488FB003A07ED /* ClientItem.swift in Sources */,
+				43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */,
 				43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */,
 				437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */,
 				4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */,
