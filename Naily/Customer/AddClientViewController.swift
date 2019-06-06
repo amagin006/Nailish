@@ -20,7 +20,7 @@ class AddClientViewController: UIViewController {
     private func setupUI() {
         
         view.addSubview(clientFormView)
-        clientFormView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        clientFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         clientFormView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         clientFormView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         clientFormView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -28,11 +28,11 @@ class AddClientViewController: UIViewController {
         view.backgroundColor = .white
         clientFormView.addSubview(personImageView)
         personImageView.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
-        personImageView.topAnchor.constraint(equalTo: clientFormView.topAnchor, constant: 30).isActive = true
-        personImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        personImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        personImageView.topAnchor.constraint(equalTo: clientFormView.topAnchor, constant: 20).isActive = true
+        personImageView.widthAnchor.constraint(equalToConstant: 160).isActive = true
+        personImageView.heightAnchor.constraint(equalToConstant: 160).isActive = true
         
-        let hStackView = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel, mailLabel])
+        let hStackView = UIStackView(arrangedSubviews: [firstNameLabel, firstNameTextField, lastNameLabel, lastNameTextField, mailLabel, mailTextField, mobileLabel, mobileTextField, DOBLabel,DOBTextField, memoLabel, memoTextField])
         hStackView.translatesAutoresizingMaskIntoConstraints = false
         clientFormView.addSubview(hStackView)
         hStackView.axis = .vertical
@@ -44,7 +44,12 @@ class AddClientViewController: UIViewController {
         hStackView.distribution = .equalSpacing
         hStackView.spacing = 10
         
+        let notificationCenter = NotificationCenter.default
+        
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
+    
     
     private func setupNavigationUI() {
         navigationItem.title = "Add Client"
@@ -75,14 +80,44 @@ class AddClientViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    @objc func doneButtonAction() {
+        self.view.endEditing(true)
+    }
+    
+    @objc func keyboardWillBeShown(notification: NSNotification) {
+        if mailTextField.isFirstResponder || mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
+            guard let userInfo = notification.userInfo else { return }
+            guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+            let keyboardFrame = keyboardSize.cgRectValue
+//            print("======= self.view.frame.origin.y \(self.view.frame.origin.y)")
+//            print("======= self.mailTextField.frame.origin.y \(self.clientFormView.frame.origin.y + self.mailTextField.frame.origin.y)")
+//            print("======= keyboardFrame.height \(keyboardFrame.height)")
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= self.mailTextField.frame.origin.y
+                print("resutl \(self.view.frame.origin.y)")
+            }
+        }
+    }
+    
+    @objc func keyboardWillBeHidden(notification: NSNotification) {
+ 
+        if mailTextField.isFirstResponder || mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
+            guard let userInfo = notification.userInfo else { return }
+            print(userInfo)
+            guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+            let keyboardFrame = keyboardSize.cgRectValue
+            if self.view.frame.origin.y != 0 {
+                self.view.frame.origin.y += self.mailTextField.frame.origin.y
+            }
+        }
+        
+    }
     
     // MARK: - UIParts
     
-    let clientFormView: UIScrollView = {
-        let vi = UIScrollView()
+    let clientFormView: UIView = {
+        let vi = UIView()
         vi.translatesAutoresizingMaskIntoConstraints = false
-        vi.contentSize.height = 5000
-        vi.backgroundColor = .blue
         return vi
     }()
     
@@ -91,40 +126,96 @@ class AddClientViewController: UIViewController {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.isUserInteractionEnabled = true
         iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectImage)))
-        iv.layer.cornerRadius = 100
+        iv.layer.cornerRadius = 80
         iv.clipsToBounds = true
         iv.backgroundColor = .white
         return iv
     }()
     
-    let firstNameLabel: MyTextField = {
+    let firstNameLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "First Name"
+        lb.font = UIFont.boldSystemFont(ofSize: 20)
+        return lb
+    }()
+    
+    let firstNameTextField: MyTextField = {
         let tf = MyTextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.backgroundColor = .white
-        tf.font = UIFont.boldSystemFont(ofSize: 20)
-        tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         tf.placeholder = "First Name..."
         return tf
     }()
     
-    let lastNameLabel: MyTextField = {
+    let lastNameLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Last Name"
+        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let lastNameTextField: MyTextField = {
         let tf = MyTextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.backgroundColor = .white
-        tf.font = UIFont.boldSystemFont(ofSize: 20)
-        tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
         tf.placeholder = "Last Name..."
         return tf
     }()
     
-    let mailLabel: MyTextField = {
+    let mailLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Mail address"
+        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let mailTextField: MyTextField = {
         let tf = MyTextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.backgroundColor = .white
-        tf.font = UIFont.boldSystemFont(ofSize: 20)
-        tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        tf.placeholder = "Mail adress..."
+        tf.placeholder = "example@example.com"
+        tf.keyboardType = UIKeyboardType.emailAddress
         return tf
+    }()
+    
+    let mobileLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Phone Number"
+        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let mobileTextField: MyTextField = {
+        let tf = MyTextField()
+        tf.placeholder = "000-000-0000"
+        tf.keyboardType = UIKeyboardType.phonePad
+        return tf
+    }()
+    
+    let DOBLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Date of Birth"
+        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let DOBTextField: MyTextField = {
+        let tf = MyTextField()
+        tf.placeholder = "DD/MM/YYY"
+        tf.keyboardType = UIKeyboardType.numbersAndPunctuation
+        return tf
+    }()
+    
+    let memoLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Memo"
+        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let memoTextField: MyTextView = {
+        let tv = MyTextView()
+        return tv
     }()
     
 }
