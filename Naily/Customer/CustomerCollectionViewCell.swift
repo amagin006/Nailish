@@ -25,6 +25,8 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         labelStackView.axis = .horizontal
         labelStackView.alignment = .center
+        labelStackView.distribution = .fill
+        
         labelStackView.spacing = 10
         
         addSubview(labelStackView)
@@ -33,6 +35,8 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         labelStackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         labelStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
         
+        backgroundColor = #colorLiteral(red: 1, green: 0.8284288049, blue: 0.8181912303, alpha: 1)
+        layer.cornerRadius = 10
     }
     
     required init?(coder aDecoder: NSCoder) {
