@@ -37,6 +37,7 @@ class AddClientViewController: UIViewController {
         clientFormView.addSubview(hStackView)
         hStackView.axis = .vertical
         hStackView.backgroundColor = .white
+        hStackView.distribution = .fillEqually
         
         hStackView.topAnchor.constraint(equalTo: personImageView.bottomAnchor, constant: 20).isActive = true
         hStackView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor, multiplier: 0.8).isActive = true
@@ -88,13 +89,11 @@ class AddClientViewController: UIViewController {
         if mailTextField.isFirstResponder || mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
             guard let userInfo = notification.userInfo else { return }
             guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-            let keyboardFrame = keyboardSize.cgRectValue
-//            print("======= self.view.frame.origin.y \(self.view.frame.origin.y)")
-//            print("======= self.mailTextField.frame.origin.y \(self.clientFormView.frame.origin.y + self.mailTextField.frame.origin.y)")
-//            print("======= keyboardFrame.height \(keyboardFrame.height)")
+            let keyboardFrameHeight = keyboardSize.cgRectValue.height
+            print(notification)
             if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= self.mailTextField.frame.origin.y
-                print("resutl \(self.view.frame.origin.y)")
+                self.view.frame.origin.y -= keyboardFrameHeight
+
             }
         }
     }
@@ -107,7 +106,7 @@ class AddClientViewController: UIViewController {
             guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             let keyboardFrame = keyboardSize.cgRectValue
             if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y += self.mailTextField.frame.origin.y
+                self.view.frame.origin.y += keyboardFrame.height
             }
         }
         
