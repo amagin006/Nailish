@@ -7,8 +7,22 @@
 //
 
 import UIKit
+import CoreData
+
+protocol AddClientViewControllerDelegate:class {
+    func addClientDidFinish(client: ClientItem)
+    func editClientDidFinish(client: ClientItem)
+}
 
 class AddClientViewController: UIViewController {
+    
+    weak var delegate: AddClientViewControllerDelegate?
+    
+    var client: ClientItem? {
+        didSet {
+            
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +46,16 @@ class AddClientViewController: UIViewController {
         personImageView.widthAnchor.constraint(equalToConstant: 160).isActive = true
         personImageView.heightAnchor.constraint(equalToConstant: 160).isActive = true
         
-        let hStackView = UIStackView(arrangedSubviews: [firstNameLabel, firstNameTextField, lastNameLabel, lastNameTextField, mailLabel, mailTextField, mobileLabel, mobileTextField, DOBLabel,DOBTextField, memoLabel, memoTextField])
+        let firstNameStackView = UIStackView(arrangedSubviews: [firstNameLabel, firstNameTextField])
+        firstNameStackView.axis = .vertical
+        let lastNameStackView = UIStackView(arrangedSubviews: [lastNameLabel, lastNameTextField])
+        lastNameStackView.axis = .vertical
+        let nameStackView = UIStackView(arrangedSubviews: [firstNameStackView, lastNameStackView])
+        nameStackView.axis = .horizontal
+        nameStackView.distribution = .fillEqually
+        nameStackView.spacing = 10
+        
+        let hStackView = UIStackView(arrangedSubviews: [nameStackView, mailLabel, mailTextField, mobileLabel, mobileTextField, DOBLabel, DOBTextField, memoLabel, memoTextField])
         hStackView.translatesAutoresizingMaskIntoConstraints = false
         clientFormView.addSubview(hStackView)
         hStackView.axis = .vertical
@@ -72,8 +95,31 @@ class AddClientViewController: UIViewController {
     }
     
     @objc func seveButtonPressed() {
-        print("saveButtonPressed")
-        dismiss(animated: true)
+        
+        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+        if client == nil {
+            let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientItem", into: manageContext)
+            newClient.setValue(firstNameTextField.text, forKey: "firstName")
+            newClient.setValue(lastNameTextField.text, forKey: "lastName")
+            newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
+            newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
+            newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
+            if let newClientImage = personImageView.image {
+                let imageData = newClientImage.jpegData(compressionQuality: 0.1)
+                newClient.setValue(imageData, forKey: "clientImage")
+            }
+            
+            CoreDataManager.shared.saveContext()
+
+            dismiss(animated: true) {
+                self.delegate?.addClientDidFinish(client: newClient as! ClientItem)
+            }
+        }
+        
+        
+//
+//        dismiss(animated: true) {
+//        }
     }
     
     @objc func cancelButtonPressed() {
@@ -86,21 +132,19 @@ class AddClientViewController: UIViewController {
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
-        if mailTextField.isFirstResponder || mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
+        if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
             guard let userInfo = notification.userInfo else { return }
             guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
             let keyboardFrameHeight = keyboardSize.cgRectValue.height
-            print(notification)
             if self.view.frame.origin.y == 0 {
                 self.view.frame.origin.y -= keyboardFrameHeight
-
             }
         }
     }
     
     @objc func keyboardWillBeHidden(notification: NSNotification) {
  
-        if mailTextField.isFirstResponder || mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
+        if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
             guard let userInfo = notification.userInfo else { return }
             print(userInfo)
             guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }

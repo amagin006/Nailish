@@ -12,16 +12,19 @@ class CustomerCollectionViewCell: UICollectionViewCell {
     
     var clientItem: ClientItem! {
         didSet {
-            cellImageView.image = clientItem.image
-            nameLabel.text = clientItem.clientName
-            lastVistiDate.text = clientItem.lastVisitDate
+            if let imageDate = clientItem.clientImage {
+                cellImageView.image = UIImage(data: imageDate)
+            }
+            firstNameLabel.text = clientItem.firstName!
+            lastNameLabel.text = clientItem.lastName!
+//            lastVistiDate.text = clientItem.lastVisit!
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let labelStackView = UIStackView(arrangedSubviews: [cellImageView, nameLabel, lastVistiDate])
+        let labelStackView = UIStackView(arrangedSubviews: [cellImageView, firstNameLabel, lastNameLabel, lastVistiDate])
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         labelStackView.axis = .horizontal
         labelStackView.alignment = .center
@@ -54,7 +57,13 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         return iv
     }()
     
-    let nameLabel: UILabel = {
+    let firstNameLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        return lb
+    }()
+    
+    let lastNameLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         return lb
