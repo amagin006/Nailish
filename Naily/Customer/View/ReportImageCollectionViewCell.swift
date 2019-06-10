@@ -14,15 +14,22 @@ class ReportImageCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         addSubview(headImageView)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // id date labels
+    
+    // uipageViewcontroller for scrolling multiple images
+    
+    // additional data
     let headImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "nailsample1"))
         return iv
     }()
+    
     
 }

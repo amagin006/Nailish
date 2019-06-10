@@ -16,8 +16,9 @@ class ReportImageCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
 
         self.collectionView!.register(ReportImageCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
         
+        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        layout.scrollDirection = .horizontal
     }
     
 
@@ -25,7 +26,7 @@ class ReportImageCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 5
+        return 20
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -36,5 +37,9 @@ class ReportImageCollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
 
-
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+       
+        return .init(width: collectionView.frame.width - 32, height: 300)
+    }
 }

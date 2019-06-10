@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ClientDetailHeadCollectionViewCell: UICollectionViewCell {
+class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -61,8 +61,6 @@ class ClientDetailHeadCollectionViewCell: UICollectionViewCell {
         memoSV.topAnchor.constraint(equalTo: clientTopSV.bottomAnchor, constant: 10).isActive = true
         memoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         memoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
-        
-        
         
     }
     
@@ -146,7 +144,5 @@ class ClientDetailHeadCollectionViewCell: UICollectionViewCell {
         lb.backgroundColor = .yellow
         return lb
     }()
-    
 
-    
 }
