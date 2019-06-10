@@ -65,7 +65,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
             self.clientList = clients
             self.collectionView.reloadData()
         } catch let err {
-            print("Failed to fetch companies: \(err)")
+            print("Failed to fetch ClientList: \(err)")
         }
     }
 
@@ -116,12 +116,27 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("pressed cell \(indexPath)")
+        
+        let detailVC = ClientDetailViewController()
+        self.navigationController?.pushViewController(detailVC, animated: true)
+        
+        
+//        // Delete Item
+//        let deletClient = nameSortedClientList[indexPath.section][indexPath.row]
+//        nameSortedClientList[indexPath.section].remove(at: indexPath.row)
+//        self.collectionView.deleteItems(at: [indexPath])
+//
+//        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+//        manageContext.delete(deletClient)
+//        CoreDataManager.shared.persistentContainer.viewContext.delete(deletClient)
+//        CoreDataManager.shared.saveContext()
+        
     }
     
     func addClientDidFinish(client: ClientItem) {
         clientList.append(client)
         nameSort(clientList: clientList)
-        self.collectionView.reloadData()
+        
     }
 
     func editClientDidFinish(client: ClientItem) {

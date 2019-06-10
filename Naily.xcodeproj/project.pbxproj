@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */; };
+		4337058F22AD9EB600EBC58B /* ClientDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337058E22AD9EB600EBC58B /* ClientDetailViewController.swift */; };
 		437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75A4229FABFF0032E371 /* AppDelegate.swift */; };
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewController.swift; sourceTree = "<group>"; };
+		4337058E22AD9EB600EBC58B /* ClientDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDetailViewController.swift; sourceTree = "<group>"; };
 		437A75A1229FABFF0032E371 /* Naily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437A75A4229FABFF0032E371 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		437A75A9229FABFF0032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 				4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */,
 				43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */,
 				43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */,
+				4337058E22AD9EB600EBC58B /* ClientDetailViewController.swift */,
 			);
 			path = Customer;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43A2F4A322A85304003A07ED /* ClientModel.xcdatamodeld in Sources */,
+				4337058F22AD9EB600EBC58B /* ClientDetailViewController.swift in Sources */,
 				43A2F49F22A7B315003A07ED /* MyText.swift in Sources */,
 				43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */,
 				437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */,
