@@ -1,5 +1,5 @@
 //
-//  ClientDetailViewController.swift
+//  ClientDetailHeadCollectionViewCell.swift
 //  Naily
 //
 //  Created by Shota Iwamoto on 2019-06-09.
@@ -8,21 +8,19 @@
 
 import UIKit
 
-class ClientDetailViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+class ClientDetailHeadCollectionViewCell: UICollectionViewCell {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupUI()
-        
-        
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     private func setupUI() {
-        view.addSubview(detailScrollView)
-        detailScrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        detailScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        detailScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        detailScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
         let lastTimeSV = UIStackView(arrangedSubviews: [lastVisitTitleLabel, lastVisitLabel])
         lastTimeSV.axis = .horizontal
@@ -47,26 +45,28 @@ class ClientDetailViewController: UIViewController {
         memoSV.axis = .vertical
         memoSV.translatesAutoresizingMaskIntoConstraints = false
         memoSV.spacing = 2
-
+        
         let clientTopSV = UIStackView(arrangedSubviews: [clientImage, nametitleSV])
         clientTopSV.axis = .horizontal
         clientTopSV.translatesAutoresizingMaskIntoConstraints = false
         clientTopSV.spacing = 20
         clientTopSV.distribution = .fill
         
-        detailScrollView.addSubview(clientTopSV)
-        clientTopSV.topAnchor.constraint(equalTo: detailScrollView.topAnchor, constant: 20).isActive = true
-        clientTopSV.centerXAnchor.constraint(equalTo: detailScrollView.centerXAnchor).isActive = true
-        clientTopSV.widthAnchor.constraint(equalTo: detailScrollView.widthAnchor, multiplier: 0.9).isActive = true
-
-        detailScrollView.addSubview(memoSV)
+        addSubview(clientTopSV)
+        clientTopSV.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        clientTopSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        clientTopSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
+        
+        addSubview(memoSV)
         memoSV.topAnchor.constraint(equalTo: clientTopSV.bottomAnchor, constant: 10).isActive = true
-        memoSV.centerXAnchor.constraint(equalTo: detailScrollView.centerXAnchor).isActive = true
-        memoSV.widthAnchor.constraint(equalTo: detailScrollView.widthAnchor, multiplier: 0.9).isActive = true
-
+        memoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        memoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
+        
+        
+        
     }
     
-
+    
     let detailScrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -148,4 +148,5 @@ class ClientDetailViewController: UIViewController {
     }()
     
 
+    
 }

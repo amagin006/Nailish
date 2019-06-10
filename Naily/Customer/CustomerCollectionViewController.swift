@@ -117,7 +117,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("pressed cell \(indexPath)")
         
-        let detailVC = ClientDetailViewController()
+        let detailVC = ClientDetailCollectionViewController()
         self.navigationController?.pushViewController(detailVC, animated: true)
         
         
