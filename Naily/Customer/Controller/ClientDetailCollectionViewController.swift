@@ -51,12 +51,12 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
     // MARK: UICollectionView flow layout
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 250)
+        return .init(width: view.frame.width, height: 220)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return .init(width: view.frame.width - 32, height: 300)
+        return .init(width: view.frame.width - 32, height: 500)
     }
     
     
