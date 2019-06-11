@@ -18,7 +18,6 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     let cellId = "cellId"
     var clientList = [ClientItem]()
     var nameSortedClientList = [[ClientItem]]()
-    var nameInitial = [String]()
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -60,12 +59,14 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     private func fetchClient() {
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<ClientItem>(entityName: "ClientItem")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true)]
+        
         do {
             let clients = try manageContext.fetch(fetchRequest)
             self.clientList = clients
             self.collectionView.reloadData()
         } catch let err {
-            print("Failed to fetch companies: \(err)")
+            print("Failed to fetch ClientList: \(err)")
         }
     }
 
@@ -74,7 +75,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return nameInitial.count
+        return nameSortedClientList.count
     }
 
 
@@ -99,7 +100,10 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
         
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId, for: indexPath) as! SectionHeader
-            header.headerLable.text = "\(nameInitial[indexPath.section])"
+            let firstItem = nameSortedClientList[indexPath.section][indexPath.item].firstName!
+            if let firstChar = firstItem.first {
+                header.headerLable.text = "\(firstChar)"
+            }
             return header
         }
         fatalError()
@@ -116,48 +120,48 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("pressed cell \(indexPath)")
+
+        let detailVC = ClientDetailCollectionViewController()
+        self.navigationController?.pushViewController(detailVC, animated: true)
+
+
+//        // Delete Item
+//        let deletClient = nameSortedClientList[indexPath.section][indexPath.row]
+//        nameSortedClientList[indexPath.section].remove(at: indexPath.row)
+//        self.collectionView.deleteItems(at: [indexPath])
+//
+//        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+//        manageContext.delete(deletClient)
+//        CoreDataManager.shared.persistentContainer.viewContext.delete(deletClient)
+//        CoreDataManager.shared.saveContext()
+
     }
     
     func addClientDidFinish(client: ClientItem) {
         clientList.append(client)
         nameSort(clientList: clientList)
-        self.collectionView.reloadData()
+        collectionView.reloadData()
     }
 
     func editClientDidFinish(client: ClientItem) {
         print(client)
     }
 
-    
-    
-    
-//    private var clientItems = [
-//        ClientItem(image: #imageLiteral(resourceName: "attractive-beautiful-beauty-1024311"), clientName: "Mery Jane", lastVisitDate: "2019/05/20"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman1"), clientName: "Jaydon Rita", lastVisitDate: "2019/05/01"),
-//        ClientItem(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"), clientName: "Love Orla", lastVisitDate: "2019/05/20"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman10"), clientName: "Leonelle Madeleine", lastVisitDate: "2019/03/20"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman9"), clientName: "Arlo Harmony", lastVisitDate: "2019/04/20"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman3"), clientName: "Charley Danielle", lastVisitDate: "2019/04/26"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman7"), clientName: "Meridith Philippa", lastVisitDate: "2019/03/21"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman6"), clientName: "Roseann Yasmin", lastVisitDate: "2019/05/03"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman5"), clientName: "Janice Nettie", lastVisitDate: "2019/05/10"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman12"), clientName: "Egbertine Victoria", lastVisitDate: "2019/04/29"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman11"), clientName: "Lamar Gemma", lastVisitDate: "2019/04/05"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman4"), clientName: "Elodie Amirah", lastVisitDate: "2019/01/08"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman8"), clientName: "Catherina Liberty", lastVisitDate: "2018/11/20"),
-//        ClientItem(image: #imageLiteral(resourceName: "woman13"), clientName: "Finley Kaitlin", lastVisitDate: "2019/02/14"),
-//    ]
-    
     func nameSort(clientList: [ClientItem]) {
         let nameSorted = clientList.sorted(by: { ($0.firstName!) < ($1.firstName!) })
-        for client in nameSorted {
-            if nameInitial.count == 0 ||
-                nameInitial.last != String(client.firstName!.prefix(1)) {
-                nameInitial.append(String(client.firstName!.prefix(1)))
-                nameSortedClientList.append([ClientItem]())
+        
+        let groupedNames = nameSorted.reduce([[ClientItem]]()) {
+            guard var last = $0.last else { return [[$1]] }
+            var collection = $0
+            if last.first!.firstName!.first == $1.firstName!.first {
+                last += [$1]
+                collection[collection.count - 1] = last
+            } else {
+                collection += [[$1]]
             }
-            nameSortedClientList[nameInitial.count - 1].append(client)
+            return collection
         }
+        self.nameSortedClientList = groupedNames
     }
     
 }

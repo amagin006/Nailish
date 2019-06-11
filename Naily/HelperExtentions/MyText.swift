@@ -94,3 +94,12 @@ class MyTextView: UITextView {
     let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     
 }
+
+extension StringProtocol {
+    var firstUppercased: String {
+        return prefix(1).uppercased()  + dropFirst()
+    }
+    var firstCapitalized: String {
+        return prefix(1).capitalized + dropFirst()
+    }
+}

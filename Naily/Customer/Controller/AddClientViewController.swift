@@ -99,7 +99,9 @@ class AddClientViewController: UIViewController {
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if client == nil {
             let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientItem", into: manageContext)
-            newClient.setValue(firstNameTextField.text, forKey: "firstName")
+            // TODO: before setValue make sure firstName starts with Capital letter
+            let firstNameUpper = firstNameTextField.text?.firstUppercased
+            newClient.setValue(firstNameUpper, forKey: "firstName")
             newClient.setValue(lastNameTextField.text, forKey: "lastName")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
@@ -116,10 +118,6 @@ class AddClientViewController: UIViewController {
             }
         }
         
-        
-//
-//        dismiss(animated: true) {
-//        }
     }
     
     @objc func cancelButtonPressed() {
