@@ -16,12 +16,24 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         super.init(frame: frame)
         // constraints priority
         contentView.backgroundColor = .lightGray
+//        contentView.translatesAutoresizingMaskIntoConstraints = false
         setDateHeader()
         setScrollingImageView()
         setPageControl()
         setDiscription()
         
         // dynamic cell (size)
+    }
+    
+    lazy var width: NSLayoutConstraint = {
+        let width = contentView.widthAnchor.constraint(equalToConstant: bounds.size.width)
+        width.isActive = true
+        return width
+    }()
+    
+    override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+        width.constant = bounds.size.width
+        return contentView.systemLayoutSizeFitting(CGSize(width: targetSize.width, height: 1))
     }
     
     func setDateHeader() {
@@ -60,14 +72,8 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         menuSV.axis = .vertical
         menuSV.distribution = .equalSpacing
         menuSV.spacing = 1
-        menuSV.anchors(topAnchor: pageControl.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: contentView.bottomAnchor, padding: .init(top: 0, left: 10, bottom: 0, right: 10))
+        menuSV.anchors(topAnchor: pageControl.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: contentView.bottomAnchor, padding: .init(top: 0, left: 10, bottom: 20, right: 10))
         
-        
-        
-        
-//        contentView.addSubview(memoLabel)
-//        memoLabel.anchors(topAnchor: pageControl.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: contentView.bottomAnchor)
-//        memoLabel.setContentHuggingPriority(.defaultLow, for: .vertical)
     }
     
     
@@ -153,6 +159,10 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         lb.numberOfLines = 0
         lb.backgroundColor = .red
         lb.text = """
+        Description
+        Description
+        Description
+        Description
         Description
         Description
         Description
