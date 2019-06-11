@@ -22,7 +22,9 @@ class ReportImageCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.addSubview(scrollImageView)
         scrollImageView.matchParent()
-        
+        scrollImageView.contentSize = CGSize(width: contentView.frame.width * CGFloat(dataSouce.count), height: contentView.frame.height)
+        scrollImageView.isUserInteractionEnabled = true
+        scrollImageView.isPagingEnabled = true
         addImageToScrollView(images: dataSouce)
     }
     
@@ -34,7 +36,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell {
             let iv = UIImageView(frame: CGRect.init(x: 0 + width * CGFloat(i), y: 0, width: width, height: height))
             iv.image = UIImage(named: images[i])
             iv.isUserInteractionEnabled = true
-            contentView.addSubview(iv)
+            scrollImageView.addSubview(iv)
         }
     }
     
