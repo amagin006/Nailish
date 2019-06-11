@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReportImageCollectionViewCell: UICollectionViewCell {
+class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     let dataSouce = ["nailsample1", "nailsample2", "nailsample3"]
     
@@ -18,15 +18,35 @@ class ReportImageCollectionViewCell: UICollectionViewCell {
         return sv
     }()
     
+    let pageControl: UIPageControl = {
+        let pg = UIPageControl()
+        pg.translatesAutoresizingMaskIntoConstraints = false
+        return pg
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(scrollImageView)
         scrollImageView.matchParent()
+        scrollImageView.delegate = self
         scrollImageView.contentSize = CGSize(width: contentView.frame.width * CGFloat(dataSouce.count), height: contentView.frame.height)
         scrollImageView.isUserInteractionEnabled = true
         scrollImageView.isPagingEnabled = true
+        scrollImageView.showsHorizontalScrollIndicator = false
         addImageToScrollView(images: dataSouce)
+        
+        addSubview(pageControl)
+        pageControl.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        pageControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        
+        pageControl.numberOfPages = 3
+        pageControl.pageIndicatorTintColor = .white
+        pageControl.currentPageIndicatorTintColor = .black
+        
+        
     }
+    
     
     // TODO: find a way to scroll inside scrollview inside collectionView
     func addImageToScrollView(images: [String]) {
@@ -40,6 +60,10 @@ class ReportImageCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -51,6 +75,11 @@ class ReportImageCollectionViewCell: UICollectionViewCell {
         return lb
     }()
     
+    let pagenation: UIPageControl = {
+        let pc = UIPageControl()
+        return pc
+    }()
+    
     
     // additional data
     let headImageView: UIImageView = {
@@ -59,3 +88,4 @@ class ReportImageCollectionViewCell: UICollectionViewCell {
     }()
     
 }
+
