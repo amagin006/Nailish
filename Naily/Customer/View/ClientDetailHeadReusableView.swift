@@ -65,14 +65,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     }
     
     
-    let detailScrollView: UIScrollView = {
-        let sv = UIScrollView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        sv.contentSize.height = 2000
-        sv.backgroundColor = .blue
-        return sv
-    }()
-    
     let clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +80,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         let lb = UILabel()
         lb.text = "Name"
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.systemFont(ofSize: 12)
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
         lb.backgroundColor = .red
         return lb
     }()
