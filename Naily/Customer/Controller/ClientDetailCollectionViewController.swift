@@ -58,4 +58,6 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
         
         return .init(width: view.frame.width - 32, height: 300)
     }
+    
+    
 }

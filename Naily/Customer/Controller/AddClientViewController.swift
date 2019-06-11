@@ -101,7 +101,6 @@ class AddClientViewController: UIViewController {
             let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientItem", into: manageContext)
             // TODO: before setValue make sure firstName starts with Capital letter
             let firstNameUpper = firstNameTextField.text?.firstUppercased
-            print(firstNameUpper ?? "++")
             newClient.setValue(firstNameUpper, forKey: "firstName")
             newClient.setValue(lastNameTextField.text, forKey: "lastName")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
@@ -119,10 +118,6 @@ class AddClientViewController: UIViewController {
             }
         }
         
-        
-//
-//        dismiss(animated: true) {
-//        }
     }
     
     @objc func cancelButtonPressed() {
