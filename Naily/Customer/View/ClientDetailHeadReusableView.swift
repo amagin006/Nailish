@@ -25,21 +25,19 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         let lastTimeSV = UIStackView(arrangedSubviews: [lastVisitTitleLabel, lastVisitLabel])
         lastTimeSV.axis = .horizontal
         lastTimeSV.translatesAutoresizingMaskIntoConstraints = false
-        lastTimeSV.spacing = 10
+        lastTimeSV.spacing = 2
         lastTimeSV.distribution = .fill
         
         let firstRowSV = UIStackView(arrangedSubviews: [nameTitleLabel, lastTimeSV])
         firstRowSV.axis = .horizontal
         firstRowSV.translatesAutoresizingMaskIntoConstraints = false
         firstRowSV.distribution = .fillEqually
-        firstRowSV.spacing = 10
+        firstRowSV.spacing = 2
         
         let nametitleSV = UIStackView(arrangedSubviews: [firstRowSV, fullNameLabel])
         nametitleSV.axis = .vertical
         nametitleSV.translatesAutoresizingMaskIntoConstraints = false
         nametitleSV.spacing = 10
-        nametitleSV.alignment = .top
-        nametitleSV.distribution = .fillEqually
         
         let memoSV = UIStackView(arrangedSubviews: [memoTitleLabel, memoTextLabel])
         memoSV.axis = .vertical
@@ -95,8 +93,9 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     let lastVisitTitleLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "LastTime"
+        lb.text = "LastTime:"
         lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.widthAnchor.constraint(equalToConstant: 60).isActive = true
         lb.font = UIFont.systemFont(ofSize: 12)
         lb.backgroundColor = .red
         return lb

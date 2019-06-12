@@ -60,7 +60,6 @@
 		4327315522A09EF900BE2792 /* Customer */ = {
 			isa = PBXGroup;
 			children = (
-				433705A022ADFA5600EBC58B /* Subclasses */,
 				4337059322ADE8FE00EBC58B /* Controller */,
 				4337059022ADE4DF00EBC58B /* View */,
 			);
@@ -115,6 +114,7 @@
 		437A75A3229FABFF0032E371 /* Naily */ = {
 			isa = PBXGroup;
 			children = (
+				433705A022ADFA5600EBC58B /* Subclasses */,
 				4327315522A09EF900BE2792 /* Customer */,
 				437A75B6229FAC4F0032E371 /* Supporting Files */,
 				437A75B0229FAC010032E371 /* Info.plist */,

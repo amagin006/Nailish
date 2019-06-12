@@ -85,8 +85,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CustomerCollectionViewCell
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CustomerCollectionViewCell        
         // sorted by name
         cell.clientItem = nameSortedClientList[indexPath.section][indexPath.row]
         return cell

@@ -20,7 +20,8 @@ class AddClientViewController: UIViewController {
     
     var client: ClientItem? {
         didSet {
-            
+//            firstNameTextField.text = client?.firstName
+//            lastNameTextField.text = client?.lastName
         }
     }
 
@@ -92,6 +93,12 @@ class AddClientViewController: UIViewController {
     
     @objc func selectImage() {
         print("press selectImage")
+        
+        let imagePickController = UIImagePickerController()
+        imagePickController.delegate = self
+        imagePickController.allowsEditing = true
+        
+        present(imagePickController, animated: true, completion: nil)
     }
     
     @objc func seveButtonPressed() {
@@ -258,5 +265,28 @@ class AddClientViewController: UIViewController {
         let tv = MyTextView()
         return tv
     }()
+    
+}
+
+extension AddClientViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+
+        
+        if let editedImage = info[.editedImage] as? UIImage {
+            personImageView.image = editedImage
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            personImageView.image = originalImage
+        }
+
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
     
 }
