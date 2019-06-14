@@ -16,8 +16,8 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
     
     let cellId = "cellId"
-    var clientList = [ClientItem]()
-    var nameSortedClientList = [[ClientItem]]()
+    var clientList = [ClientInfo]()
+    var nameSortedClientList = [[ClientInfo]]()
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -58,7 +58,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
     private func fetchClient() {
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<ClientItem>(entityName: "ClientItem")
+        let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true)]
         
         do {
@@ -85,10 +85,9 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CustomerCollectionViewCell
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CustomerCollectionViewCell        
         // sorted by name
-        cell.clientItem = nameSortedClientList[indexPath.section][indexPath.row]
+        cell.clientInfo = nameSortedClientList[indexPath.section][indexPath.row]
         return cell
     }
     
@@ -122,10 +121,11 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
         print("pressed cell \(indexPath)")
 
         let detailVC = ClientDetailCollectionViewController()
+        detailVC.client = nameSortedClientList[indexPath.section][indexPath.row]
         self.navigationController?.pushViewController(detailVC, animated: true)
 
 
-//        // Delete Item
+//        // Delete Ite
 //        let deletClient = nameSortedClientList[indexPath.section][indexPath.row]
 //        nameSortedClientList[indexPath.section].remove(at: indexPath.row)
 //        self.collectionView.deleteItems(at: [indexPath])
@@ -137,20 +137,27 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
 
     }
     
-    func addClientDidFinish(client: ClientItem) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchClient()
+        nameSort(clientList: clientList)
+        collectionView.reloadData()
+    }
+    
+    func addClientDidFinish(client: ClientInfo) {
         clientList.append(client)
         nameSort(clientList: clientList)
         collectionView.reloadData()
     }
 
-    func editClientDidFinish(client: ClientItem) {
+    func editClientDidFinish(client: ClientInfo) {
         print(client)
     }
 
-    func nameSort(clientList: [ClientItem]) {
+    func nameSort(clientList: [ClientInfo]) {
         let nameSorted = clientList.sorted(by: { ($0.firstName!) < ($1.firstName!) })
         
-        let groupedNames = nameSorted.reduce([[ClientItem]]()) {
+        let groupedNames = nameSorted.reduce([[ClientInfo]]()) {
             guard var last = $0.last else { return [[$1]] }
             var collection = $0
             if last.first!.firstName!.first == $1.firstName!.first {

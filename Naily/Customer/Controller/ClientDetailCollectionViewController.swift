@@ -7,12 +7,16 @@
 //
 
 import UIKit
+import CoreData
 
 private let headerIdentifier = "ClientDetailheaderCell"
 private let reportIdentifier = "ClientDetailReportCell"
 
 class ClientDetailCollectionViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
     
+    var client: ClientInfo!
+    var reportItems: [ReportItem]!
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
@@ -22,9 +26,26 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
 
         self.collectionView.register(ReportImageCollectionViewCell.self, forCellWithReuseIdentifier: reportIdentifier)
         collectionView?.collectionViewLayout = layout
+        self.title = "Client Report"
+        
+        let editButton: UIBarButtonItem = {
+            let bb = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonPressed))
+            return bb
+        }()
+        navigationItem.rightBarButtonItem = editButton
+//        fetchReportItem()
     }
 
     
+    @objc func editButtonPressed() {
+        let editVC = AddClientViewController()
+        editVC.delegate = self
+        let editNVC = LightStatusNavigationController(rootViewController: editVC)
+        editVC.client = client
+        present(editNVC, animated: true, completion: nil)
+    }
+    
+
     // MARK: UICollectionViewDataSource
 
 
@@ -35,7 +56,7 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reportIdentifier, for: indexPath) as! ReportImageCollectionViewCell
-    
+        
         return cell
     }
 
@@ -45,13 +66,25 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
         
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier, for: indexPath) as! ClientDetailHeaderReusableView
         
+        headerView.delegate = self
+        
+        headerView.firstNameLabel.text = client.firstName!
+        if let last = client.lastName {
+            headerView.lastNameLabel.text = last
+        }
+        if let image = client.clientImage {
+            headerView.clientImage.image = UIImage(data: image)
+        }
+        if let memo = client.memo {
+            headerView.memoTextLabel.text = memo
+        }
         return headerView
     }
     
     // MARK: UICollectionView flow layout
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 220)
+        return .init(width: view.frame.width, height: 300)
     }
     
     var layout: UICollectionViewFlowLayout = {
@@ -61,10 +94,43 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
         return layout
     }()
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//
-//        return .init(width: view.frame.width - 32, height: 500)
-//    }
-//
+    private func fetchReportItem() {
+        let managerContext = CoreDataManager.shared.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
+        let id = client.objectID
+        fetchRequest.predicate = NSPredicate(format: "client.objectID == %@", id)
+//        fetchRequest.sortDescriptors = []
+        
+        do {
+            let reports = try managerContext.fetch(fetchRequest)
+            self.reportItems = reports
+            
+        } catch let err {
+            print("Failed to fetch ClientList: \(err)")
+        }
+    }
+    
+    
+}
+
+extension ClientDetailCollectionViewController: AddClientViewControllerDelegate, ClientDetailHeaderReusableViewDelegate {
+
+    // AddClientViewControllerDelegate
+    func addClientDidFinish(client: ClientInfo) {
+        
+    }
+    
+    func editClientDidFinish(client: ClientInfo) {
+        self.client = client
+        self.collectionView.reloadData()
+    }
+    
+    // ClientDetailHeaderReusableViewDelegate
+    func newReportButtonPressed() {
+        print("newReportButtonPressed")
+        let newReportVC = NewReportViewController()
+        let newReportNVC = LightStatusNavigationController(rootViewController: newReportVC)
+        present(newReportNVC, animated: true, completion: nil)
+    }
     
 }

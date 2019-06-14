@@ -10,16 +10,25 @@ import UIKit
 import CoreData
 
 protocol AddClientViewControllerDelegate:class {
-    func addClientDidFinish(client: ClientItem)
-    func editClientDidFinish(client: ClientItem)
+    func addClientDidFinish(client: ClientInfo)
+    func editClientDidFinish(client: ClientInfo)
 }
 
 class AddClientViewController: UIViewController {
     
     weak var delegate: AddClientViewControllerDelegate?
     
-    var client: ClientItem? {
+    var client: ClientInfo? {
         didSet {
+            firstNameTextField.text = client?.firstName
+            lastNameTextField.text = client?.lastName ?? ""
+            mailTextField.text = client?.mailAdress ?? ""
+            mobileTextField.text = client?.mobileNumber ?? ""
+            DOBTextField.text = client?.dateOfBirth ?? ""
+            memoTextField.text = client?.memo ?? ""
+            if let image = client?.clientImage {
+                personImageView.image = UIImage(data: image)
+            }
             
         }
     }
@@ -76,7 +85,7 @@ class AddClientViewController: UIViewController {
     
     
     private func setupNavigationUI() {
-        navigationItem.title = "Add Client"
+        navigationItem.title = client == nil ? "Add Client": "Edit Client"
         let cancelButton: UIBarButtonItem = {
             let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
             return bt
@@ -92,29 +101,49 @@ class AddClientViewController: UIViewController {
     
     @objc func selectImage() {
         print("press selectImage")
+        
+        let imagePickController = UIImagePickerController()
+        imagePickController.delegate = self
+        imagePickController.allowsEditing = true
+        
+        present(imagePickController, animated: true, completion: nil)
     }
     
     @objc func seveButtonPressed() {
         
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if client == nil {
-            let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientItem", into: manageContext)
+            let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
             // TODO: before setValue make sure firstName starts with Capital letter
-            let firstNameUpper = firstNameTextField.text?.firstUppercased
-            newClient.setValue(firstNameUpper, forKey: "firstName")
-            newClient.setValue(lastNameTextField.text, forKey: "lastName")
-            newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
-            newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
-            newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
             if let newClientImage = personImageView.image {
                 let imageData = newClientImage.jpegData(compressionQuality: 0.1)
                 newClient.setValue(imageData, forKey: "clientImage")
             }
-            
+            let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+            newClient.setValue(firstNameUpper, forKey: "firstName")
+            newClient.setValue(lastNameTextField.text, forKey: "lastName")
+            newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
+            newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
+            newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
+            newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
             CoreDataManager.shared.saveContext()
 
             dismiss(animated: true) {
-                self.delegate?.addClientDidFinish(client: newClient as! ClientItem)
+                self.delegate?.addClientDidFinish(client: newClient as! ClientInfo)
+            }
+        } else {
+            client?.firstName = firstNameTextField.text
+            client?.lastName = lastNameTextField.text
+            client?.mailAdress = mailTextField.text ?? ""
+            client?.mobileNumber = mobileTextField.text ?? ""
+            client?.dateOfBirth = DOBTextField.text ?? ""
+            client?.memo = memoTextField.text ?? ""
+            if let image = personImageView.image {
+                client?.clientImage = image.jpegData(compressionQuality: 0.1)
+            }
+            CoreDataManager.shared.saveContext()
+            dismiss(animated: true) {
+                self.delegate?.editClientDidFinish(client: self.client!)
             }
         }
         
@@ -125,9 +154,6 @@ class AddClientViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    @objc func doneButtonAction() {
-        self.view.endEditing(true)
-    }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
         if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
@@ -258,5 +284,26 @@ class AddClientViewController: UIViewController {
         let tv = MyTextView()
         return tv
     }()
+    
+}
+
+extension AddClientViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let editedImage = info[.editedImage] as? UIImage {
+            personImageView.image = editedImage
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            personImageView.image = originalImage
+        }
+
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
     
 }

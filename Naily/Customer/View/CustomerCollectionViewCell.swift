@@ -10,36 +10,48 @@ import UIKit
 
 class CustomerCollectionViewCell: UICollectionViewCell {
     
-    var clientItem: ClientItem! {
+    var clientInfo: ClientInfo! {
         didSet {
-            if let imageDate = clientItem.clientImage {
+            if let imageDate = clientInfo.clientImage {
                 cellImageView.image = UIImage(data: imageDate)
+                
             }
-            firstNameLabel.text = clientItem.firstName!
-            lastNameLabel.text = clientItem.lastName!
-//            lastVistiDate.text = clientItem.lastVisit!
+            firstNameLabel.text = clientInfo.firstName!
+            lastNameLabel.text = clientInfo.lastName!
+//            lastVistiDate.text = clientInfo.lastVisit!
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let labelStackView = UIStackView(arrangedSubviews: [cellImageView, firstNameLabel, lastNameLabel, lastVistiDate])
-        labelStackView.translatesAutoresizingMaskIntoConstraints = false
-        labelStackView.axis = .horizontal
-        labelStackView.alignment = .center
-        labelStackView.distribution = .fill
+        let nameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
+        nameSV.translatesAutoresizingMaskIntoConstraints = false
+        nameSV.axis = .horizontal
+        nameSV.alignment = .center
+        nameSV.distribution = .fillEqually
         
-        labelStackView.spacing = 10
+        let labelSV = UIStackView(arrangedSubviews: [nameSV, lastVistiDate])
+        labelSV.translatesAutoresizingMaskIntoConstraints = false
+        labelSV.axis = .vertical
         
-        addSubview(labelStackView)
-        labelStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
-        labelStackView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        labelStackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        labelStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        let cellSV = UIStackView(arrangedSubviews: [cellImageView, labelSV])
+        cellSV.translatesAutoresizingMaskIntoConstraints = false
+        cellSV.axis = .horizontal
+        cellSV.alignment = .center
+        cellSV.distribution = .fillProportionally
+        
+        cellSV.spacing = 10
+        
+        addSubview(cellSV)
+        cellSV.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        cellSV.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        cellSV.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        cellSV.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
         
         backgroundColor = #colorLiteral(red: 1, green: 0.8284288049, blue: 0.8181912303, alpha: 1)
         layer.cornerRadius = 10
+        setShadow()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -72,11 +84,19 @@ class CustomerCollectionViewCell: UICollectionViewCell {
     let lastVistiDate: UILabel = {
         let lb = UILabel()
         lb.text = "2019/05/21"
-        lb.widthAnchor.constraint(equalToConstant: 100)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.systemFont(ofSize: 14.0)
+        lb.font = UIFont.systemFont(ofSize: 12.0)
+        lb.textColor = UIColor.lightGray
         return lb
     }()
+    
+    func setShadow() {
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 4, height: 4)
+        layer.shadowRadius = 0.5
+        layer.masksToBounds = false
+        layer.shadowOpacity = 0.2
+    }
     
     
     

@@ -15,8 +15,8 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     override init(frame: CGRect) {
         super.init(frame: frame)
         // constraints priority
-        contentView.backgroundColor = .lightGray
-//        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.backgroundColor = UIColor(red: 10/255, green: 20/255, blue: 15/255, alpha: 0.2)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         setDateHeader()
         setScrollingImageView()
         setPageControl()
@@ -44,23 +44,22 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     func setScrollingImageView() {
         contentView.addSubview(scrollImageView)
         scrollImageView.delegate = self
-        scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 10, left: 10, bottom: 20, right: 10))
-        scrollImageView.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 20, left: 10, bottom: 0, right: 10))
+        scrollImageView.heightAnchor.constraint(equalToConstant: 300).isActive = true
         
         contentView.layoutIfNeeded() // calculates sizes based on constraints
         
-        scrollImageView.contentSize = CGSize(width: scrollImageView.bounds.width * CGFloat(dataSouce.count), height: scrollImageView.bounds.height)
+        scrollImageView.contentSize = CGSize(width: (UIScreen.main.bounds.width - 20) * CGFloat(dataSouce.count), height: scrollImageView.bounds.height)
         scrollImageView.isUserInteractionEnabled = true
         scrollImageView.isPagingEnabled = true
         scrollImageView.showsHorizontalScrollIndicator = false
-        scrollImageView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        scrollImageView.setContentHuggingPriority(.defaultLow, for: .vertical)
         addImageToScrollView(images: dataSouce)
     }
     
     func setPageControl() {
         contentView.addSubview(pageControl)
         pageControl.numberOfPages = dataSouce.count
-        // TODO: When dots indecater tap, change the scroll page
         pageControl.defersCurrentPageDisplay = true
         pageControl.anchors(topAnchor: scrollImageView.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil)
     }
@@ -76,14 +75,12 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         
     }
     
-    
-    // TODO: find a way to scroll inside scrollview inside collectionView
+
     func addImageToScrollView(images: [String]) {
-        
-        
-        let width = scrollImageView.bounds.width
+
+        let width = UIScreen.main.bounds.width - 20
         let height = scrollImageView.bounds.height
-        
+
         for i in 0..<images.count {
             let iv = UIImageView(frame: CGRect.init(x: 0 + width * CGFloat(i), y: 0, width: width, height: height))
             iv.image = UIImage(named: images[i])
@@ -91,7 +88,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
             scrollImageView.addSubview(iv)
         }
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
     }
@@ -104,9 +101,11 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         fatalError("init(coder:) has not been implemented")
     }
 
+    
     // View
     let scrollImageView: UIScrollView = {
         let sv = UIScrollView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     
@@ -133,7 +132,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"
-        lb.backgroundColor = .yellow
+//        lb.backgroundColor = .yellow
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
@@ -141,7 +140,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     let menuTextLabel: UILabel = {
         let lb = UILabel()
         lb.text = "off + Jal Nail + design"
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
         return lb
     }()
     
@@ -150,14 +149,14 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         lb.text = "Memo"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         
-        lb.backgroundColor = .yellow
+//        lb.backgroundColor = .yellow
         return lb
     }()
     
     let memoTextLabel: UILabel = {
         let lb = UILabel()
         lb.numberOfLines = 0
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
         lb.text = """
         Description
         Description
@@ -174,7 +173,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     let priceText: UILabel = {
         let lb = UILabel()
         lb.text = "$ 60.00"
-        lb.backgroundColor = .orange
+//        lb.backgroundColor = .orange
         return lb
     }()
     
