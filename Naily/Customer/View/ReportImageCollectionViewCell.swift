@@ -15,7 +15,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     override init(frame: CGRect) {
         super.init(frame: frame)
         // constraints priority
-        contentView.backgroundColor = .lightGray
+        contentView.backgroundColor = UIColor(red: 10/255, green: 20/255, blue: 15/255, alpha: 0.2)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         setDateHeader()
         setScrollingImageView()
@@ -38,13 +38,13 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     
     func setDateHeader() {
         contentView.addSubview(dateLabel)
-        dateLabel.anchors(topAnchor: contentView.topAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 0, left: 10, bottom: 0, right: 10))
+        dateLabel.anchors(topAnchor: contentView.topAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 10, left: 10, bottom: 0, right: 10))
     }
     
     func setScrollingImageView() {
         contentView.addSubview(scrollImageView)
         scrollImageView.delegate = self
-        scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 0, left: 10, bottom: 0, right: 10))
+        scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 20, left: 10, bottom: 0, right: 10))
         scrollImageView.heightAnchor.constraint(equalToConstant: 300).isActive = true
         
         contentView.layoutIfNeeded() // calculates sizes based on constraints
@@ -132,7 +132,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"
-        lb.backgroundColor = .yellow
+//        lb.backgroundColor = .yellow
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
@@ -140,7 +140,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     let menuTextLabel: UILabel = {
         let lb = UILabel()
         lb.text = "off + Jal Nail + design"
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
         return lb
     }()
     
@@ -149,14 +149,14 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         lb.text = "Memo"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         
-        lb.backgroundColor = .yellow
+//        lb.backgroundColor = .yellow
         return lb
     }()
     
     let memoTextLabel: UILabel = {
         let lb = UILabel()
         lb.numberOfLines = 0
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
         lb.text = """
         Description
         Description
@@ -173,7 +173,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     let priceText: UILabel = {
         let lb = UILabel()
         lb.text = "$ 60.00"
-        lb.backgroundColor = .orange
+//        lb.backgroundColor = .orange
         return lb
     }()
     

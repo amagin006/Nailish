@@ -10,6 +10,10 @@ import UIKit
 import CoreData
 
 class NewReportViewController: UIViewController {
+    
+    var reportImageViews = [UIImageView]()
+    var reportImages = [UIImage]()
+    var selectImageNum = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,13 +40,18 @@ class NewReportViewController: UIViewController {
         subImageSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         subImageSV.heightAnchor.constraint(equalToConstant: 92).isActive = true
         
-        for _ in 0..<3 {
+        for i in 0..<3 {
+            
             let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
+            
             iv.layer.borderWidth = 2
             iv.layer.borderColor = UIColor.lightGray.cgColor
             iv.translatesAutoresizingMaskIntoConstraints = false
             iv.isUserInteractionEnabled = true
             iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectImage(_:))))
+            iv.tag = i
+            reportImageViews.append(iv)
+            reportImages.append(iv.image!)
             subImageSV.addArrangedSubview(iv)
         }
         
@@ -69,6 +78,10 @@ class NewReportViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
 
+        if reportImages[2] != UIImage(named: "imagePlaceholder"){
+            addImageView.image = UIImage(named: "addicon3")
+            addImageView.isUserInteractionEnabled = false
+        }
     }
     
     private func setupNavigationUI() {
@@ -87,11 +100,23 @@ class NewReportViewController: UIViewController {
     }
     
     @objc func selectImage(_ sender: UITapGestureRecognizer) {
-        print("ImageSelect")
+//        print("ImageSelect \(sender.view?.tag)")
+        let image = reportImages[(sender.view?.tag)!]
+        selectImageNum = sender.view!.tag
+        if image != UIImage(named: "imagePlaceholder") {
+            reportMainImageView.image = image
+        }
     }
     
     @objc func addNewImageSelect() {
-        print("addImageSelect")
+        print("press selectImage")
+        if reportImages[2] == UIImage(named: "imagePlaceholder"){
+            let imagePickController = UIImagePickerController()
+            imagePickController.delegate = self
+            imagePickController.allowsEditing = true
+            
+            present(imagePickController, animated: true, completion: nil)
+        }
     }
     
     @objc func reportCancelButtonPressed() {
@@ -202,4 +227,35 @@ class NewReportViewController: UIViewController {
         return tv
     }()
 
+}
+
+extension NewReportViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let editedImage = info[.editedImage] as? UIImage {
+            reportMainImageView.image = editedImage
+            for (index,imageView) in reportImageViews.enumerated() {
+                if imageView.image == UIImage(named: "imagePlaceholder") {
+                    imageView.image = editedImage
+                    reportImages[index] = editedImage
+                    break
+                }
+            }
+            
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            reportImages.append(originalImage)
+            
+            
+        }
+        
+        
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    
 }
