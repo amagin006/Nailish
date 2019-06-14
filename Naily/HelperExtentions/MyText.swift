@@ -52,12 +52,15 @@ class MyTextField: UITextField, UITextFieldDelegate {
     }()
     
     let doneBtn: UIBarButtonItem = {
-        let bt = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(AddClientViewController.doneButtonAction))
+        let bt = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonAction))
         return bt
     }()
     
     let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     
+    @objc func doneButtonAction() {
+        self.endEditing(true)
+    }
 }
 
 class MyTextView: UITextView {
@@ -87,11 +90,15 @@ class MyTextView: UITextView {
     }()
     
     let doneBtn: UIBarButtonItem = {
-        let bt = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(AddClientViewController.doneButtonAction))
+        let bt = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonAction))
         return bt
     }()
     
     let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+    
+    @objc func doneButtonAction() {
+        self.endEditing(true)
+    }
     
 }
 
@@ -101,5 +108,28 @@ extension StringProtocol {
     }
     var firstCapitalized: String {
         return prefix(1).capitalized + dropFirst()
+    }
+}
+
+
+extension UIButton {
+    func setBackgroundColor(_ color: UIColor, for state: UIControl.State) {
+        let image = color.image
+        setBackgroundImage(image, for: state)
+    }
+}
+
+extension UIColor {
+    var image: UIImage? {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        context.setFillColor(self.cgColor)
+        context.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
 }

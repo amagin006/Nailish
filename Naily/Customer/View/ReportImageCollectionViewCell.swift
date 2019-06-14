@@ -45,7 +45,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         contentView.addSubview(scrollImageView)
         scrollImageView.delegate = self
         scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 0, left: 10, bottom: 0, right: 10))
-        scrollImageView.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        scrollImageView.heightAnchor.constraint(equalToConstant: 300).isActive = true
         
         contentView.layoutIfNeeded() // calculates sizes based on constraints
         

@@ -20,8 +20,16 @@ class AddClientViewController: UIViewController {
     
     var client: ClientInfo? {
         didSet {
-//            firstNameTextField.text = client?.firstName
-//            lastNameTextField.text = client?.lastName
+            firstNameTextField.text = client?.firstName
+            lastNameTextField.text = client?.lastName ?? ""
+            mailTextField.text = client?.mailAdress ?? ""
+            mobileTextField.text = client?.mobileNumber ?? ""
+            DOBTextField.text = client?.dateOfBirth ?? ""
+            memoTextField.text = client?.memo ?? ""
+            if let image = client?.clientImage {
+                personImageView.image = UIImage(data: image)
+            }
+            
         }
     }
 
@@ -77,7 +85,7 @@ class AddClientViewController: UIViewController {
     
     
     private func setupNavigationUI() {
-        navigationItem.title = "Add Client"
+        navigationItem.title = client == nil ? "Add Client": "Edit Client"
         let cancelButton: UIBarButtonItem = {
             let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
             return bt
@@ -123,6 +131,20 @@ class AddClientViewController: UIViewController {
             dismiss(animated: true) {
                 self.delegate?.addClientDidFinish(client: newClient as! ClientInfo)
             }
+        } else {
+            client?.firstName = firstNameTextField.text
+            client?.lastName = lastNameTextField.text
+            client?.mailAdress = mailTextField.text ?? ""
+            client?.mobileNumber = mobileTextField.text ?? ""
+            client?.dateOfBirth = DOBTextField.text ?? ""
+            client?.memo = memoTextField.text ?? ""
+            if let image = personImageView.image {
+                client?.clientImage = image.jpegData(compressionQuality: 0.1)
+            }
+            CoreDataManager.shared.saveContext()
+            dismiss(animated: true) {
+                self.delegate?.editClientDidFinish(client: self.client!)
+            }
         }
         
     }
@@ -132,9 +154,6 @@ class AddClientViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    @objc func doneButtonAction() {
-        self.view.endEditing(true)
-    }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
         if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {

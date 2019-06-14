@@ -137,6 +137,13 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchClient()
+        nameSort(clientList: clientList)
+        collectionView.reloadData()
+    }
+    
     func addClientDidFinish(client: ClientInfo) {
         clientList.append(client)
         nameSort(clientList: clientList)

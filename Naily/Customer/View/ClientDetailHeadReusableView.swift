@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol ClientDetailHeaderReusableViewDelegate: class {
+    func newReportButtonPressed()
+}
+
 class ClientDetailHeaderReusableView: UICollectionReusableView {
+    
+    weak var delegate: ClientDetailHeaderReusableViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,14 +72,14 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         memoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         
         addSubview(addReportButton)
-        addReportButton.topAnchor.constraint(equalTo: memoSV.bottomAnchor, constant: 15).isActive = true
+        addReportButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15).isActive = true
         addReportButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         addReportButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
         
     }
     
     @objc func addButtonPressed() {
-        print("press add")
+        self.delegate?.newReportButtonPressed()
     }
 
     
@@ -159,21 +165,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         return lb
     }()
     
-//    let editButton: UIButton = {
-//        let bt = UIButton()
-//        bt.setTitle("Edit", for: .normal)
-//        bt.translatesAutoresizingMaskIntoConstraints = false
-//        bt.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
-//        bt.setTitleColor(.black, for: .normal)
-//        bt.layer.borderWidth = 2
-//        bt.layer.cornerRadius = 10
-////        bt.backgroundColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1)
-//        bt.layer.borderColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1).cgColor
-//        bt.setImage(UIImage(named: "editicon1"), for: .normal)
-//        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -30, bottom: 0, right: 0)
-//        return bt
-//    }()
-    
     let addReportButton: UIButton = {
         let bt = UIButton()
         bt.setTitle("New Report", for: .normal)
@@ -182,10 +173,14 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         bt.setTitleColor(.black, for: .normal)
         bt.layer.borderWidth = 2
         bt.layer.cornerRadius = 10
+        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
         bt.contentEdgeInsets = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
-//        bt.backgroundColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1)
         bt.layer.borderColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1).cgColor
         bt.setImage(UIImage(named: "addicon1"), for: .normal)
         return bt
     }()
 }
+
+
+
+
