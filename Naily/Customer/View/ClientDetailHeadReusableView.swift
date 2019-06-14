@@ -19,7 +19,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     private func setupUI() {
         
         let lastTimeSV = UIStackView(arrangedSubviews: [lastVisitTitleLabel, lastVisitLabel])
@@ -34,10 +33,16 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         firstRowSV.distribution = .fillEqually
         firstRowSV.spacing = 2
         
-        let nametitleSV = UIStackView(arrangedSubviews: [firstRowSV, fullNameLabel])
+        let fullNameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
+        fullNameSV.axis = .horizontal
+        fullNameSV.translatesAutoresizingMaskIntoConstraints = false
+        fullNameSV.distribution = .fillEqually
+        fullNameSV.spacing = 2
+        
+        let nametitleSV = UIStackView(arrangedSubviews: [firstRowSV, fullNameSV])
         nametitleSV.axis = .vertical
         nametitleSV.translatesAutoresizingMaskIntoConstraints = false
-        nametitleSV.spacing = 10
+        nametitleSV.spacing = 5
         
         let memoSV = UIStackView(arrangedSubviews: [memoTitleLabel, memoTextLabel])
         memoSV.axis = .vertical
@@ -60,10 +65,19 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         memoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         memoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         
+        addSubview(addReportButton)
+        addReportButton.topAnchor.constraint(equalTo: memoSV.bottomAnchor, constant: 15).isActive = true
+        addReportButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        addReportButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        
     }
     
+    @objc func addButtonPressed() {
+        print("press add")
+    }
+
     
-    let clientImage: UIImageView = {
+    var clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 45
@@ -79,15 +93,24 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.text = "Name"
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
         return lb
     }()
     
-    let fullNameLabel: UILabel = {
+    
+    let firstNameLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "FirstName LastName"
+        lb.text = "FirstName"
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
+        return lb
+    }()
+    
+    let lastNameLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "LastName"
+        lb.translatesAutoresizingMaskIntoConstraints = false
+//        lb.backgroundColor = .red
         return lb
     }()
     
@@ -97,7 +120,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.widthAnchor.constraint(equalToConstant: 60).isActive = true
         lb.font = UIFont.systemFont(ofSize: 12)
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
         return lb
     }()
     
@@ -105,7 +128,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         let lb = UILabel()
         lb.text = "2019/05/12"
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
         lb.font = UIFont.italicSystemFont(ofSize: 12)
         return lb
     }()
@@ -115,7 +138,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.text = "Memo"
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 12)
-        lb.backgroundColor = .red
+//        lb.backgroundColor = .red
         return lb
     }()
     
@@ -132,8 +155,37 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         var labelframe = lb.frame
         lb.frame.origin.x = 0
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
-        lb.backgroundColor = .yellow
+//        lb.backgroundColor = .yellow
         return lb
     }()
-
+    
+//    let editButton: UIButton = {
+//        let bt = UIButton()
+//        bt.setTitle("Edit", for: .normal)
+//        bt.translatesAutoresizingMaskIntoConstraints = false
+//        bt.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
+//        bt.setTitleColor(.black, for: .normal)
+//        bt.layer.borderWidth = 2
+//        bt.layer.cornerRadius = 10
+////        bt.backgroundColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1)
+//        bt.layer.borderColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1).cgColor
+//        bt.setImage(UIImage(named: "editicon1"), for: .normal)
+//        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -30, bottom: 0, right: 0)
+//        return bt
+//    }()
+    
+    let addReportButton: UIButton = {
+        let bt = UIButton()
+        bt.setTitle("New Report", for: .normal)
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        bt.setTitleColor(.black, for: .normal)
+        bt.layer.borderWidth = 2
+        bt.layer.cornerRadius = 10
+        bt.contentEdgeInsets = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
+//        bt.backgroundColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1)
+        bt.layer.borderColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1).cgColor
+        bt.setImage(UIImage(named: "addicon1"), for: .normal)
+        return bt
+    }()
 }

@@ -10,14 +10,15 @@ import UIKit
 
 class CustomerCollectionViewCell: UICollectionViewCell {
     
-    var clientItem: ClientItem! {
+    var clientInfo: ClientInfo! {
         didSet {
-            if let imageDate = clientItem.clientImage {
+            if let imageDate = clientInfo.clientImage {
                 cellImageView.image = UIImage(data: imageDate)
+                
             }
-            firstNameLabel.text = clientItem.firstName!
-            lastNameLabel.text = clientItem.lastName!
-//            lastVistiDate.text = clientItem.lastVisit!
+            firstNameLabel.text = clientInfo.firstName!
+            lastNameLabel.text = clientInfo.lastName!
+//            lastVistiDate.text = clientInfo.lastVisit!
         }
     }
     

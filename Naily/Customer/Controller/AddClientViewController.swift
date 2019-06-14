@@ -10,15 +10,15 @@ import UIKit
 import CoreData
 
 protocol AddClientViewControllerDelegate:class {
-    func addClientDidFinish(client: ClientItem)
-    func editClientDidFinish(client: ClientItem)
+    func addClientDidFinish(client: ClientInfo)
+    func editClientDidFinish(client: ClientInfo)
 }
 
 class AddClientViewController: UIViewController {
     
     weak var delegate: AddClientViewControllerDelegate?
     
-    var client: ClientItem? {
+    var client: ClientInfo? {
         didSet {
 //            firstNameTextField.text = client?.firstName
 //            lastNameTextField.text = client?.lastName
@@ -105,23 +105,23 @@ class AddClientViewController: UIViewController {
         
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if client == nil {
-            let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientItem", into: manageContext)
+            let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
             // TODO: before setValue make sure firstName starts with Capital letter
-            let firstNameUpper = firstNameTextField.text?.firstUppercased
-            newClient.setValue(firstNameUpper, forKey: "firstName")
-            newClient.setValue(lastNameTextField.text, forKey: "lastName")
-            newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
-            newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
-            newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
             if let newClientImage = personImageView.image {
                 let imageData = newClientImage.jpegData(compressionQuality: 0.1)
                 newClient.setValue(imageData, forKey: "clientImage")
             }
-            
+            let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+            newClient.setValue(firstNameUpper, forKey: "firstName")
+            newClient.setValue(lastNameTextField.text, forKey: "lastName")
+            newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
+            newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
+            newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
+            newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
             CoreDataManager.shared.saveContext()
 
             dismiss(animated: true) {
-                self.delegate?.addClientDidFinish(client: newClient as! ClientItem)
+                self.delegate?.addClientDidFinish(client: newClient as! ClientInfo)
             }
         }
         
@@ -276,8 +276,6 @@ extension AddClientViewController: UIImagePickerControllerDelegate, UINavigation
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-
-        
         if let editedImage = info[.editedImage] as? UIImage {
             personImageView.image = editedImage
         } else if let originalImage = info[.originalImage] as? UIImage {
@@ -285,7 +283,7 @@ extension AddClientViewController: UIImagePickerControllerDelegate, UINavigation
         }
 
         
-        dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
     
     

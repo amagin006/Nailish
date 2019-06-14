@@ -101,6 +101,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         fatalError("init(coder:) has not been implemented")
     }
 
+    
     // View
     let scrollImageView: UIScrollView = {
         let sv = UIScrollView()
