@@ -140,7 +140,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchClient()
-        nameSort(clientList: clientList)
+//        nameSort(clientList: clientList)
         collectionView.reloadData()
     }
     

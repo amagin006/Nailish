@@ -14,6 +14,12 @@ class NewReportViewController: UIViewController {
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
     var selectImageNum = 0
+    
+    var report: ReportItem? {
+        didSet {
+            
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,14 +61,31 @@ class NewReportViewController: UIViewController {
             subImageSV.addArrangedSubview(iv)
         }
         
-        let addImageView = UIImageView(image: #imageLiteral(resourceName: "addicon2"))
-        addImageView.translatesAutoresizingMaskIntoConstraints = false
-        addImageView.isUserInteractionEnabled = true
-        addImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(addNewImageSelect)))
-        subImageSV.addArrangedSubview(addImageView)
+//        let addImageView = UIImageView(image: #imageLiteral(resourceName: "addicon2"))
+//        addImageView.translatesAutoresizingMaskIntoConstraints = false
+//        addImageView.isUserInteractionEnabled = true
+//        addImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(addNewImageSelect)))
+        let addImageButton = UIButton()
+        addImageButton.setImage(#imageLiteral(resourceName: "addicon2"), for: .normal)
+        addImageButton.addTarget(self, action: #selector(addNewImageSelect), for: .touchUpInside)
+        
+        subImageSV.addArrangedSubview(addImageButton)
+        
+        let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceTextField])
+        priceSV.axis = .vertical
+        priceSV.spacing = 5
+        
+        let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsTextField])
+        tipsSV.axis = .vertical
+        tipsSV.spacing = 5
+        
+        let priceBoxSV = UIStackView(arrangedSubviews: [priceSV, tipsSV])
+        priceBoxSV.axis = .horizontal
+        priceBoxSV.distribution = .fillEqually
+        priceBoxSV.spacing = 10
         
         let discriptionSV = UIStackView(arrangedSubviews: [
-            vistTitleLabel, visitTextField, menuTitleLabel, menuTextField, priceTitleLabel, priceTextField, memoLabel,
+            vistTitleLabel, visitTextField, menuTitleLabel, menuTextField, priceBoxSV, memoLabel,
             memoTextView])
         discriptionSV.translatesAutoresizingMaskIntoConstraints = false
         discriptionSV.axis = .vertical
@@ -78,10 +101,6 @@ class NewReportViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
 
-        if reportImages[2] != UIImage(named: "imagePlaceholder"){
-            addImageView.image = UIImage(named: "addicon3")
-            addImageView.isUserInteractionEnabled = false
-        }
     }
     
     private func setupNavigationUI() {
@@ -100,7 +119,7 @@ class NewReportViewController: UIViewController {
     }
     
     @objc func selectImage(_ sender: UITapGestureRecognizer) {
-//        print("ImageSelect \(sender.view?.tag)")
+
         let image = reportImages[(sender.view?.tag)!]
         selectImageNum = sender.view!.tag
         if image != UIImage(named: "imagePlaceholder") {
@@ -126,6 +145,31 @@ class NewReportViewController: UIViewController {
     
     @objc func reportSeveButtonPressed() {
         print("reportSeveButtonPressed")
+        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+        if report == nil {
+            let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
+            
+            for i in 0..<reportImageViews.count {
+                let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
+                newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
+            }
+            if let visitDay = visitTextField.text {
+                newReport.setValue(visitDay, forKey: "visitDate")
+            }
+            if let menu = menuTextField.text {
+                newReport.setValue(menu, forKey: "menu")
+            }
+            if let price = priceTextField.text {
+                newReport.setValue(price, forKey: "price")
+            }
+            if let tips = tipsTextField.text {
+                newReport.setValue(tips, forKey: "tips")
+            }
+            if let memo = memoTextView.text {
+                newReport.setValue(memo, forKey: "memo")
+            }
+        }
+        
         dismiss(animated: true)
     }
     
@@ -208,6 +252,19 @@ class NewReportViewController: UIViewController {
     }()
     
     let priceTextField: MyTextField = {
+        let tf = MyTextField()
+        tf.font = UIFont.systemFont(ofSize: 18)
+        return tf
+    }()
+    
+    let tipsTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "tips"
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        return lb
+    }()
+    
+    let tipsTextField: MyTextField = {
         let tf = MyTextField()
         tf.font = UIFont.systemFont(ofSize: 18)
         return tf
