@@ -1,5 +1,5 @@
 //
-//  AddReportViewController.swift
+//  NewReportViewController.swift
 //  Naily
 //
 //  Created by Shota Iwamoto on 2019-06-13.
@@ -9,11 +9,19 @@
 import UIKit
 import CoreData
 
+protocol NewReportViewControllerDelegate:class {
+    func reportSavedPressed(report: ReportItem)
+}
+
+
 class NewReportViewController: UIViewController {
+    
+    weak var delegate: NewReportViewControllerDelegate?
     
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
     var selectImageNum = 0
+    var client: ClientInfo?
     
     var report: ReportItem? {
         didSet {
@@ -61,10 +69,6 @@ class NewReportViewController: UIViewController {
             subImageSV.addArrangedSubview(iv)
         }
         
-//        let addImageView = UIImageView(image: #imageLiteral(resourceName: "addicon2"))
-//        addImageView.translatesAutoresizingMaskIntoConstraints = false
-//        addImageView.isUserInteractionEnabled = true
-//        addImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(addNewImageSelect)))
         let addImageButton = UIButton()
         addImageButton.setImage(#imageLiteral(resourceName: "addicon2"), for: .normal)
         addImageButton.addTarget(self, action: #selector(addNewImageSelect), for: .touchUpInside)
@@ -153,24 +157,28 @@ class NewReportViewController: UIViewController {
                 let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
                 newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
             }
-            if let visitDay = visitTextField.text {
-                newReport.setValue(visitDay, forKey: "visitDate")
+            if let visitDate = visitTextField.text {
+                newReport.setValue(visitDate, forKey: "visitDate")
             }
             if let menu = menuTextField.text {
                 newReport.setValue(menu, forKey: "menu")
             }
             if let price = priceTextField.text {
-                newReport.setValue(price, forKey: "price")
+                newReport.setValue(Int(price), forKey: "price")
             }
             if let tips = tipsTextField.text {
-                newReport.setValue(tips, forKey: "tips")
+                newReport.setValue(Int(tips), forKey: "tips")
             }
             if let memo = memoTextView.text {
                 newReport.setValue(memo, forKey: "memo")
             }
-        }
+            newReport.setValue(client, forKey: "client")
+            CoreDataManager.shared.saveContext()
         
-        dismiss(animated: true)
+            dismiss(animated: true) {
+                self.delegate?.reportSavedPressed(report: newReport as! ReportItem)
+            }
+        }
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
@@ -228,6 +236,7 @@ class NewReportViewController: UIViewController {
     let visitTextField: MyTextField = {
         let tf = MyTextField()
         tf.font = UIFont.systemFont(ofSize: 18)
+        tf.keyboardType = .decimalPad
         return tf
     }()
     
@@ -254,6 +263,7 @@ class NewReportViewController: UIViewController {
     let priceTextField: MyTextField = {
         let tf = MyTextField()
         tf.font = UIFont.systemFont(ofSize: 18)
+        tf.keyboardType = .decimalPad
         return tf
     }()
     
@@ -267,6 +277,7 @@ class NewReportViewController: UIViewController {
     let tipsTextField: MyTextField = {
         let tf = MyTextField()
         tf.font = UIFont.systemFont(ofSize: 18)
+        tf.keyboardType = .decimalPad
         return tf
     }()
     

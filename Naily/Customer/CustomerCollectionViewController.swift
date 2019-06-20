@@ -51,18 +51,18 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
     @objc func navigateAddClient() {
         let addVC = AddClientViewController()
-        addVC.delegate = self
+        addVC.delegate = self 
         let addNVC = LightStatusNavigationController(rootViewController: addVC)
         present(addNVC, animated: true, completion: nil)
     }
     
     private func fetchClient() {
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true)]
-        
+        let fetchRequestInfo = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
+        fetchRequestInfo.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true)]
+
         do {
-            let clients = try manageContext.fetch(fetchRequest)
+            let clients = try manageContext.fetch(fetchRequestInfo)
             self.clientList = clients
             self.collectionView.reloadData()
         } catch let err {
@@ -119,6 +119,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("pressed cell \(indexPath)")
+        print("client.id \(nameSortedClientList[indexPath.section][indexPath.row])")
 
         let detailVC = ClientDetailCollectionViewController()
         detailVC.client = nameSortedClientList[indexPath.section][indexPath.row]
@@ -139,8 +140,6 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchClient()
-//        nameSort(clientList: clientList)
         collectionView.reloadData()
     }
     

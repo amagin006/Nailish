@@ -4,6 +4,7 @@
         <attribute name="clientImage" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="dateOfBirth" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastVisit" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mailAdress" optional="YES" attributeType="String" syncable="YES"/>
@@ -24,7 +25,7 @@
         <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ClientInfo" inverseName="items" inverseEntity="ClientInfo" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ClientInfo" positionX="-52.82421875" positionY="-21.88671875" width="128" height="178"/>
+        <element name="ClientInfo" positionX="-52.82421875" positionY="-21.88671875" width="128" height="195"/>
         <element name="ReportItem" positionX="-391.0234375" positionY="101.546875" width="128" height="195"/>
     </elements>
 </model>
