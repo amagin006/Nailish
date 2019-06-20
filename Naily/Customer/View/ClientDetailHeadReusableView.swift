@@ -16,6 +16,19 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     weak var delegate: ClientDetailHeaderReusableViewDelegate?
     
+    var client: ClientInfo? {
+        didSet {
+            firstNameLabel.text = client?.firstName!
+            lastNameLabel.text = client?.lastName ?? ""
+            lastVisitLabel.text = client?.lastVisit ?? ""
+            memoTextLabel.text = client?.memo ?? ""
+            if let image = client?.clientImage {
+                clientImage.image = UIImage(data: image)
+            }
+            
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()

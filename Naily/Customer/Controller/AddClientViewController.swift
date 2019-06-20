@@ -114,7 +114,7 @@ class AddClientViewController: UIViewController {
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if client == nil {
             let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
-            // TODO: before setValue make sure firstName starts with Capital letter
+  
             if let newClientImage = personImageView.image {
                 let imageData = newClientImage.jpegData(compressionQuality: 0.1)
                 newClient.setValue(imageData, forKey: "clientImage")

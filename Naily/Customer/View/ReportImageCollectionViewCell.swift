@@ -10,19 +10,41 @@ import UIKit
 
 class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
-    let dataSouce = ["nailsample1", "nailsample2", "nailsample3"]
+    var snapshotImages = [Data]()
+    var reportItem: ReportItem! {
+        didSet {
+            snapshotImages.removeAll()
+            if let snapshot1 = reportItem.snapshot1 {
+                snapshotImages.append(snapshot1)
+            }
+            if let snapshot2 = reportItem.snapshot2 {
+                snapshotImages.append(snapshot2)
+            }
+            if let snapshot3 = reportItem.snapshot3 {
+                snapshotImages.append(snapshot3)
+            }
+            setupUI()
+            dateLabel.text = reportItem.visitDate
+            menuTextLabel.text = reportItem.menu
+            memoTextLabel.text = reportItem.memo
+            priceText.text = "\(reportItem.price)"
+            tipsText.text = "\(reportItem.tips)"
+            totalPriceText.text = "\(reportItem.price + reportItem.tips)"
+        }
+    }
+    
+    func setupUI() {
+        setDateHeader()
+        setScrollingImageView()
+        setPageControl()
+        setDescription()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         // constraints priority
         contentView.backgroundColor = UIColor(red: 10/255, green: 20/255, blue: 15/255, alpha: 0.2)
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        setDateHeader()
-        setScrollingImageView()
-        setPageControl()
-        setDiscription()
-        
-        // dynamic cell (size)
     }
     
     lazy var width: NSLayoutConstraint = {
@@ -46,48 +68,55 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         scrollImageView.delegate = self
         scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 20, left: 10, bottom: 0, right: 10))
         scrollImageView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        
         contentView.layoutIfNeeded() // calculates sizes based on constraints
         
-        scrollImageView.contentSize = CGSize(width: (UIScreen.main.bounds.width - 20) * CGFloat(dataSouce.count), height: scrollImageView.bounds.height)
+        scrollImageView.contentSize = CGSize(width: (UIScreen.main.bounds.width - 20) * CGFloat(snapshotImages.count), height: scrollImageView.bounds.height)
         scrollImageView.isUserInteractionEnabled = true
         scrollImageView.isPagingEnabled = true
         scrollImageView.showsHorizontalScrollIndicator = false
         scrollImageView.setContentHuggingPriority(.defaultLow, for: .vertical)
-        addImageToScrollView(images: dataSouce)
+        addImageToScrollView(images: snapshotImages)
+    }
+    
+    func addImageToScrollView(images: [Data]) {
+        let width = UIScreen.main.bounds.width - 20
+        let height = scrollImageView.bounds.height
+        
+        for i in 0..<images.count {
+            let iv = UIImageView(frame: CGRect.init(x: 0 + width * CGFloat(i), y: 0, width: width, height: height))
+            iv.image = UIImage(data: images[i])
+            iv.isUserInteractionEnabled = true
+            scrollImageView.addSubview(iv)
+        }
     }
     
     func setPageControl() {
         contentView.addSubview(pageControl)
-        pageControl.numberOfPages = dataSouce.count
         pageControl.defersCurrentPageDisplay = true
+        pageControl.numberOfPages = snapshotImages.count
         pageControl.anchors(topAnchor: scrollImageView.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil)
     }
     
-    
-    func setDiscription() {
-        let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuTextLabel, priceText, memoTitleLabel, memoTextLabel])
+    func setDescription() {
+        let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceText])
+        priceSV.axis = .vertical
+        let tipsSV = UIStackView(arrangedSubviews: [tipsTitle, tipsText])
+        tipsSV.axis = .vertical
+        let totalPriceSV = UIStackView(arrangedSubviews: [totalPriceTitle, totalPriceText])
+        totalPriceSV.axis = .vertical
+        let priceRowSV = UIStackView(arrangedSubviews: [priceSV, tipsSV, totalPriceSV])
+        priceRowSV.axis = .horizontal
+        priceRowSV.distribution = .fillEqually
+        
+        let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuTextLabel, priceRowSV, memoTitleLabel, memoTextLabel])
         contentView.addSubview(menuSV)
         menuSV.axis = .vertical
         menuSV.distribution = .equalSpacing
         menuSV.spacing = 1
         menuSV.anchors(topAnchor: pageControl.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: contentView.bottomAnchor, padding: .init(top: 0, left: 10, bottom: 20, right: 10))
-        
     }
     
 
-    func addImageToScrollView(images: [String]) {
-
-        let width = UIScreen.main.bounds.width - 20
-        let height = scrollImageView.bounds.height
-
-        for i in 0..<images.count {
-            let iv = UIImageView(frame: CGRect.init(x: 0 + width * CGFloat(i), y: 0, width: width, height: height))
-            iv.image = UIImage(named: images[i])
-            iv.isUserInteractionEnabled = true
-            scrollImageView.addSubview(iv)
-        }
-    }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
@@ -170,12 +199,48 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         return lb
     }()
     
-    let priceText: UILabel = {
+    let priceTitleLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "$ 60.00"
-//        lb.backgroundColor = .orange
+        lb.text = "Price"
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
     
+    let priceText: UILabel = {
+        let lb = UILabel()
+        lb.text = "$ 60.00"
+        lb.font = UIFont.boldSystemFont(ofSize: 18)
+        return lb
+    }()
+    
+    let tipsTitle: UILabel = {
+        let lb = UILabel()
+        lb.text = "Tips"
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        
+        return lb
+    }()
+    
+    let tipsText: UILabel = {
+        let lb = UILabel()
+        lb.text = "$ 6.00"
+        lb.font = UIFont.boldSystemFont(ofSize: 18)
+        return lb
+    }()
+    
+    let totalPriceTitle: UILabel = {
+        let lb = UILabel()
+        lb.text = "total"
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        
+        return lb
+    }()
+    
+    let totalPriceText: UILabel = {
+        let lb = UILabel()
+        lb.text = "$ 6.00"
+        lb.font = UIFont.boldSystemFont(ofSize: 18)
+        return lb
+    }()
 }
 
