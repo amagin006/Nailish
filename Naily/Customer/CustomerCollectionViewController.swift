@@ -21,7 +21,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
-        // sticky header
+
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.sectionHeadersPinToVisibleBounds = true
         
@@ -74,13 +74,10 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return nameSortedClientList.count
     }
 
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
         return nameSortedClientList[section].count
     }
 
@@ -107,7 +104,6 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
         }
         fatalError()
     }
-
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width * 0.9, height: 80)
@@ -118,13 +114,10 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("pressed cell \(indexPath)")
-        print("client.id \(nameSortedClientList[indexPath.section][indexPath.row])")
-
+        
         let detailVC = ClientDetailCollectionViewController()
         detailVC.client = nameSortedClientList[indexPath.section][indexPath.row]
         self.navigationController?.pushViewController(detailVC, animated: true)
-
 
 //        // Delete Ite
 //        let deletClient = nameSortedClientList[indexPath.section][indexPath.row]

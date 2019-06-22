@@ -13,11 +13,9 @@ protocol NewReportViewControllerDelegate:class {
     func reportSavedPressed(report: ReportItem)
 }
 
-
 class NewReportViewController: UIViewController {
     
     weak var delegate: NewReportViewControllerDelegate?
-    
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
     var selectImageNum = 0
@@ -103,7 +101,7 @@ class NewReportViewController: UIViewController {
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillShowNotification, object: nil)
 
     }
     
@@ -185,24 +183,21 @@ class NewReportViewController: UIViewController {
         
         guard let userInfo = notification.userInfo else { return }
         guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        
         let keyboardFrameHeight = keyboardSize.cgRectValue.height
-        if self.view.frame.origin.y == 0 {
-            self.view.frame.origin.y -= keyboardFrameHeight
+        
+        if visitTextField.isFirstResponder {
+            self.view.frame.origin.y = -visitTextField.toolbar.datePicker.frame.height
         }
-    
+        else {
+            self.view.frame.origin.y = -keyboardFrameHeight
+        }
     }
     
     @objc func keyboardWillBeHidden(notification: NSNotification) {
-        
-        guard let userInfo = notification.userInfo else { return }
-        print(userInfo)
-        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-        let keyboardFrame = keyboardSize.cgRectValue
         if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y += keyboardFrame.height
+            self.view.frame.origin.y = 0
         }
-    
-        
     }
     
     // UIParts
@@ -210,7 +205,6 @@ class NewReportViewController: UIViewController {
     let formScrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.backgroundColor = .white
-//        sv.contentSize.height = 2000
         return sv
     }()
     
@@ -233,10 +227,8 @@ class NewReportViewController: UIViewController {
         return lb
     }()
 
-    let visitTextField: MyTextField = {
-        let tf = MyTextField()
-        tf.font = UIFont.systemFont(ofSize: 18)
-        tf.keyboardType = .decimalPad
+    let visitTextField: DatePickerKeyboard = {
+        let tf = DatePickerKeyboard()
         return tf
     }()
     
@@ -317,11 +309,8 @@ extension NewReportViewController: UIImagePickerControllerDelegate, UINavigation
             
         } else if let originalImage = info[.originalImage] as? UIImage {
             reportImages.append(originalImage)
-            
-            
         }
-        
-        
+
         picker.dismiss(animated: true, completion: nil)
     }
     
