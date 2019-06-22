@@ -12,21 +12,18 @@ import CoreData
 private let reuseIdentifier = "Cell"
 private let headerId = "headerId"
 
-class CustomerCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, AddClientViewControllerDelegate {
+class CustomerCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, NSFetchedResultsControllerDelegate, AddClientViewControllerDelegate {
     
     
     let cellId = "cellId"
-    var clientList = [ClientInfo]()
-    var nameSortedClientList = [[ClientInfo]]()
+//    var clientList = [ClientInfo]()
+//    var nameSortedClientList = [[ClientInfo]]()
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
-
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.sectionHeadersPinToVisibleBounds = true
-        
         collectionView.backgroundColor = .white
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -36,11 +33,48 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        do {
+            try fetchedResultsController.performFetch()
+            print("hello")
+        } catch let err {
+            print(err)
+        }
         self.collectionView!.register(CustomerCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         self.collectionView!.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         setRightAddButton()
-        fetchClient()
-        nameSort(clientList: clientList)
+//        fetchClient()
+//        nameSort(clientList: clientList)
+
+    }
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
+        let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
+        let nameInitialDescriptors = NSSortDescriptor(key: "nameInitial", ascending: true)
+        let firstNameDescriptors = NSSortDescriptor(key: "firstName", ascending: true)
+        fetchRequest.sortDescriptors = [nameInitialDescriptors, firstNameDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: "nameInitial", cacheName: nil)
+        frc.delegate = self
+        return frc
+    }()
+    
+    var blockOperations = [BlockOperation]()
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        if type == .insert {
+            blockOperations.append(BlockOperation(block: {
+                self.collectionView?.insertItems(at: [newIndexPath!])
+            }))
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        collectionView?.performBatchUpdates({
+            for operation in self.blockOperations {
+                operation.start()
+            }
+        }, completion: { (completed) in
+            
+        })
     }
     
     // MARK: helper methods
@@ -56,35 +90,39 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
         present(addNVC, animated: true, completion: nil)
     }
     
-    private func fetchClient() {
-        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-        let fetchRequestInfo = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
-        fetchRequestInfo.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true)]
-
-        do {
-            let clients = try manageContext.fetch(fetchRequestInfo)
-            self.clientList = clients
-            self.collectionView.reloadData()
-        } catch let err {
-            print("Failed to fetch ClientList: \(err)")
-        }
-    }
-
-
+//    private func fetchClient() {
+//        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+//        let fetchRequestInfo = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
+//        fetchRequestInfo.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true)]
+//
+//        do {
+//            let clients = try manageContext.fetch(fetchRequestInfo)
+//            self.clientList = clients
+//            self.collectionView.reloadData()
+//        } catch let err {
+//            print("Failed to fetch ClientList: \(err)")
+//        }
+//    }
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return nameSortedClientList.count
+        return fetchedResultsController.sections?.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return nameSortedClientList[section].count
+//        return nameSortedClientList[section].count
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CustomerCollectionViewCell        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CustomerCollectionViewCell
+        
         // sorted by name
-        cell.clientInfo = nameSortedClientList[indexPath.section][indexPath.row]
+        let clientInfoData = fetchedResultsController.object(at: indexPath)
+        cell.clientInfo = clientInfoData
+        
+//        cell.clientInfo = nameSortedClientList[indexPath.section][indexPath.row]
         return cell
     }
     
@@ -93,13 +131,14 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
+
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId, for: indexPath) as! SectionHeader
-            let firstItem = nameSortedClientList[indexPath.section][indexPath.item].firstName!
-            if let firstChar = firstItem.first {
-                header.headerLable.text = "\(firstChar)"
-            }
+//            let firstItem = nameSortedClientList[indexPath.section][indexPath.item].firstName!
+            let firstItem = fetchedResultsController.sections![indexPath.section]
+//            if let firstChar = firstItem {
+                header.headerLable.text = "\(firstItem.name.first!)"
+//            }
             return header
         }
         fatalError()
@@ -116,7 +155,7 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let detailVC = ClientDetailCollectionViewController()
-        detailVC.client = nameSortedClientList[indexPath.section][indexPath.row]
+        detailVC.client = fetchedResultsController.object(at: indexPath)
         self.navigationController?.pushViewController(detailVC, animated: true)
 
 //        // Delete Ite
@@ -131,37 +170,40 @@ class CustomerCollectionViewController: UICollectionViewController, UICollection
 
     }
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         collectionView.reloadData()
     }
     
     func addClientDidFinish(client: ClientInfo) {
-        clientList.append(client)
-        nameSort(clientList: clientList)
-        collectionView.reloadData()
+        print("addClient ")
+//        clientList.append(client)
+//        nameSort(clientList: clientList)
+//        collectionView.reloadData()
     }
 
     func editClientDidFinish(client: ClientInfo) {
         print(client)
     }
 
-    func nameSort(clientList: [ClientInfo]) {
-        let nameSorted = clientList.sorted(by: { ($0.firstName!) < ($1.firstName!) })
-        
-        let groupedNames = nameSorted.reduce([[ClientInfo]]()) {
-            guard var last = $0.last else { return [[$1]] }
-            var collection = $0
-            if last.first!.firstName!.first == $1.firstName!.first {
-                last += [$1]
-                collection[collection.count - 1] = last
-            } else {
-                collection += [[$1]]
-            }
-            return collection
-        }
-        self.nameSortedClientList = groupedNames
-    }
+//    func nameSort(clientList: [ClientInfo]) {
+//        let nameSorted = clientList.sorted(by: { ($0.firstName!) < ($1.firstName!) })
+//
+//        let groupedNames = nameSorted.reduce([[ClientInfo]]()) {
+//            guard var last = $0.last else { return [[$1]] }
+//            var collection = $0
+//            if last.first!.firstName!.first == $1.firstName!.first {
+//                last += [$1]
+//                collection[collection.count - 1] = last
+//            } else {
+//                collection += [[$1]]
+//            }
+//            return collection
+//        }
+//        self.nameSortedClientList = groupedNames
+//    }
     
 }
 

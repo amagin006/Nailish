@@ -120,8 +120,11 @@ class AddClientViewController: UIViewController {
                 newClient.setValue(imageData, forKey: "clientImage")
             }
             let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+            let nameInitial = String(firstNameUpper?.first ?? "#")
+            print(nameInitial)
             newClient.setValue(firstNameUpper, forKey: "firstName")
             newClient.setValue(lastNameTextField.text, forKey: "lastName")
+            newClient.setValue(nameInitial, forKey: "nameInitial")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
             newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
