@@ -16,6 +16,7 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
     
     var client: ClientInfo!
     var reportItems: [ReportItem]!
+//    var fetchedResultsController: NSFetchedResultsController!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -91,13 +92,17 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
         let managerContext = CoreDataManager.shared.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
         fetchRequest.predicate = NSPredicate(format: "client == %@", client)
-//        fetchRequest.sortDescriptors = []
+        fetchRequest.sortDescriptors = []
         do {
             let reports = try managerContext.fetch(fetchRequest)
             self.reportItems = reports
         } catch let err {
             print("Failed to fetch ClientList: \(err)")
         }
+        
+//        NSFetchedResultsController(fetchRequest: <#T##NSFetchRequest<_>#>, managedObjectContext: <#T##NSManagedObjectContext#>, sectionNameKeyPath: <#T##String?#>, cacheName: <#T##String?#>)
+//        
+//        
     }
     
     
@@ -106,8 +111,9 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
 extension ClientDetailCollectionViewController: AddClientViewControllerDelegate, ClientDetailHeaderReusableViewDelegate, NewReportViewControllerDelegate {
 
     func reportSavedPressed(report: ReportItem) {
-        reportItems.insert(report, at: 0)
-        collectionView.reloadData()
+        self.reportItems.append(report)
+        self.collectionView.insertItems(at: [IndexPath(item: self.reportItems.count - 1, section: 0)])
+        self.collectionView.reloadItems(at: [IndexPath(item: self.reportItems.count - 1, section: 0)])
     }
 
     // AddClientViewControllerDelegate
@@ -124,6 +130,7 @@ extension ClientDetailCollectionViewController: AddClientViewControllerDelegate,
     func newReportButtonPressed() {
         let newReportVC = NewReportViewController()
         newReportVC.client = client
+        newReportVC.delegate = self
         let newReportNVC = LightStatusNavigationController(rootViewController: newReportVC)
         present(newReportNVC, animated: true, completion: nil)
     }

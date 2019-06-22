@@ -44,13 +44,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lastTimeSV.axis = .horizontal
         lastTimeSV.translatesAutoresizingMaskIntoConstraints = false
         lastTimeSV.spacing = 2
-        lastTimeSV.distribution = .fill
-        
-        let firstRowSV = UIStackView(arrangedSubviews: [nameTitleLabel, lastTimeSV])
-        firstRowSV.axis = .horizontal
-        firstRowSV.translatesAutoresizingMaskIntoConstraints = false
-        firstRowSV.distribution = .fillEqually
-        firstRowSV.spacing = 2
         
         let fullNameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
         fullNameSV.axis = .horizontal
@@ -58,10 +51,10 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         fullNameSV.distribution = .fillEqually
         fullNameSV.spacing = 2
         
-        let nametitleSV = UIStackView(arrangedSubviews: [firstRowSV, fullNameSV])
+        let nametitleSV = UIStackView(arrangedSubviews: [lastTimeSV, nameTitleLabel, fullNameSV])
         nametitleSV.axis = .vertical
         nametitleSV.translatesAutoresizingMaskIntoConstraints = false
-        nametitleSV.spacing = 5
+
         
         let memoSV = UIStackView(arrangedSubviews: [memoTitleLabel, memoTextLabel])
         memoSV.axis = .vertical
@@ -74,15 +67,14 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         clientTopSV.spacing = 20
         clientTopSV.distribution = .fill
         
-        addSubview(clientTopSV)
-        clientTopSV.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        clientTopSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        clientTopSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
-        
-        addSubview(memoSV)
-        memoSV.topAnchor.constraint(equalTo: clientTopSV.bottomAnchor, constant: 10).isActive = true
-        memoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        memoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
+        let headerInfoSV = UIStackView(arrangedSubviews: [clientTopSV, memoSV])
+        addSubview(headerInfoSV)
+        headerInfoSV.translatesAutoresizingMaskIntoConstraints = false
+        headerInfoSV.axis = .vertical
+        headerInfoSV.spacing = 10
+        headerInfoSV.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        headerInfoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        headerInfoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         
         addSubview(addReportButton)
         addReportButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15).isActive = true
@@ -121,7 +113,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         let lb = UILabel()
         lb.text = "FirstName"
         lb.translatesAutoresizingMaskIntoConstraints = false
-//        lb.backgroundColor = .red
+        lb.font = UIFont.systemFont(ofSize: 20)
         return lb
     }()
     
@@ -129,7 +121,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         let lb = UILabel()
         lb.text = "LastName"
         lb.translatesAutoresizingMaskIntoConstraints = false
-//        lb.backgroundColor = .red
+        lb.font = UIFont.systemFont(ofSize: 20)
         return lb
     }()
     
@@ -147,7 +139,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         let lb = UILabel()
         lb.text = "2019/05/12"
         lb.translatesAutoresizingMaskIntoConstraints = false
-//        lb.backgroundColor = .red
         lb.font = UIFont.italicSystemFont(ofSize: 12)
         return lb
     }()
@@ -157,24 +148,19 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.text = "Memo"
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 12)
-//        lb.backgroundColor = .red
+
         return lb
     }()
     
     let memoTextLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = """
-        hello
-        hello goodmorning
-        it's me! Mario!
-        """
         lb.numberOfLines = 0
+        
         lb.sizeToFit()
         var labelframe = lb.frame
         lb.frame.origin.x = 0
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
-//        lb.backgroundColor = .yellow
         return lb
     }()
     
