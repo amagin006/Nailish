@@ -1,0 +1,110 @@
+//
+//  FetchCollectionViewController.swift
+//  Naily
+//
+//  Created by Shota Iwamoto on 2019-06-23.
+//  Copyright © 2019 Shota Iwamoto. All rights reserved.
+//
+
+import UIKit
+import CoreData
+
+struct CollectionViewContentChange {
+    let type: NSFetchedResultsChangeType
+    let indexPath: IndexPath?
+    let newIndexPath: IndexPath?
+}
+
+struct CollectionViewSectionChange {
+    let type: NSFetchedResultsChangeType
+    let sectionInfo: NSFetchedResultsSectionInfo
+    let sectionIndex: Int
+}
+
+
+class FetchCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate {
+    
+    var contentsChanges = [CollectionViewContentChange]()
+    var senctionChanges = [CollectionViewSectionChange]()
+   
+    override func viewDidLoad() {
+        fetchedResultsController.delegate = self
+    }
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
+        let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
+        let nameInitialDescriptors = NSSortDescriptor(key: "nameInitial", ascending: true)
+        let firstNameDescriptors = NSSortDescriptor(key: "firstName", ascending: true)
+        fetchRequest.sortDescriptors = [nameInitialDescriptors, firstNameDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: "nameInitial", cacheName: nil)
+        frc.delegate = self
+        return frc
+    }()
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        let change = CollectionViewContentChange(type: type, indexPath: indexPath, newIndexPath: newIndexPath)
+        contentsChanges.append(change)
+        print("conentChange ============ \(change)")
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        let change = CollectionViewSectionChange(type: type, sectionInfo: sectionInfo, sectionIndex: sectionIndex)
+        senctionChanges.append(change)
+        print("sectionChange +++++++++ \n\(change)")
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        collectionView?.performBatchUpdates({
+            for contentsChange in contentsChanges {
+                self.performCollectionViewContentsChange(contentsChange)
+            }
+            for sectionChange in senctionChanges {
+                self.performCollectionViewSectionChange(sectionChange)
+            }
+        }, completion: { _ in
+            self.contentsChanges.removeAll()
+            self.senctionChanges.removeAll()
+            print("completion")
+        })
+    }
+    
+}
+
+private extension FetchCollectionViewController {
+    func performCollectionViewContentsChange(_ contentChange: CollectionViewContentChange) {
+        
+        switch contentChange.type {
+        case .insert:
+            collectionView.insertItems(at: [contentChange.newIndexPath!])
+        case .update:
+            collectionView.reloadItems(at: [contentChange.indexPath!])
+        case .move:
+            collectionView?.moveItem(at: contentChange.indexPath!, to: contentChange.newIndexPath!)
+        case .delete:
+            collectionView?.deleteItems(at: [contentChange.indexPath!])
+        @unknown default:
+            fatalError()
+        }
+    }
+    
+    func performCollectionViewSectionChange(_ sectionChange: CollectionViewSectionChange) {
+        
+        switch sectionChange.type {
+        case .insert:
+            collectionView.insertSections(NSIndexSet(index: sectionChange.sectionIndex) as IndexSet)
+        case .update:
+            print("update")
+//            collectionView.reloadItems(at: [contentChange.indexPath!])
+        case .move:
+            print("move")
+//            collectionView?.moveItem(at: contentChange.indexPath!, to: contentChange.newIndexPath!)
+        case .delete:
+            print("delete")
+//            collectionView?.deleteItems(at: [contentChange.indexPath!])
+        @unknown default:
+            fatalError()
+        }
+    }
+}
