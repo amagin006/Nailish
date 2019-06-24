@@ -82,17 +82,7 @@ class AddClientViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
-    
-    lazy var fetchedResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
-        let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
-        let nameInitialDescriptors = NSSortDescriptor(key: "nameInitial", ascending: true)
-        let firstNameDescriptors = NSSortDescriptor(key: "firstName", ascending: true)
-        fetchRequest.sortDescriptors = [nameInitialDescriptors, firstNameDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: "nameInitial", cacheName: nil)
-        return frc
-    }()
-    
+
     private func setupNavigationUI() {
         navigationItem.title = client == nil ? "Add Client": "Edit Client"
         let cancelButton: UIBarButtonItem = {
@@ -122,7 +112,6 @@ class AddClientViewController: UIViewController {
         
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if client == nil {
-            
             do {
                 let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
                 
@@ -140,40 +129,40 @@ class AddClientViewController: UIViewController {
                 newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
                 newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
             
-                try fetchedResultsController.managedObjectContext.save()
+                try fetchedClientInfoResultsController.managedObjectContext.save()
                 print("new client saved")
             } catch let err {
-                print("new client saved failed \(err)")
+                print("Saved new client failed - \(err)")
             }
-            CoreDataManager.shared.saveContext()
+            dismiss(animated: true)
             
-            dismiss(animated: true) {
-//                self.delegate?.addClientDidFinish(client: newClient as! ClientInfo)
-            }
         } else {
-            client?.firstName = firstNameTextField.text
-            client?.lastName = lastNameTextField.text
-            client?.mailAdress = mailTextField.text ?? ""
-            client?.mobileNumber = mobileTextField.text ?? ""
-            client?.dateOfBirth = DOBTextField.text ?? ""
-            client?.memo = memoTextField.text ?? ""
-            if let image = personImageView.image {
-                client?.clientImage = image.jpegData(compressionQuality: 0.1)
+            do {
+                client?.firstName = firstNameTextField.text
+                client?.lastName = lastNameTextField.text
+                client?.mailAdress = mailTextField.text ?? ""
+                client?.mobileNumber = mobileTextField.text ?? ""
+                client?.dateOfBirth = DOBTextField.text ?? ""
+                client?.memo = memoTextField.text ?? ""
+                if let image = personImageView.image {
+                    client?.clientImage = image.jpegData(compressionQuality: 0.1)
+                }
+                try fetchedClientInfoResultsController.managedObjectContext.save()
+                print("edit client saved")
+            } catch let err {
+                print("Edit client failed - \(err)")
             }
-            CoreDataManager.shared.saveContext()
-            dismiss(animated: true) {
-                self.delegate?.editClientDidFinish(client: self.client!)
-            }
+
+            dismiss(animated: true) 
         }
-        
+
     }
     
     @objc func cancelButtonPressed() {
         print("cancelButtonPressed")
         dismiss(animated: true)
     }
-    
-    
+
     @objc func keyboardWillBeShown(notification: NSNotification) {
         if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
             guard let userInfo = notification.userInfo else { return }
@@ -200,6 +189,24 @@ class AddClientViewController: UIViewController {
     }
     
     // MARK: - UIParts
+    lazy var fetchedClientInfoResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
+        let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
+        let nameInitialDescriptors = NSSortDescriptor(key: "nameInitial", ascending: true)
+        let firstNameDescriptors = NSSortDescriptor(key: "firstName", ascending: true)
+        fetchRequest.sortDescriptors = [nameInitialDescriptors, firstNameDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: "nameInitial", cacheName: nil)
+        return frc
+    }()
+    
+    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
+        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
+        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
+        fetchRequest.sortDescriptors = [visitDateDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        return frc
+    }()
     
     let clientFormView: UIView = {
         let vi = UIView()

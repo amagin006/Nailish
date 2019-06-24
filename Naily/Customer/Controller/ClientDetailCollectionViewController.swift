@@ -16,7 +16,7 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
     
     var client: ClientInfo!
     var reportItems: [ReportItem]!
-//    var fetchedResultsController: NSFetchedResultsController!
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
