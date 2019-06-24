@@ -83,6 +83,15 @@ class AddClientViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
+    lazy var fetchedResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
+        let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
+        let nameInitialDescriptors = NSSortDescriptor(key: "nameInitial", ascending: true)
+        let firstNameDescriptors = NSSortDescriptor(key: "firstName", ascending: true)
+        fetchRequest.sortDescriptors = [nameInitialDescriptors, firstNameDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: "nameInitial", cacheName: nil)
+        return frc
+    }()
     
     private func setupNavigationUI() {
         navigationItem.title = client == nil ? "Add Client": "Edit Client"
@@ -113,26 +122,33 @@ class AddClientViewController: UIViewController {
         
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if client == nil {
-            let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
-  
-            if let newClientImage = personImageView.image {
-                let imageData = newClientImage.jpegData(compressionQuality: 0.1)
-                newClient.setValue(imageData, forKey: "clientImage")
+            
+            do {
+                let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
+                
+                if let newClientImage = personImageView.image {
+                    let imageData = newClientImage.jpegData(compressionQuality: 0.1)
+                    newClient.setValue(imageData, forKey: "clientImage")
+                }
+                let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+                let nameInitial = String(firstNameUpper?.first ?? "#")
+                newClient.setValue(firstNameUpper, forKey: "firstName")
+                newClient.setValue(lastNameTextField.text, forKey: "lastName")
+                newClient.setValue(nameInitial, forKey: "nameInitial")
+                newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
+                newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
+                newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
+                newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
+            
+                try fetchedResultsController.managedObjectContext.save()
+                print("new client saved")
+            } catch let err {
+                print("new client saved failed \(err)")
             }
-            let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
-            let nameInitial = String(firstNameUpper?.first ?? "#")
-            print(nameInitial)
-            newClient.setValue(firstNameUpper, forKey: "firstName")
-            newClient.setValue(lastNameTextField.text, forKey: "lastName")
-            newClient.setValue(nameInitial, forKey: "nameInitial")
-            newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
-            newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
-            newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
-            newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
             CoreDataManager.shared.saveContext()
-
+            
             dismiss(animated: true) {
-                self.delegate?.addClientDidFinish(client: newClient as! ClientInfo)
+//                self.delegate?.addClientDidFinish(client: newClient as! ClientInfo)
             }
         } else {
             client?.firstName = firstNameTextField.text

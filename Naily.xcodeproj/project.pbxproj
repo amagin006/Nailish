@@ -28,7 +28,7 @@
 		43ED0B0322BD8D5B00781893 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0222BD8D5B00781893 /* Extensions.swift */; };
 		43ED0B0522BD8D9100781893 /* MyTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0422BD8D9100781893 /* MyTextView.swift */; };
 		43ED0B0922BD998900781893 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0822BD998900781893 /* CustomToolbar.swift */; };
-		43ED0B0B22BDA02700781893 /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0A22BDA02700781893 /* FetchedResultsTableViewController.swift */; };
+		43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,7 +55,7 @@
 		43ED0B0222BD8D5B00781893 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		43ED0B0422BD8D9100781893 /* MyTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextView.swift; sourceTree = "<group>"; };
 		43ED0B0822BD998900781893 /* CustomToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
-		43ED0B0A22BDA02700781893 /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
+		43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCollectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +104,7 @@
 			children = (
 				433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */,
 				433705AB22AEEFF900EBC58B /* UIView+ConstraintLayout.swift */,
+				43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -153,7 +154,6 @@
 		43A2F4A022A7B31A003A07ED /* HelperExtentions */ = {
 			isa = PBXGroup;
 			children = (
-				43ED0B0A22BDA02700781893 /* FetchedResultsTableViewController.swift */,
 				43A2F49E22A7B315003A07ED /* MyTextField.swift */,
 				43ED0B0022BD8D4100781893 /* DatePickerKeyboard.swift */,
 				43ED0B0222BD8D5B00781893 /* Extensions.swift */,
@@ -245,10 +245,10 @@
 				43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */,
 				433705AC22AEEFF900EBC58B /* UIView+ConstraintLayout.swift in Sources */,
 				43ED0B0922BD998900781893 /* CustomToolbar.swift in Sources */,
-				43ED0B0B22BDA02700781893 /* FetchedResultsTableViewController.swift in Sources */,
 				4337059222ADE57A00EBC58B /* ReportImageCollectionViewCell.swift in Sources */,
 				433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */,
 				43ED0B0322BD8D5B00781893 /* Extensions.swift in Sources */,
+				43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */,
 				437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */,
 				43E6915422AB0B8A0097C2B6 /* CoreDataManager.swift in Sources */,
 				43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */,
