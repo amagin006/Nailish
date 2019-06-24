@@ -26,9 +26,16 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        do {
+            try fetchedClientInfoResultsController.performFetch()
+        } catch let err {
+            print(err)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         do {
             try fetchedClientInfoResultsController.performFetch()
         } catch let err {
@@ -101,7 +108,7 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
+//
         let detailVC = ClientDetailCollectionViewController()
         detailVC.client = fetchedClientInfoResultsController.object(at: indexPath)
         self.navigationController?.pushViewController(detailVC, animated: true)

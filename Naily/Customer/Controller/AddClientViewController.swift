@@ -18,7 +18,7 @@ class AddClientViewController: UIViewController {
     
     weak var delegate: AddClientViewControllerDelegate?
     
-    var client: ClientInfo? {
+    var client: ClientInfo! {
         didSet {
             firstNameTextField.text = client?.firstName
             lastNameTextField.text = client?.lastName ?? ""
@@ -139,6 +139,7 @@ class AddClientViewController: UIViewController {
         } else {
             do {
                 client?.firstName = firstNameTextField.text
+                client?.nameInitial = String(client.firstName?.first ?? "#")
                 client?.lastName = lastNameTextField.text
                 client?.mailAdress = mailTextField.text ?? ""
                 client?.mobileNumber = mobileTextField.text ?? ""
@@ -148,12 +149,12 @@ class AddClientViewController: UIViewController {
                     client?.clientImage = image.jpegData(compressionQuality: 0.1)
                 }
                 try fetchedClientInfoResultsController.managedObjectContext.save()
-                print("edit client saved")
-            } catch let err {
-                print("Edit client failed - \(err)")
+             } catch let err {
+                print("Saved new client failed - \(err)")
             }
-
-            dismiss(animated: true) 
+            dismiss(animated: true) { [unowned self] in
+                self.delegate?.editClientDidFinish(client: self.client)
+            }
         }
 
     }

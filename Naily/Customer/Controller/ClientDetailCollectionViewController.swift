@@ -12,15 +12,27 @@ import CoreData
 private let headerIdentifier = "ClientDetailheaderCell"
 private let reportIdentifier = "ClientDetailReportCell"
 
-class ClientDetailCollectionViewController: BaseCollectionViewController, UICollectionViewDelegateFlowLayout {
+class ClientDetailCollectionViewController: BaseCollectionViewController, AddClientViewControllerDelegate, UICollectionViewDelegateFlowLayout {
+
+    func editClientDidFinish(client: ClientInfo) {
+        self.client = client
+    }
+
+    func addClientDidFinish(client: ClientInfo) {
+        
+    }
     
-    var client: ClientInfo!
+    var client: ClientInfo! {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
+    
     var reportItems: [ReportItem]!
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        collectionView.reloadData()
+
     }
         
     override func viewDidLoad() {
@@ -42,19 +54,16 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
         navigationItem.rightBarButtonItem = editButton
 
     }
-
     
     @objc func editButtonPressed() {
         let editVC = AddClientViewController()
-        editVC.delegate = self
         let editNVC = LightStatusNavigationController(rootViewController: editVC)
+        editVC.delegate = self
         editVC.client = client
         present(editNVC, animated: true, completion: nil)
     }
     
-
     // MARK: UICollectionViewDataSource
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return reportItems.count
     }
@@ -100,30 +109,15 @@ class ClientDetailCollectionViewController: BaseCollectionViewController, UIColl
             print("Failed to fetch ClientList: \(err)")
         }
         
-//        NSFetchedResultsController(fetchRequest: <#T##NSFetchRequest<_>#>, managedObjectContext: <#T##NSManagedObjectContext#>, sectionNameKeyPath: <#T##String?#>, cacheName: <#T##String?#>)
-//        
-//        
     }
-    
-    
 }
 
-extension ClientDetailCollectionViewController: AddClientViewControllerDelegate, ClientDetailHeaderReusableViewDelegate, NewReportViewControllerDelegate {
+extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, NewReportViewControllerDelegate {
 
     func reportSavedPressed(report: ReportItem) {
         self.reportItems.append(report)
         self.collectionView.insertItems(at: [IndexPath(item: self.reportItems.count - 1, section: 0)])
         self.collectionView.reloadItems(at: [IndexPath(item: self.reportItems.count - 1, section: 0)])
-    }
-
-    // AddClientViewControllerDelegate
-    func addClientDidFinish(client: ClientInfo) {
-        
-    }
-    
-    func editClientDidFinish(client: ClientInfo) {
-        self.client = client
-        self.collectionView.reloadData()
     }
     
     // ClientDetailHeaderReusableViewDelegate
