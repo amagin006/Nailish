@@ -26,7 +26,7 @@ class FetchCollectionViewController: UICollectionViewController, NSFetchedResult
     
     var contentsChanges = [CollectionViewContentChange]()
     var sectionChanges = [CollectionViewSectionChange]()
-   
+    
     override func viewDidLoad() {
         fetchedClientInfoResultsController.delegate = self
         fetchedReportItemResultsController.delegate = self
@@ -51,7 +51,10 @@ class FetchCollectionViewController: UICollectionViewController, NSFetchedResult
         let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
         fetchRequest.sortDescriptors = [visitDateDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                             managedObjectContext: context,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
         frc.delegate = self
         return frc
     }()
