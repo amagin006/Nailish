@@ -25,19 +25,36 @@ struct CollectionViewSectionChange {
 class FetchCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate {
     
     var contentsChanges = [CollectionViewContentChange]()
-    var senctionChanges = [CollectionViewSectionChange]()
-   
+    var sectionChanges = [CollectionViewSectionChange]()
+    
     override func viewDidLoad() {
-        fetchedResultsController.delegate = self
+        fetchedClientInfoResultsController.delegate = self
+        fetchedReportItemResultsController.delegate = self
     }
     
-    lazy var fetchedResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
+    lazy var fetchedClientInfoResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
         let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
         let nameInitialDescriptors = NSSortDescriptor(key: "nameInitial", ascending: true)
         let firstNameDescriptors = NSSortDescriptor(key: "firstName", ascending: true)
         fetchRequest.sortDescriptors = [nameInitialDescriptors, firstNameDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: "nameInitial", cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                             managedObjectContext: context,
+                                             sectionNameKeyPath: "nameInitial",
+                                             cacheName: nil)
+        frc.delegate = self
+        return frc
+    }()
+    
+    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
+        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
+        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
+        fetchRequest.sortDescriptors = [visitDateDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                             managedObjectContext: context,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
         frc.delegate = self
         return frc
     }()
@@ -46,13 +63,11 @@ class FetchCollectionViewController: UICollectionViewController, NSFetchedResult
         
         let change = CollectionViewContentChange(type: type, indexPath: indexPath, newIndexPath: newIndexPath)
         contentsChanges.append(change)
-        print("conentChange ============ \(change)")
     }
-    
+    // FIRST TIME EDITTING NOT UPDATING
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         let change = CollectionViewSectionChange(type: type, sectionInfo: sectionInfo, sectionIndex: sectionIndex)
-        senctionChanges.append(change)
-        print("sectionChange +++++++++ \n\(change)")
+        sectionChanges.append(change)
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -60,16 +75,14 @@ class FetchCollectionViewController: UICollectionViewController, NSFetchedResult
             for contentsChange in contentsChanges {
                 self.performCollectionViewContentsChange(contentsChange)
             }
-            for sectionChange in senctionChanges {
+            for sectionChange in sectionChanges {
                 self.performCollectionViewSectionChange(sectionChange)
             }
         }, completion: { _ in
             self.contentsChanges.removeAll()
-            self.senctionChanges.removeAll()
-            print("completion")
+            self.sectionChanges.removeAll()
         })
     }
-    
 }
 
 private extension FetchCollectionViewController {
@@ -81,9 +94,10 @@ private extension FetchCollectionViewController {
         case .update:
             collectionView.reloadItems(at: [contentChange.indexPath!])
         case .move:
-            collectionView?.moveItem(at: contentChange.indexPath!, to: contentChange.newIndexPath!)
+            collectionView.deleteItems(at: [contentChange.indexPath!])
+            collectionView.insertItems(at: [contentChange.newIndexPath!])
         case .delete:
-            collectionView?.deleteItems(at: [contentChange.indexPath!])
+            collectionView.deleteItems(at: [contentChange.indexPath!])
         @unknown default:
             fatalError()
         }
@@ -94,17 +108,9 @@ private extension FetchCollectionViewController {
         switch sectionChange.type {
         case .insert:
             collectionView.insertSections(NSIndexSet(index: sectionChange.sectionIndex) as IndexSet)
-        case .update:
-            print("update")
-//            collectionView.reloadItems(at: [contentChange.indexPath!])
-        case .move:
-            print("move")
-//            collectionView?.moveItem(at: contentChange.indexPath!, to: contentChange.newIndexPath!)
         case .delete:
-            print("delete")
-//            collectionView?.deleteItems(at: [contentChange.indexPath!])
-        @unknown default:
-            fatalError()
+            collectionView.deleteSections(NSIndexSet(index: sectionChange.sectionIndex) as IndexSet)
+        default: break
         }
     }
 }

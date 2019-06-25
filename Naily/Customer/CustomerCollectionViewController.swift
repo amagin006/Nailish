@@ -26,11 +26,18 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        do {
+            try fetchedClientInfoResultsController.performFetch()
+        } catch let err {
+            print(err)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         do {
-            try fetchedResultsController.performFetch()
+            try fetchedClientInfoResultsController.performFetch()
         } catch let err {
             print(err)
         }
@@ -39,18 +46,6 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         self.collectionView!.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         setRightAddButton()
     }
-    
-//    lazy var fetchedResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
-//        let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
-//        let nameInitialDescriptors = NSSortDescriptor(key: "nameInitial", ascending: true)
-//        let firstNameDescriptors = NSSortDescriptor(key: "firstName", ascending: true)
-//        fetchRequest.sortDescriptors = [nameInitialDescriptors, firstNameDescriptors]
-//        let context = CoreDataManager.shared.persistentContainer.viewContext
-//        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: "nameInitial", cacheName: nil)
-//        frc.delegate = self
-//        return frc
-//    }()
-
 
     // MARK: helper methods
     private func setRightAddButton() {
@@ -66,14 +61,14 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     
     // MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if let count = fetchedResultsController.sections?.count {
+        if let count = fetchedClientInfoResultsController.sections?.count {
             return count
         }
         return 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let count = fetchedResultsController.sections?[section].numberOfObjects {
+        if let count = fetchedClientInfoResultsController.sections?[section].numberOfObjects {
             return count
         }
         return 0
@@ -82,7 +77,7 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CustomerCollectionViewCell
         
-        let clientInfoData = fetchedResultsController.object(at: indexPath)
+        let clientInfoData = fetchedClientInfoResultsController.object(at: indexPath)
         cell.clientInfo = clientInfoData
         
         return cell
@@ -97,7 +92,7 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId, for: indexPath) as! SectionHeader
             
-            let firstItem = fetchedResultsController.sections![indexPath.section]
+            let firstItem = fetchedClientInfoResultsController.sections![indexPath.section]
             header.headerLable.text = "\(firstItem.name.first!)"
             return header
         }
@@ -113,31 +108,17 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
-//        let detailVC = ClientDetailCollectionViewController()
-//        detailVC.client = fetchedResultsController.object(at: indexPath)
-//        self.navigationController?.pushViewController(detailVC, animated: true)
+//
+        let detailVC = ClientDetailCollectionViewController()
+        detailVC.client = fetchedClientInfoResultsController.object(at: indexPath)
+        self.navigationController?.pushViewController(detailVC, animated: true)
 
-        // Delete Item
-        
-//        nameSortedClientList[indexPath.section].remove(at: indexPath.row)
-//        self.collectionView.deleteItems(at: [indexPath])
-//        manageContext.delete(deletClient)
-        
-//        CoreDataManager.shared.saveContext()
-        
-        let clientInfoData = fetchedResultsController.object(at: indexPath)
-        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-        manageContext.delete(clientInfoData)
-        print(clientInfoData)
-        do {
-            try fetchedResultsController.performFetch()
-        } catch let err {
-            print("can't delete - \(err)")
-        }
+//        // Delete Item
+//        let clientInfoData = fetchedClientInfoResultsController.object(at: indexPath)
+//        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+//        manageContext.delete(clientInfoData)
     }
 }
-
 
 class SectionHeader: UICollectionReusableView {
     
