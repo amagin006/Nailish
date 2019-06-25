@@ -9,13 +9,13 @@
 import UIKit
 import CoreData
 
-protocol NewReportViewControllerDelegate:class {
-    func reportSavedPressed(report: ReportItem)
-}
+//protocol NewReportViewControllerDelegate:class {
+//    func reportSavedPressed(report: ReportItem)
+//}
 
 class NewReportViewController: UIViewController {
     
-    weak var delegate: NewReportViewControllerDelegate?
+//    weak var delegate: NewReportViewControllerDelegate?
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
     var selectImageNum = 0
@@ -176,9 +176,7 @@ class NewReportViewController: UIViewController {
             } catch let err {
                 print("failed save Report - \(err)")
             }
-            dismiss(animated: true) {
-                self.delegate?.reportSavedPressed(report: newReport as! ReportItem)
-            }
+            dismiss(animated: true)
         }
     }
     

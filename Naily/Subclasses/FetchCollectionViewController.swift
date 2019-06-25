@@ -48,7 +48,7 @@ class FetchCollectionViewController: UICollectionViewController, NSFetchedResult
     
     lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
         let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
-        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
+        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: false)
         fetchRequest.sortDescriptors = [visitDateDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
