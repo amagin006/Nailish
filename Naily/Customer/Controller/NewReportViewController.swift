@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Photos
 
 class NewReportViewController: UIViewController {
     
@@ -67,7 +68,9 @@ class NewReportViewController: UIViewController {
     private func setupUI() {
         view.addSubview(formScrollView)
         formScrollView.anchors(topAnchor: view.topAnchor, leadingAnchor: view.leadingAnchor, trailingAnchor: view.trailingAnchor, bottomAnchor: view.bottomAnchor)
-        formScrollView.contentSize.width = UIScreen.main.bounds.width
+        formScrollView.frame = self.view.frame
+        formScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 2000)
+//        formScrollView.contentSize.width = UIScreen.main.bounds.width
 
         formScrollView.addSubview(reportMainImageView)
         reportMainImageView.topAnchor.constraint(equalTo: formScrollView.topAnchor).isActive = true
@@ -81,7 +84,7 @@ class NewReportViewController: UIViewController {
         subImageSV.topAnchor.constraint(equalTo: reportMainImageView.bottomAnchor, constant: 10).isActive = true
         subImageSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
         subImageSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
-        subImageSV.heightAnchor.constraint(equalToConstant: 92).isActive = true
+        subImageSV.heightAnchor.constraint(equalToConstant: 106).isActive = true
         
         for i in 0..<4 {
             if reportImageViews.count < 4 {
@@ -147,12 +150,41 @@ class NewReportViewController: UIViewController {
     
     @objc func selectImage(_ sender: UITapGestureRecognizer) {
         selectImageNum = sender.view!.tag
-        editSelectImage()
+        let status = PHPhotoLibrary.authorizationStatus()
+        switch status {
+        case .authorized:
+            // handle authorized status
+            self.editSelectImage()
+        default:
+            // ask for permissions
+            PHPhotoLibrary.requestAuthorization { status in
+                switch status {
+                case .authorized:
+                    self.editSelectImage()
+                default:
+                    // won't happen but still
+                    let cameraUnavailableAlertController = UIAlertController (title: "Photo Library Unavailable", message: "Please check to see if device settings doesn't allow photo library access", preferredStyle: .alert)
+                    
+                    let settingsAction = UIAlertAction(title: "Settings", style: .destructive) { (_) -> Void in
+                        let settingsUrl = NSURL(string:UIApplication.openSettingsURLString)
+                        if let url = settingsUrl {
+                            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+                        }
+                    }
+                    let cancelAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
+                    cameraUnavailableAlertController.addAction(settingsAction)
+                    cameraUnavailableAlertController.addAction(cancelAction)
+                    self.present(cameraUnavailableAlertController , animated: true, completion: nil)
+                    break
+                }
+            }
+        }
     }
     
     private func editSelectImage() {
         let imagePickController = UIImagePickerController()
         imagePickController.delegate = self
+        imagePickController.sourceType = .photoLibrary
         imagePickController.allowsEditing = true
         
         present(imagePickController, animated: true, completion: nil)
@@ -323,7 +355,8 @@ extension NewReportViewController: UIImagePickerControllerDelegate, UINavigation
         dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let editedImage = info[.editedImage] as? UIImage {
             reportMainImageView.image = editedImage
