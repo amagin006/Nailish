@@ -13,6 +13,7 @@
 		433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */; };
 		433705AA22AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */; };
 		433705AC22AEEFF900EBC58B /* UIView+ConstraintLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433705AB22AEEFF900EBC58B /* UIView+ConstraintLayout.swift */; };
+		435C902E22C3557C009D6D4E /* ClientModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */; };
 		437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75A4229FABFF0032E371 /* AppDelegate.swift */; };
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
@@ -21,7 +22,6 @@
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
 		43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */; };
 		43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49E22A7B315003A07ED /* MyTextField.swift */; };
-		43A2F4A322A85304003A07ED /* ClientModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F4A122A85304003A07ED /* ClientModel.xcdatamodeld */; };
 		43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */; };
 		43E6915422AB0B8A0097C2B6 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */; };
 		43ED0B0122BD8D4100781893 /* DatePickerKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0022BD8D4100781893 /* DatePickerKeyboard.swift */; };
@@ -38,6 +38,7 @@
 		433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewController.swift; sourceTree = "<group>"; };
 		433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientDetailHeadReusableView.swift; sourceTree = "<group>"; };
 		433705AB22AEEFF900EBC58B /* UIView+ConstraintLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+ConstraintLayout.swift"; sourceTree = "<group>"; };
+		435C902D22C3557B009D6D4E /* ClientModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ClientModel.xcdatamodel; sourceTree = "<group>"; };
 		437A75A1229FABFF0032E371 /* Naily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437A75A4229FABFF0032E371 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		437A75A9229FABFF0032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -48,7 +49,6 @@
 		43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewCell.swift; sourceTree = "<group>"; };
 		43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClientViewController.swift; sourceTree = "<group>"; };
 		43A2F49E22A7B315003A07ED /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
-		43A2F4A222A85304003A07ED /* ClientModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ClientModel.xcdatamodel; sourceTree = "<group>"; };
 		43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportViewController.swift; sourceTree = "<group>"; };
 		43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		43ED0B0022BD8D4100781893 /* DatePickerKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerKeyboard.swift; sourceTree = "<group>"; };
@@ -82,8 +82,8 @@
 			isa = PBXGroup;
 			children = (
 				43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */,
-				4337059122ADE57A00EBC58B /* ReportImageCollectionViewCell.swift */,
 				433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */,
+				4337059122ADE57A00EBC58B /* ReportImageCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -133,8 +133,8 @@
 				437A75B6229FAC4F0032E371 /* Supporting Files */,
 				437A75B0229FAC010032E371 /* Info.plist */,
 				437A75B7229FBF8B0032E371 /* MainTabBarController.swift */,
-				43A2F4A122A85304003A07ED /* ClientModel.xcdatamodeld */,
 				43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */,
+				435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */,
 				43A2F4A022A7B31A003A07ED /* HelperExtentions */,
 			);
 			path = Naily;
@@ -155,9 +155,9 @@
 			isa = PBXGroup;
 			children = (
 				43A2F49E22A7B315003A07ED /* MyTextField.swift */,
+				43ED0B0422BD8D9100781893 /* MyTextView.swift */,
 				43ED0B0022BD8D4100781893 /* DatePickerKeyboard.swift */,
 				43ED0B0222BD8D5B00781893 /* Extensions.swift */,
-				43ED0B0422BD8D9100781893 /* MyTextView.swift */,
 				43ED0B0822BD998900781893 /* CustomToolbar.swift */,
 			);
 			path = HelperExtentions;
@@ -234,7 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43A2F4A322A85304003A07ED /* ClientModel.xcdatamodeld in Sources */,
+				435C902E22C3557C009D6D4E /* ClientModel.xcdatamodeld in Sources */,
 				43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */,
 				4337059D22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift in Sources */,
 				43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */,
@@ -454,12 +454,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		43A2F4A122A85304003A07ED /* ClientModel.xcdatamodeld */ = {
+		435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				43A2F4A222A85304003A07ED /* ClientModel.xcdatamodel */,
+				435C902D22C3557B009D6D4E /* ClientModel.xcdatamodel */,
 			);
-			currentVersion = 43A2F4A222A85304003A07ED /* ClientModel.xcdatamodel */;
+			currentVersion = 435C902D22C3557B009D6D4E /* ClientModel.xcdatamodel */;
 			path = ClientModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

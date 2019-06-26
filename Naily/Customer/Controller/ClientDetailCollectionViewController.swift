@@ -32,7 +32,6 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         
     override func viewDidLoad() {
         super.viewDidLoad()
-//        fetchReportItem()
         collectionView.backgroundColor = .white
         self.collectionView.register(ClientDetailHeaderReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         self.collectionView.register(ReportImageCollectionViewCell.self, forCellWithReuseIdentifier: reportIdentifier)
@@ -49,11 +48,11 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
             fetchedReportItemResultsController.fetchRequest.predicate = NSPredicate(format: "client == %@", client)
             try fetchedReportItemResultsController.performFetch()
         } catch let err {
-            print(err)
+            print("Failed fetchedReportItem \(err)")
         }
     }
     
-    @objc func editButtonPressed() {
+    @objc private func editButtonPressed() {
         let editVC = AddClientViewController()
         let editNVC = LightStatusNavigationController(rootViewController: editVC)
         editVC.delegate = self
@@ -76,6 +75,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let reportCell = collectionView.dequeueReusableCell(withReuseIdentifier: reportIdentifier, for: indexPath) as! ReportImageCollectionViewCell
         let reportData = fetchedReportItemResultsController.object(at: indexPath)
+        reportCell.delegate = self
         reportCell.reportItem = reportData
         return reportCell
     }
@@ -104,8 +104,8 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     }()
 }
 
-extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, AddClientViewControllerDelegate {
-    
+extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, ReportImageCollectionViewCellDelegate, AddClientViewControllerDelegate {
+
     func editClientDidFinish(client: ClientInfo) {
         self.client = client
     }
@@ -121,5 +121,15 @@ extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDe
         let newReportNVC = LightStatusNavigationController(rootViewController: newReportVC)
         present(newReportNVC, animated: true, completion: nil)
     }
+    
+    // ClientDetailHeaderReusableViewDelegate
+    func editReportItemButtonPressed(report: ReportItem) {
+        let editReportVC = NewReportViewController()
+        editReportVC.client = client
+        editReportVC.report = report
+        let editReportNVC = LightStatusNavigationController(rootViewController: editReportVC)
+        present(editReportNVC, animated: true, completion: nil)
+    }
+    
     
 }

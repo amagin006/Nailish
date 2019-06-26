@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol ReportImageCollectionViewCellDelegate: class {
+    func editReportItemButtonPressed(report: ReportItem)
+}
+
 class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
+    
+    weak var delegate: ReportImageCollectionViewCellDelegate?
     
     var snapshotImages = [Data]()
     var reportItem: ReportItem! {
@@ -22,6 +28,9 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
             }
             if let snapshot3 = reportItem.snapshot3 {
                 snapshotImages.append(snapshot3)
+            }
+            if let snapshot4 = reportItem.snapshot4 {
+                snapshotImages.append(snapshot4)
             }
             setupUI()
             dateLabel.text = reportItem.visitDate
@@ -42,7 +51,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // constraints priority
         contentView.backgroundColor = UIColor(red: 10/255, green: 20/255, blue: 15/255, alpha: 0.2)
         contentView.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -108,15 +116,21 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         priceRowSV.axis = .horizontal
         priceRowSV.distribution = .fillEqually
         
-        let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuTextLabel, priceRowSV, memoTitleLabel, memoTextLabel])
+        let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuTextLabel, priceRowSV, memoTitleLabel, memoTextLabel, editReportButton])
         contentView.addSubview(menuSV)
         menuSV.axis = .vertical
         menuSV.distribution = .equalSpacing
-        menuSV.spacing = 1
+        menuSV.spacing = 15
         menuSV.anchors(topAnchor: pageControl.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: contentView.bottomAnchor, padding: .init(top: 0, left: 10, bottom: 20, right: 10))
+        
+        // after 'self' is instantiated
+        editReportButton.addTarget(self, action: #selector(editReportButtonPressed), for: .touchUpInside)
     }
     
-
+    @objc func editReportButtonPressed() {
+        print("editbuttonPressed")
+        self.delegate?.editReportItemButtonPressed(report: reportItem)
+    }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
@@ -129,7 +143,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
     
     // View
     let scrollImageView: UIScrollView = {
@@ -161,7 +174,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"
-//        lb.backgroundColor = .yellow
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
@@ -169,7 +181,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     let menuTextLabel: UILabel = {
         let lb = UILabel()
         lb.text = "off + Jal Nail + design"
-//        lb.backgroundColor = .red
         return lb
     }()
     
@@ -177,15 +188,12 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         let lb = UILabel()
         lb.text = "Memo"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
-        
-//        lb.backgroundColor = .yellow
         return lb
     }()
     
     let memoTextLabel: UILabel = {
         let lb = UILabel()
         lb.numberOfLines = 0
-//        lb.backgroundColor = .red
         lb.text = """
         Description
         Description
@@ -241,6 +249,20 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         lb.text = "$ 6.00"
         lb.font = UIFont.boldSystemFont(ofSize: 18)
         return lb
+    }()
+
+    let editReportButton: UIButton = {
+        let bt = UIButton()
+        bt.setTitle("Edit", for: .normal)
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.setTitleColor(.black, for: .normal)
+        bt.layer.borderWidth = 2
+        bt.layer.cornerRadius = 10
+        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
+        bt.contentEdgeInsets = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
+        bt.layer.borderColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1).cgColor
+        bt.setImage(UIImage(named: "editicon1"), for: .normal)
+        return bt
     }()
 }
 
