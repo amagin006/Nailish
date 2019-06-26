@@ -9,13 +9,8 @@
 import UIKit
 import CoreData
 
-protocol NewReportViewControllerDelegate:class {
-    func reportSavedPressed(report: ReportItem)
-}
-
 class NewReportViewController: UIViewController {
     
-    weak var delegate: NewReportViewControllerDelegate?
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
     var selectImageNum = 0
@@ -23,7 +18,34 @@ class NewReportViewController: UIViewController {
     
     var report: ReportItem? {
         didSet {
-            
+            if let image1 = report?.snapshot1, let image2 = report?.snapshot2, let image3 = report?.snapshot3 {
+                reportImages.append(UIImage(data: image1)!)
+                reportImages.append(UIImage(data: image2)!)
+                reportImages.append(UIImage(data: image3)!)
+                for i in 0..<4 {
+                    let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
+                    iv.layer.borderWidth = 2
+                    iv.layer.borderColor = UIColor.lightGray.cgColor
+                    iv.translatesAutoresizingMaskIntoConstraints = false
+                    iv.isUserInteractionEnabled = true
+                    iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectImage(_:))))
+                    iv.tag = i
+                    reportImageViews.append(iv)
+                    reportImages.append(iv.image!)
+                    reportImageViews[i].image = reportImages[i]
+                    subImageSV.addArrangedSubview(reportImageViews[i])
+                }
+            }
+            reportMainImageView.image = reportImages[0]
+            visitTextField.text = report?.visitDate
+            menuTextField.text = report?.menu
+            if let price = report?.price {
+                priceTextField.text = String(price)
+            }
+            if let tips = report?.tips {
+                tipsTextField.text = String(tips)
+            }
+            memoTextView.text = report?.memo
         }
     }
 
@@ -61,26 +83,20 @@ class NewReportViewController: UIViewController {
         subImageSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         subImageSV.heightAnchor.constraint(equalToConstant: 92).isActive = true
         
-        for i in 0..<3 {
-            
-            let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
-            
-            iv.layer.borderWidth = 2
-            iv.layer.borderColor = UIColor.lightGray.cgColor
-            iv.translatesAutoresizingMaskIntoConstraints = false
-            iv.isUserInteractionEnabled = true
-            iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectImage(_:))))
-            iv.tag = i
-            reportImageViews.append(iv)
-            reportImages.append(iv.image!)
-            subImageSV.addArrangedSubview(iv)
+        for i in 0..<4 {
+            if reportImageViews.count < 4 {
+                let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
+                iv.layer.borderWidth = 2
+                iv.layer.borderColor = UIColor.lightGray.cgColor
+                iv.translatesAutoresizingMaskIntoConstraints = false
+                iv.isUserInteractionEnabled = true
+                iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectImage(_:))))
+                iv.tag = i
+                reportImageViews.append(iv)
+                reportImages.append(iv.image!)
+                subImageSV.addArrangedSubview(reportImageViews[i])
+            }
         }
-        
-        let addImageButton = UIButton()
-        addImageButton.setImage(#imageLiteral(resourceName: "addicon2"), for: .normal)
-        addImageButton.addTarget(self, action: #selector(addNewImageSelect), for: .touchUpInside)
-        
-        subImageSV.addArrangedSubview(addImageButton)
         
         let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceTextField])
         priceSV.axis = .vertical
@@ -115,7 +131,7 @@ class NewReportViewController: UIViewController {
     }
     
     private func setupNavigationUI() {
-        navigationItem.title = "New Report"
+        navigationItem.title = report == nil ? "New Report" : "Edit Report"
         let cancelButton: UIBarButtonItem = {
             let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(reportCancelButtonPressed))
             return bt
@@ -130,23 +146,16 @@ class NewReportViewController: UIViewController {
     }
     
     @objc func selectImage(_ sender: UITapGestureRecognizer) {
-
-        let image = reportImages[(sender.view?.tag)!]
         selectImageNum = sender.view!.tag
-        if image != UIImage(named: "imagePlaceholder") {
-            reportMainImageView.image = image
-        }
+        editSelectImage()
     }
     
-    @objc func addNewImageSelect() {
-        print("press selectImage")
-        if reportImages[2] == UIImage(named: "imagePlaceholder"){
-            let imagePickController = UIImagePickerController()
-            imagePickController.delegate = self
-            imagePickController.allowsEditing = true
-            
-            present(imagePickController, animated: true, completion: nil)
-        }
+    private func editSelectImage() {
+        let imagePickController = UIImagePickerController()
+        imagePickController.delegate = self
+        imagePickController.allowsEditing = true
+        
+        present(imagePickController, animated: true, completion: nil)
     }
     
     @objc func reportCancelButtonPressed() {
@@ -167,8 +176,8 @@ class NewReportViewController: UIViewController {
             
             newReport.setValue(visitTextField.text ?? "", forKey: "visitDate")
             newReport.setValue(menuTextField.text ?? "", forKey: "menu")
-            newReport.setValue(Int(priceTextField.text ?? ""), forKey: "price")
-            newReport.setValue(Int(tipsTextField.text ?? ""), forKey: "tips")
+            newReport.setValue(Int(priceTextField.text ?? "0"), forKey: "price")
+            newReport.setValue(Int(tipsTextField.text ?? "0"), forKey: "tips")
             newReport.setValue(memoTextView.text ?? "", forKey: "memo")
             newReport.setValue(client, forKey: "client")
             do {
@@ -176,9 +185,17 @@ class NewReportViewController: UIViewController {
             } catch let err {
                 print("failed save Report - \(err)")
             }
-            dismiss(animated: true) {
-                self.delegate?.reportSavedPressed(report: newReport as! ReportItem)
-            }
+            dismiss(animated: true)
+        } else {
+            report?.snapshot1 = reportImageViews[0].image?.jpegData(compressionQuality: 0.1)
+            report?.snapshot2 = reportImageViews[1].image?.jpegData(compressionQuality: 0.1)
+            report?.snapshot3 = reportImageViews[2].image?.jpegData(compressionQuality: 0.1)
+            report?.visitDate = visitTextField.text ?? ""
+            report?.menu = menuTextField.text ?? ""
+            report?.price = Int32(priceTextField.text ?? "0")!
+            report?.tips = Int32(tipsTextField.text ?? "0")!
+            report?.memo = memoTextView.text ?? ""
+            dismiss(animated: true)
         }
     }
     
@@ -204,7 +221,6 @@ class NewReportViewController: UIViewController {
     }
     
     // UIParts
-    
     let formScrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.backgroundColor = .white
@@ -217,6 +233,17 @@ class NewReportViewController: UIViewController {
         return iv
     }()
     
+    let subImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
+
+        iv.layer.borderWidth = 2
+        iv.layer.borderColor = UIColor.lightGray.cgColor
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectImage(_:))))
+        return iv
+    }()
+
     let subImageSV: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -286,10 +313,8 @@ class NewReportViewController: UIViewController {
     let memoTextView: MyTextView = {
         let tv = MyTextView()
         tv.font = UIFont.systemFont(ofSize: 18)
-       
         return tv
     }()
-
 }
 
 extension NewReportViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -302,12 +327,15 @@ extension NewReportViewController: UIImagePickerControllerDelegate, UINavigation
         
         if let editedImage = info[.editedImage] as? UIImage {
             reportMainImageView.image = editedImage
-            for (index,imageView) in reportImageViews.enumerated() {
-                if imageView.image == UIImage(named: "imagePlaceholder") {
-                    imageView.image = editedImage
-                    reportImages[index] = editedImage
-                    break
-                }
+            switch selectImageNum {
+            case 0:
+                reportImageViews[0].image = editedImage
+            case 1:
+                reportImageViews[1].image = editedImage
+            case 2:
+                reportImageViews[2].image = editedImage
+            default:
+                print("---")
             }
             
         } else if let originalImage = info[.originalImage] as? UIImage {

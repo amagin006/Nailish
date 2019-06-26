@@ -135,7 +135,6 @@ class AddClientViewController: UIViewController {
                 print("Saved new client failed - \(err)")
             }
             dismiss(animated: true)
-            
         } else {
             do {
                 client?.firstName = firstNameTextField.text
@@ -156,7 +155,6 @@ class AddClientViewController: UIViewController {
                 self.delegate?.editClientDidFinish(client: self.client)
             }
         }
-
     }
     
     @objc func cancelButtonPressed() {
@@ -200,14 +198,14 @@ class AddClientViewController: UIViewController {
         return frc
     }()
     
-    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
-        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
-        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
-        fetchRequest.sortDescriptors = [visitDateDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        return frc
-    }()
+//    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
+//        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
+//        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
+//        fetchRequest.sortDescriptors = [visitDateDescriptors]
+//        let context = CoreDataManager.shared.persistentContainer.viewContext
+//        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+//        return frc
+//    }()
     
     let clientFormView: UIView = {
         let vi = UIView()

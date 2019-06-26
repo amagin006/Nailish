@@ -80,13 +80,11 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         addReportButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15).isActive = true
         addReportButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         addReportButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        
     }
     
     @objc func addButtonPressed() {
         self.delegate?.newReportButtonPressed()
     }
-
     
     var clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
@@ -131,7 +129,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.widthAnchor.constraint(equalToConstant: 60).isActive = true
         lb.font = UIFont.systemFont(ofSize: 12)
-//        lb.backgroundColor = .red
         return lb
     }()
     
@@ -179,7 +176,3 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         return bt
     }()
 }
-
-
-
-
