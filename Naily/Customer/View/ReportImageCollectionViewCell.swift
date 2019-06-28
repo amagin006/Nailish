@@ -258,6 +258,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         bt.setTitleColor(.black, for: .normal)
         bt.layer.borderWidth = 2
         bt.layer.cornerRadius = 10
+        bt.backgroundColor = .white
         bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
         bt.contentEdgeInsets = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         bt.layer.borderColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1).cgColor

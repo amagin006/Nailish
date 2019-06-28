@@ -84,7 +84,7 @@ class NewReportViewController: UIViewController {
         subImageSV.topAnchor.constraint(equalTo: reportMainImageView.bottomAnchor, constant: 10).isActive = true
         subImageSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
         subImageSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
-        subImageSV.heightAnchor.constraint(equalToConstant: 106).isActive = true
+        subImageSV.heightAnchor.constraint(equalToConstant: 90).isActive = true
         
         for i in 0..<4 {
             if reportImageViews.count < 4 {
@@ -222,6 +222,7 @@ class NewReportViewController: UIViewController {
             report?.snapshot1 = reportImageViews[0].image?.jpegData(compressionQuality: 0.1)
             report?.snapshot2 = reportImageViews[1].image?.jpegData(compressionQuality: 0.1)
             report?.snapshot3 = reportImageViews[2].image?.jpegData(compressionQuality: 0.1)
+            report?.snapshot4 = reportImageViews[3].image?.jpegData(compressionQuality: 0.1)
             report?.visitDate = visitTextField.text ?? ""
             report?.menu = menuTextField.text ?? ""
             report?.price = Int32(priceTextField.text ?? "0")!
@@ -367,6 +368,8 @@ extension NewReportViewController: UIImagePickerControllerDelegate, UINavigation
                 reportImageViews[1].image = editedImage
             case 2:
                 reportImageViews[2].image = editedImage
+            case 3:
+                reportImageViews[3].image = editedImage
             default:
                 print("---")
             }

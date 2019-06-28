@@ -15,7 +15,7 @@ class MainTabBarController: UITabBarController {
         
         viewControllers = [
             createViewController(viewController: CustomerCollectionViewController(), title: "Customer", imageName: "customer"),
-            createViewController(viewController: UIViewController(), title: "Calender", imageName: "calendar"),
+            createViewController(viewController: MainCalenderViewController(), title: "Calender", imageName: "calendar"),
             createViewController(viewController: UIViewController(), title: "Analysis", imageName: "analysis"),
             createViewController(viewController: UIViewController(), title: "Setting", imageName: "settings"),
             
@@ -25,7 +25,6 @@ class MainTabBarController: UITabBarController {
     
 
     fileprivate func createViewController(viewController: UIViewController, title: String, imageName: String) -> UIViewController {
-        
         viewController.view.backgroundColor = .white
         viewController.navigationItem.title = title
         let navController = UINavigationController(rootViewController: viewController)
