@@ -24,7 +24,11 @@ class AddClientViewController: UIViewController {
             lastNameTextField.text = client?.lastName ?? ""
             mailTextField.text = client?.mailAdress ?? ""
             mobileTextField.text = client?.mobileNumber ?? ""
-            DOBTextField.text = client?.dateOfBirth ?? ""
+            if let date = client?.dateOfBirth {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .medium
+                DOBTextField.text = formatter.string(from: date)
+            }
             memoTextField.text = client?.memo ?? ""
             if let image = client?.clientImage {
                 personImageView.image = UIImage(data: image)
@@ -126,7 +130,9 @@ class AddClientViewController: UIViewController {
                 newClient.setValue(nameInitial, forKey: "nameInitial")
                 newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
                 newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
-                newClient.setValue(DOBTextField.text ?? "", forKey: "dateOfBirth")
+                if DOBTextField.text != "" {
+                    newClient.setValue(DOBTextField.toolbar.datePicker.date, forKey: "dateOfBirth")
+                }
                 newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
             
                 try fetchedClientInfoResultsController.managedObjectContext.save()
@@ -142,7 +148,9 @@ class AddClientViewController: UIViewController {
                 client?.lastName = lastNameTextField.text
                 client?.mailAdress = mailTextField.text ?? ""
                 client?.mobileNumber = mobileTextField.text ?? ""
-                client?.dateOfBirth = DOBTextField.text ?? ""
+                if DOBTextField.text != "" {
+                    client?.dateOfBirth = DOBTextField.toolbar.datePicker.date
+                }
                 client?.memo = memoTextField.text ?? ""
                 if let image = personImageView.image {
                     client?.clientImage = image.jpegData(compressionQuality: 0.1)
@@ -290,10 +298,8 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let DOBTextField: MyTextField = {
-        let tf = MyTextField()
-        tf.placeholder = "DD/MM/YYY"
-        tf.keyboardType = UIKeyboardType.numbersAndPunctuation
+    let DOBTextField: DatePickerKeyboard = {
+        let tf = DatePickerKeyboard()
         return tf
     }()
     

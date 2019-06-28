@@ -20,12 +20,15 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         didSet {
             firstNameLabel.text = client?.firstName!
             lastNameLabel.text = client?.lastName ?? ""
-            lastVisitLabel.text = client?.lastVisit ?? ""
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            if let date = client?.lastVisit {
+                lastVisitLabel.text = formatter.string(from: date)
+            }
             memoTextLabel.text = client?.memo ?? ""
             if let image = client?.clientImage {
                 clientImage.image = UIImage(data: image)
             }
-            
         }
     }
     

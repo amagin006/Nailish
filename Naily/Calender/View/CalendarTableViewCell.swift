@@ -32,6 +32,20 @@ class CalendarTableViewCell: UITableViewCell {
 //        return bv
 //    }()
     
+    private func setupUI() {
+        let timeSV = UIStackView(arrangedSubviews: [startTimeLabel, separatorTimeLabel, endTimeLabel])
+        timeSV.axis = .horizontal
+        
+        let textSV = UIStackView(arrangedSubviews: [nameLabel, timeSV, memuLabel])
+        textSV.axis = .vertical
+        
+        let imageTextSV = UIStackView(arrangedSubviews: [clientImage, textSV])
+        imageTextSV.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        imageTextSV.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        imageTextSV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+    }
+    
     private let clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "woman4"))
         iv.layer.cornerRadius = 30

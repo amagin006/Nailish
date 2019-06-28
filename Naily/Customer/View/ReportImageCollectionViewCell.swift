@@ -33,7 +33,12 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
                 snapshotImages.append(snapshot4)
             }
             setupUI()
-            dateLabel.text = reportItem.visitDate
+            
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            if let date = reportItem.visitDate {
+                dateLabel.text = formatter.string(from: date)
+            }
             menuTextLabel.text = reportItem.menu
             memoTextLabel.text = reportItem.memo
             priceText.text = "\(reportItem.price)"
