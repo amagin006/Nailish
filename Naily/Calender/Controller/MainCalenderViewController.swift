@@ -46,23 +46,35 @@ class MainCalenderViewController: UIViewController {
     }
     
     private func setupTableViewUI() {
-        view.addSubview(appointTitleLabel)
-        appointTitleLabel.topAnchor.constraint(equalTo: calendarView.bottomAnchor).isActive = true
-        appointTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        appointTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        appointTitleLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        view.addSubview(appointTitleView)
+        appointTitleView.topAnchor.constraint(equalTo: calendarView.bottomAnchor).isActive = true
+        appointTitleView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        appointTitleView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        appointTitleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        appointTitleView.addSubview(appointTitleLabel)
+        appointTitleLabel.leadingAnchor.constraint(equalTo: appointTitleView.leadingAnchor, constant: 20).isActive = true
+        appointTitleLabel.centerYAnchor.constraint(equalTo: appointTitleView.centerYAnchor).isActive = true
+        
+        appointTitleView.addSubview(addAppointmentButton)
+        addAppointmentButton.trailingAnchor.constraint(equalTo: appointTitleView.trailingAnchor, constant: -20).isActive = true
+        addAppointmentButton.centerYAnchor.constraint(equalTo: appointTitleView.centerYAnchor).isActive = true
         
         view.addSubview(appointTableView)
-        appointTableView.topAnchor.constraint(equalTo: appointTitleLabel.bottomAnchor).isActive = true
+        appointTableView.topAnchor.constraint(equalTo: appointTitleView.bottomAnchor).isActive = true
         appointTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         appointTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         appointTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         appointTableView.delegate = self
         appointTableView.dataSource = self
-        appointTableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        appointTableView.separatorColor = .clear
+        appointTableView.backgroundColor = .red
+        appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
     }
 
-    
+    @objc func addAppointmentPressed() {
+        print("addAppointmentPressed")
+    }
 
     
     // UI Parts
@@ -78,20 +90,36 @@ class MainCalenderViewController: UIViewController {
         return tv
     }()
     
+    let appointTitleView: UIView = {
+        let tv = UIView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.backgroundColor = UIColor(cgColor: #colorLiteral(red: 0.7957356597, green: 0.9098039269, blue: 0.5860904475, alpha: 1))
+        return tv
+    }()
+    
     let appointTitleLabel: MyUILabel = {
         let lb = MyUILabel()
         lb.text = "Appointment"
-        lb.font = UIFont.boldSystemFont(ofSize: 26)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.boldSystemFont(ofSize: 20)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.backgroundColor = UIColor(cgColor: #colorLiteral(red: 0.7957356597, green: 0.9098039269, blue: 0.5860904475, alpha: 1))
         return lb
     }()
-
+    
+    let addAppointmentButton: UIButton = {
+        let bt = UIButton(type: .system)
+        bt.setTitle("Add", for: .normal)
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.titleLabel?.text = "Add"
+        bt.addTarget(self, action: #selector(addAppointmentPressed), for: .touchUpInside)
+        return bt
+    }()
 }
 
 extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
         cell.textLabel?.text = myArray[indexPath.row]
         return cell
     }
@@ -99,7 +127,10 @@ extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return myArray.count
     }
-
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 116
+    }
 
 }
 

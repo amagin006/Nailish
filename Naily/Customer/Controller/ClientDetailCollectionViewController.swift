@@ -93,7 +93,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     // MARK: UICollectionView flow layout
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 300)
+        return .init(width: view.frame.width, height: 400)
     }
     
     var layout: UICollectionViewFlowLayout = {

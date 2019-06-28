@@ -34,6 +34,10 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         setupUI()
     }
     
+    func getHaderHeight() -> Int {
+        return Int(self.frame.height)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -76,9 +80,15 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         headerInfoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         headerInfoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         
-        addSubview(addReportButton)
-        addReportButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15).isActive = true
-        addReportButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        addSubview(reportTitleView)
+        reportTitleView.topAnchor.constraint(equalTo: headerInfoSV.bottomAnchor, constant: 10).isActive = true
+        reportTitleView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        reportTitleView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        reportTitleView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        reportTitleView.addSubview(addReportButton)
+        addReportButton.centerYAnchor.constraint(equalTo: reportTitleView.centerYAnchor).isActive = true
+        addReportButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         addReportButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
     }
     
@@ -102,7 +112,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.text = "Name"
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
-//        lb.backgroundColor = .red
         return lb
     }()
     
@@ -153,12 +162,18 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.numberOfLines = 0
-        
         lb.sizeToFit()
         var labelframe = lb.frame
         lb.frame.origin.x = 0
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
         return lb
+    }()
+    
+    let reportTitleView: UIView = {
+        let vi = UIView()
+        vi.translatesAutoresizingMaskIntoConstraints = false
+        vi.backgroundColor = .blue
+        return vi
     }()
     
     let addReportButton: UIButton = {
@@ -169,9 +184,10 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         bt.setTitleColor(.black, for: .normal)
         bt.layer.borderWidth = 2
         bt.layer.cornerRadius = 10
+        bt.backgroundColor = .white
         bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
         bt.contentEdgeInsets = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
-        bt.layer.borderColor = UIColor(red: 0.3, green: 0.7, blue: 0.6, alpha: 1).cgColor
+        bt.layer.borderColor = UIColor(cgColor: #colorLiteral(red: 0, green: 0.5433532596, blue: 0.7865155935, alpha: 1)).cgColor
         bt.setImage(UIImage(named: "addicon1"), for: .normal)
         return bt
     }()
