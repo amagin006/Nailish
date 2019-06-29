@@ -181,9 +181,9 @@
 			isa = PBXGroup;
 			children = (
 				435C903E22C512BA009D6D4E /* Utils */,
+				437A75B6229FAC4F0032E371 /* Supporting Files */,
 				4327315522A09EF900BE2792 /* Customer */,
 				435C903522C41B92009D6D4E /* Calender */,
-				437A75B6229FAC4F0032E371 /* Supporting Files */,
 				437A75B0229FAC010032E371 /* Info.plist */,
 				437A75B7229FBF8B0032E371 /* MainTabBarController.swift */,
 				43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */,
