@@ -1,5 +1,5 @@
 //
-//  CustomToolbar.swift
+//  CustomDateToolbar.swift
 //  Naily
 //
 //  Created by Shota Iwamoto on 2019-06-21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomToolbar: UIToolbar {
+class CustomDateToolbar: UIToolbar {
     
     var didSelectDate: ((String, Bool) -> ())?
     
@@ -48,6 +48,7 @@ class CustomToolbar: UIToolbar {
         formatter.dateStyle = .medium
         return formatter.string(from: datePicker.date)
     }
+    
     
     @objc func doneButtonAction() {
         didSelectDate!(getDateStr(), true)

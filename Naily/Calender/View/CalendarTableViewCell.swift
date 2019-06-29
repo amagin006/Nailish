@@ -9,6 +9,14 @@
 import UIKit
 
 class CalendarTableViewCell: UITableViewCell {
+    
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,7 +27,12 @@ class CalendarTableViewCell: UITableViewCell {
 //        self.addSubview(backView)
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func layoutSubviews() {
+        
 //        contentView.backgroundColor = .clear
 //        backgroundColor = .clear
 //        backView.layer.cornerRadius = 10
@@ -32,13 +45,37 @@ class CalendarTableViewCell: UITableViewCell {
 //        return bv
 //    }()
     
+    private func setupUI() {
+        
+        let timeSV = UIStackView(arrangedSubviews: [startTimeLabel, separatorTimeLabel, endTimeLabel])
+        timeSV.translatesAutoresizingMaskIntoConstraints = false
+        timeSV.spacing = 5
+        timeSV.axis = .horizontal
+
+        let textSV = UIStackView(arrangedSubviews: [nameLabel, timeSV, memuLabel])
+        textSV.translatesAutoresizingMaskIntoConstraints = false
+        textSV.alignment = .leading
+        textSV.distribution = .fillProportionally
+        textSV.spacing = 5
+        textSV.axis = .vertical
+
+        let imageTextSV = UIStackView(arrangedSubviews: [clientImage, textSV])
+        addSubview(imageTextSV)
+        imageTextSV.translatesAutoresizingMaskIntoConstraints = false
+        imageTextSV.axis = .horizontal
+        imageTextSV.spacing = 10
+        imageTextSV.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        imageTextSV.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        imageTextSV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+     }
+    
     private let clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "woman4"))
-        iv.layer.cornerRadius = 30
+        iv.layer.cornerRadius = 40
         iv.clipsToBounds = true
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        iv.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return iv
     }()
     
@@ -46,7 +83,7 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Ashry Henderson"
-        lb.backgroundColor = .yellow
+        lb.font = UIFont.boldSystemFont(ofSize: 20)
         return lb
     }()
     
@@ -54,7 +91,7 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "12:00"
-        lb.backgroundColor = .lightGray
+        lb.font = UIFont.boldSystemFont(ofSize: 20)
         return lb
     }()
     
@@ -62,7 +99,7 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "~"
-        lb.backgroundColor = .lightGray
+        lb.font = UIFont.boldSystemFont(ofSize: 20)
         return lb
     }()
     
@@ -70,7 +107,7 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "14:00"
-        lb.backgroundColor = .lightGray
+        lb.font = UIFont.boldSystemFont(ofSize: 20)
         return lb
     }()
     
@@ -78,7 +115,6 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Off + Jal + Design"
-        lb.backgroundColor = .lightGray
         return lb
     }()
 

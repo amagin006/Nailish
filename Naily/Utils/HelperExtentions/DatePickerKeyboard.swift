@@ -12,7 +12,7 @@ import UIKit
 
 class DatePickerKeyboard: UITextView, UITextViewDelegate {
     
-    let toolbar = CustomToolbar()
+    let toolbar = CustomDateToolbar()
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)

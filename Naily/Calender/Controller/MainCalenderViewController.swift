@@ -14,7 +14,6 @@ private let cellId = "cellId"
 class MainCalenderViewController: UIViewController {
 
     let gregorian: Calendar = Calendar(identifier: .gregorian)
-    private let myArray = ["First","Second","Third"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,17 +119,42 @@ class MainCalenderViewController: UIViewController {
 extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
-        cell.textLabel?.text = myArray[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return myArray.count
+        return 4
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 116
+        return 100
     }
+    
+//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let edit = editAction(at: indexPath)
+//        let delete = deleteAction(at: indexPath)
+//        return UISwipeActionsConfiguration(actions: [edit, delete])
+//    }
+//    
+//    private func editAction(at: IndexPath) -> UIContextualAction {
+//        let action = UIContextualAction(style: .normal, title: "Edit") { (action, view, completion) in
+//            print("editAction")
+//            completion(true)
+//        }
+//        action.image = #imageLiteral(resourceName: "editicon2")
+//        action.backgroundColor = .gray
+//        return action
+//    }
+//    
+//    private func deleteAction(at: IndexPath) -> UIContextualAction {
+//        let action = UIContextualAction(style: .normal, title: "Delete") { (action, view, completion) in
+//            print("deleteAction")
+//            completion(true)
+//        }
+//        action.image = #imageLiteral(resourceName: "garbageBox")
+//        action.backgroundColor = .red
+//        return action
+//    }
 
 }
 

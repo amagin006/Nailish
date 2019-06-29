@@ -46,6 +46,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         
         do {
             fetchedReportItemResultsController.fetchRequest.predicate = NSPredicate(format: "client == %@", client)
+//            fetchedReportItemResultsController.fetchRequest.sortDescriptors = [NSSortDescriptor(key: "visitDate", ascending: false)]
             try fetchedReportItemResultsController.performFetch()
         } catch let err {
             print("Failed fetchedReportItem \(err)")
@@ -77,6 +78,8 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         let reportData = fetchedReportItemResultsController.object(at: indexPath)
         reportCell.delegate = self
         reportCell.reportItem = reportData
+//        print("=================")
+//        print(reportData)
         return reportCell
     }
 
@@ -93,7 +96,14 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     // MARK: UICollectionView flow layout
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: 400)
+        let emptyLabel = UILabel(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+        emptyLabel.numberOfLines = 0
+        emptyLabel.lineBreakMode = .byWordWrapping
+        // font
+        emptyLabel.text = client.memo
+        emptyLabel.sizeToFit()
+
+        return .init(width: view.frame.width, height: emptyLabel.frame.height + 206)
     }
     
     var layout: UICollectionViewFlowLayout = {

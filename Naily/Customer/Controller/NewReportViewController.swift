@@ -38,7 +38,11 @@ class NewReportViewController: UIViewController {
                 }
             }
             reportMainImageView.image = reportImages[0]
-            visitTextField.text = report?.visitDate
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            if let date = report?.visitDate {
+                visitTextField.text = formatter.string(from: date)
+            }
             menuTextField.text = report?.menu
             if let price = report?.price {
                 priceTextField.text = String(price)
@@ -206,7 +210,7 @@ class NewReportViewController: UIViewController {
                 newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
             }
             
-            newReport.setValue(visitTextField.text ?? "", forKey: "visitDate")
+            newReport.setValue(visitTextField.toolbar.datePicker.date, forKey: "visitDate")
             newReport.setValue(menuTextField.text ?? "", forKey: "menu")
             newReport.setValue(Int(priceTextField.text ?? "0"), forKey: "price")
             newReport.setValue(Int(tipsTextField.text ?? "0"), forKey: "tips")
@@ -223,7 +227,7 @@ class NewReportViewController: UIViewController {
             report?.snapshot2 = reportImageViews[1].image?.jpegData(compressionQuality: 0.1)
             report?.snapshot3 = reportImageViews[2].image?.jpegData(compressionQuality: 0.1)
             report?.snapshot4 = reportImageViews[3].image?.jpegData(compressionQuality: 0.1)
-            report?.visitDate = visitTextField.text ?? ""
+            report?.visitDate = visitTextField.toolbar.datePicker.date
             report?.menu = menuTextField.text ?? ""
             report?.price = Int32(priceTextField.text ?? "0")!
             report?.tips = Int32(tipsTextField.text ?? "0")!
