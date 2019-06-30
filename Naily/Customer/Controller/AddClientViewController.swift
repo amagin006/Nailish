@@ -195,7 +195,6 @@ class AddClientViewController: UIViewController {
         
     }
     
-    // MARK: - UIParts
     lazy var fetchedClientInfoResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
         let fetchRequest = NSFetchRequest<ClientInfo>(entityName: "ClientInfo")
         let nameInitialDescriptors = NSSortDescriptor(key: "nameInitial", ascending: true)
@@ -215,9 +214,11 @@ class AddClientViewController: UIViewController {
 //        return frc
 //    }()
     
-    let clientFormView: UIView = {
-        let vi = UIView()
+    // MARK: - UIParts
+    let clientFormView: UIScrollView = {
+        let vi = UIScrollView()
         vi.translatesAutoresizingMaskIntoConstraints = false
+        vi.contentSize.height = 800
         return vi
     }()
     

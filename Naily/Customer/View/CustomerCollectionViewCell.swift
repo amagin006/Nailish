@@ -28,11 +28,13 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         let nameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
         nameSV.translatesAutoresizingMaskIntoConstraints = false
         nameSV.axis = .horizontal
+        nameSV.spacing = 10
         nameSV.alignment = .center
-        nameSV.distribution = .fillEqually
         
         let labelSV = UIStackView(arrangedSubviews: [nameSV, lastVistiDate])
         labelSV.translatesAutoresizingMaskIntoConstraints = false
+        labelSV.alignment = .leading
+        labelSV.spacing = 4
         labelSV.axis = .vertical
         
         let cellSV = UIStackView(arrangedSubviews: [cellImageView, labelSV])

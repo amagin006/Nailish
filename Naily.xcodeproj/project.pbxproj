@@ -26,6 +26,7 @@
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
 		43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */; };
 		43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49E22A7B315003A07ED /* MyTextField.swift */; };
+		43DA461822C7E13B00000FB5 /* AddAppointmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DA461722C7E13B00000FB5 /* AddAppointmentViewController.swift */; };
 		43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */; };
 		43E6915422AB0B8A0097C2B6 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */; };
 		43ED0B0122BD8D4100781893 /* DatePickerKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0022BD8D4100781893 /* DatePickerKeyboard.swift */; };
@@ -57,6 +58,7 @@
 		43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewCell.swift; sourceTree = "<group>"; };
 		43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClientViewController.swift; sourceTree = "<group>"; };
 		43A2F49E22A7B315003A07ED /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
+		43DA461722C7E13B00000FB5 /* AddAppointmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAppointmentViewController.swift; sourceTree = "<group>"; };
 		43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportViewController.swift; sourceTree = "<group>"; };
 		43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		43ED0B0022BD8D4100781893 /* DatePickerKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerKeyboard.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				435C903722C41CB0009D6D4E /* MainCalenderViewController.swift */,
+				43DA461722C7E13B00000FB5 /* AddAppointmentViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -180,14 +183,14 @@
 		437A75A3229FABFF0032E371 /* Naily */ = {
 			isa = PBXGroup;
 			children = (
-				435C903E22C512BA009D6D4E /* Utils */,
-				437A75B6229FAC4F0032E371 /* Supporting Files */,
 				4327315522A09EF900BE2792 /* Customer */,
 				435C903522C41B92009D6D4E /* Calender */,
 				437A75B0229FAC010032E371 /* Info.plist */,
 				437A75B7229FBF8B0032E371 /* MainTabBarController.swift */,
 				43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */,
 				435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */,
+				435C903E22C512BA009D6D4E /* Utils */,
+				437A75B6229FAC4F0032E371 /* Supporting Files */,
 			);
 			path = Naily;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */,
 				437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */,
 				435C903B22C50A3B009D6D4E /* CalendarTableViewCell.swift in Sources */,
+				43DA461822C7E13B00000FB5 /* AddAppointmentViewController.swift in Sources */,
 				43E6915422AB0B8A0097C2B6 /* CoreDataManager.swift in Sources */,
 				43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */,
 				433705AA22AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift in Sources */,

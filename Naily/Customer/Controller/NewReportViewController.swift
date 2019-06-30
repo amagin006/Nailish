@@ -80,15 +80,7 @@ class NewReportViewController: UIViewController {
         reportMainImageView.topAnchor.constraint(equalTo: formScrollView.topAnchor).isActive = true
         reportMainImageView.widthAnchor.constraint(equalTo: formScrollView.widthAnchor).isActive = true
         reportMainImageView.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
-        reportMainImageView.heightAnchor.constraint(equalToConstant: 330).isActive = true
-        
-        formScrollView.addSubview(subImageSV)
-        subImageSV.distribution = .fillEqually
-        subImageSV.spacing = 10
-        subImageSV.topAnchor.constraint(equalTo: reportMainImageView.bottomAnchor, constant: 10).isActive = true
-        subImageSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
-        subImageSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
-        subImageSV.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        reportMainImageView.heightAnchor.constraint(equalTo: formScrollView.widthAnchor).isActive = true
         
         for i in 0..<4 {
             if reportImageViews.count < 4 {
@@ -104,6 +96,15 @@ class NewReportViewController: UIViewController {
                 subImageSV.addArrangedSubview(reportImageViews[i])
             }
         }
+        let reportImageViewHeight = reportImageViews[0].widthAnchor
+        
+        formScrollView.addSubview(subImageSV)
+        subImageSV.distribution = .fillEqually
+        subImageSV.spacing = 10
+        subImageSV.topAnchor.constraint(equalTo: reportMainImageView.bottomAnchor, constant: 10).isActive = true
+        subImageSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        subImageSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+        subImageSV.heightAnchor.constraint(equalTo: reportImageViewHeight).isActive = true
         
         let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceTextField])
         priceSV.axis = .vertical
@@ -195,7 +196,6 @@ class NewReportViewController: UIViewController {
     }
     
     @objc func reportCancelButtonPressed() {
-        print("reportCancelButtonPressed")
         dismiss(animated: true)
     }
     

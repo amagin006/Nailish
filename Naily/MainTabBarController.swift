@@ -14,21 +14,21 @@ class MainTabBarController: UITabBarController {
         super.viewDidLoad()
         
         viewControllers = [
-            createViewController(viewController: CustomerCollectionViewController(), title: "Customer", imageName: "customer"),
-            createViewController(viewController: MainCalenderViewController(), title: "Calender", imageName: "calendar"),
-            createViewController(viewController: UIViewController(), title: "Analysis", imageName: "analysis"),
-            createViewController(viewController: UIViewController(), title: "Setting", imageName: "settings"),
+            createViewController(viewController: CustomerCollectionViewController(), title: "Customer", imageName: "customer", headerLarge: false),
+            createViewController(viewController: MainCalenderViewController(), title: "Calender", imageName: "calendar", headerLarge: false),
+            createViewController(viewController: UIViewController(), title: "Analysis", imageName: "analysis", headerLarge: true),
+            createViewController(viewController: UIViewController(), title: "Setting", imageName: "settings", headerLarge: true),
             
         ]
         
     }
     
 
-    fileprivate func createViewController(viewController: UIViewController, title: String, imageName: String) -> UIViewController {
+    fileprivate func createViewController(viewController: UIViewController, title: String, imageName: String, headerLarge: Bool) -> UIViewController {
         viewController.view.backgroundColor = .white
         viewController.navigationItem.title = title
         let navController = UINavigationController(rootViewController: viewController)
-        navController.navigationBar.prefersLargeTitles = true
+        navController.navigationBar.prefersLargeTitles = headerLarge
         navController.tabBarItem.title = title
         
         navController.tabBarItem.image = UIImage(named: imageName)

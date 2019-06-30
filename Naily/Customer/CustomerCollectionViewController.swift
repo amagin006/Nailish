@@ -49,7 +49,17 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
 
     // MARK: helper methods
     private func setRightAddButton() {
-        let addButton = UIBarButtonItem(image: UIImage(named: "add-contact"), style: .plain, target: self, action: #selector(navigateAddClient))
+        let iconButton = UIButton(type: .custom)
+//        iconButton.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 20, height: 30))
+        let image = UIImage(named: "add-contact")?.withRenderingMode(.alwaysTemplate)
+        iconButton.tintColor = #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)
+        iconButton.setImage(image, for: .normal)
+        iconButton.addTarget(self, action: #selector(navigateAddClient), for: .touchUpInside)
+        
+        let addButton = UIBarButtonItem(customView: iconButton)
+        addButton.customView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        addButton.customView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        self.navigationItem.leftBarButtonItem = addButton
         navigationItem.rightBarButtonItem = addButton
     }
     

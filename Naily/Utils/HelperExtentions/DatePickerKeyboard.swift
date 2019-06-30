@@ -64,3 +64,53 @@ class MyPaddingLabel: UILabel {
     }
 }
 
+
+class TimePickerKeyboard: UITextView, UITextViewDelegate {
+    
+    let toolbar = CustomTimeToolbar()
+    
+    override init(frame: CGRect, textContainer: NSTextContainer?) {
+        super.init(frame: frame, textContainer: textContainer)
+        setupDatePicker()
+        // closure (function without name)
+        toolbar.didSelectTime = { (text, dismiss) in
+            self.text = text
+            if dismiss {
+                self.endEditing(true)
+            }
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupDatePicker() {
+        self.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.backgroundColor = .white
+        self.font = UIFont.systemFont(ofSize: 14)
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 10
+        self.layer.borderColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1).cgColor
+        self.inputView = toolbar.datePicker
+        self.inputAccessoryView = toolbar
+        self.delegate = self
+    }
+    
+    
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        return false
+    }
+    
+    override func selectionRects(for range: UITextRange) -> [UITextSelectionRect] {
+        return []
+    }
+    
+    override func caretRect(for position: UITextPosition) -> CGRect {
+        return CGRect(x: 0, y: 0, width: 0, height: 0)
+    }
+}
+
+
+

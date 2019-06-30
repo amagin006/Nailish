@@ -78,8 +78,6 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         let reportData = fetchedReportItemResultsController.object(at: indexPath)
         reportCell.delegate = self
         reportCell.reportItem = reportData
-//        print("=================")
-//        print(reportData)
         return reportCell
     }
 
