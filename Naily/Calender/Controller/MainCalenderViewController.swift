@@ -24,10 +24,10 @@ class MainCalenderViewController: UIViewController {
     
     private func setupCalendar() {
         view.addSubview(calendarView)
-        calendarView.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
+        calendarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         calendarView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         calendarView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        calendarView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        calendarView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4).isActive = true
   
         calendarView.dataSource = self
         calendarView.delegate = self
@@ -73,6 +73,9 @@ class MainCalenderViewController: UIViewController {
 
     @objc func addAppointmentPressed() {
         print("addAppointmentPressed")
+        let addAppointmentVC = AddAppointmentViewController()
+        let addAppointmentNVC = LightStatusNavigationController(rootViewController: addAppointmentVC)
+        present(addAppointmentNVC, animated: true, completion: nil)
     }
 
     
@@ -129,32 +132,6 @@ extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
-    
-//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        let edit = editAction(at: indexPath)
-//        let delete = deleteAction(at: indexPath)
-//        return UISwipeActionsConfiguration(actions: [edit, delete])
-//    }
-//    
-//    private func editAction(at: IndexPath) -> UIContextualAction {
-//        let action = UIContextualAction(style: .normal, title: "Edit") { (action, view, completion) in
-//            print("editAction")
-//            completion(true)
-//        }
-//        action.image = #imageLiteral(resourceName: "editicon2")
-//        action.backgroundColor = .gray
-//        return action
-//    }
-//    
-//    private func deleteAction(at: IndexPath) -> UIContextualAction {
-//        let action = UIContextualAction(style: .normal, title: "Delete") { (action, view, completion) in
-//            print("deleteAction")
-//            completion(true)
-//        }
-//        action.image = #imageLiteral(resourceName: "garbageBox")
-//        action.backgroundColor = .red
-//        return action
-//    }
 
 }
 

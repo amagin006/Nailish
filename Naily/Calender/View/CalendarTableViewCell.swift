@@ -55,27 +55,28 @@ class CalendarTableViewCell: UITableViewCell {
         let textSV = UIStackView(arrangedSubviews: [nameLabel, timeSV, memuLabel])
         textSV.translatesAutoresizingMaskIntoConstraints = false
         textSV.alignment = .leading
-        textSV.distribution = .fillProportionally
-        textSV.spacing = 5
+        textSV.distribution = .fill
+        textSV.spacing = 2
         textSV.axis = .vertical
 
         let imageTextSV = UIStackView(arrangedSubviews: [clientImage, textSV])
         addSubview(imageTextSV)
         imageTextSV.translatesAutoresizingMaskIntoConstraints = false
         imageTextSV.axis = .horizontal
-        imageTextSV.spacing = 10
-        imageTextSV.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
-        imageTextSV.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        imageTextSV.alignment = .center
+        imageTextSV.spacing = 16
+        imageTextSV.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        imageTextSV.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         imageTextSV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
      }
     
     private let clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "woman4"))
-        iv.layer.cornerRadius = 40
+        iv.layer.cornerRadius = 25
         iv.clipsToBounds = true
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        iv.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 50).isActive = true
         return iv
     }()
     
@@ -83,7 +84,7 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Ashry Henderson"
-        lb.font = UIFont.boldSystemFont(ofSize: 20)
+        lb.font = UIFont.systemFont(ofSize: 20)
         return lb
     }()
     
@@ -91,7 +92,8 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "12:00"
-        lb.font = UIFont.boldSystemFont(ofSize: 20)
+        lb.font = UIFont.systemFont(ofSize: 16)
+        lb.textColor = .gray
         return lb
     }()
     
@@ -99,7 +101,8 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "~"
-        lb.font = UIFont.boldSystemFont(ofSize: 20)
+        lb.font = UIFont.systemFont(ofSize: 16)
+        lb.textColor = .gray
         return lb
     }()
     
@@ -107,7 +110,8 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "14:00"
-        lb.font = UIFont.boldSystemFont(ofSize: 20)
+        lb.font = UIFont.systemFont(ofSize: 16)
+        lb.textColor = .gray
         return lb
     }()
     
@@ -115,6 +119,8 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Off + Jal + Design"
+        lb.textColor = .gray
+        lb.font = UIFont.systemFont(ofSize: 14)
         return lb
     }()
 
