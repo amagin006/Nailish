@@ -15,16 +15,18 @@ private let cellId = "cellId"
 class MainCalenderViewController: UIViewController {
 
     let gregorian: Calendar = Calendar(identifier: .gregorian)
+    var selectDate = Date()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        calendarView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCalendar()
         setupTableViewUI()
-        do {
-            try fetchedAppointmentItemResultsController.performFetch()
-        } catch let err {
-            print(err)
-        }
+        
+        getAppointmentdata(date: selectDate)
     }
     
     private func setupCalendar() {
@@ -84,6 +86,16 @@ class MainCalenderViewController: UIViewController {
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         return frc
     }()
+    
+    private func getAppointmentdata(date: Date) {
+        let predicate = NSPredicate(format: "%@ =< appointmentDate AND appointmentDate < %@", getBeginingAndEndOfDay(date).begining as CVarArg, getBeginingAndEndOfDay(date).end as CVarArg)
+        fetchedAppointmentItemResultsController.fetchRequest.predicate = predicate
+        do {
+            try fetchedAppointmentItemResultsController.performFetch()
+        } catch let err {
+            print(err)
+        }
+    }
 
     @objc func addAppointmentPressed() {
         let addAppointmentVC = AddAppointmentViewController()
@@ -132,11 +144,12 @@ class MainCalenderViewController: UIViewController {
 }
 
 extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource {
+
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
-        let appointmentData = fetchedAppointmentItemResultsController.object(at: indexPath)
-        cell.appointment = appointmentData
+        getAppointmentdata(date: selectDate)
+        cell.appointment = fetchedAppointmentItemResultsController.object(at: indexPath)
         return cell
     }
     
@@ -162,7 +175,7 @@ extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource
 }
 
 extension MainCalenderViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
-    
+
     func getWeekIndex(_ date: Date) -> Int{
         let tmpCalendar = Calendar(identifier: .gregorian)
         return tmpCalendar.component(.weekday, from: date)
@@ -187,10 +200,21 @@ extension MainCalenderViewController: FSCalendarDelegate, FSCalendarDataSource, 
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        let selectDate = getDay(date)
-        print(selectDate)
+        getAppointmentdata(date: date)
+        selectDate = date
+        appointTableView.reloadData()
     }
     
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        getAppointmentdata(date: date)
+        return fetchedAppointmentItemResultsController.fetchedObjects?.count ?? 0
+    }
+    
+    private func getBeginingAndEndOfDay(_ date:Date) -> (begining: Date , end: Date) {
+        let begining = Calendar(identifier: .gregorian).startOfDay(for: date)
+        let end = begining + 24*60*60
+        return (begining, end)
+    }
     //    @objc func swipUp() {
     //        self.calendarView.setScope(.week, animated: true)
     //    }

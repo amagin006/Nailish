@@ -15,20 +15,20 @@ class CalendarTableViewCell: UITableViewCell {
             firstNameLabel.text = appointment.client!.firstName ?? ""
             lastNameLabel.text = appointment.client!.lastName ?? ""
             let formatter = DateFormatter()
-            formatter.dateStyle = .medium
+            formatter.dateFormat = "HH:mm"
             if let startTime = appointment.start {
                 startTimeLabel.text = formatter.string(from: startTime)
             }
             if let endTime = appointment.end {
-                startTimeLabel.text = formatter.string(from: endTime)
+                endTimeLabel.text = formatter.string(from: endTime)
             }
-            memuLabel.text = appointment.menu ?? ""
         }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        
     }
     
     override func awakeFromNib() {
@@ -71,7 +71,7 @@ class CalendarTableViewCell: UITableViewCell {
         nameSV.axis = .horizontal
         nameSV.spacing = 10
 
-        let textSV = UIStackView(arrangedSubviews: [nameSV, timeSV, memuLabel])
+        let textSV = UIStackView(arrangedSubviews: [nameSV, timeSV])
         textSV.translatesAutoresizingMaskIntoConstraints = false
         textSV.alignment = .leading
         textSV.distribution = .fill

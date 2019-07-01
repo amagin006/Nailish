@@ -152,6 +152,7 @@ class AddAppointmentViewController: UIViewController {
         } catch let err {
             print("failed insert appointment into CoreData - \(err)")
         }
+        
         self.navigationController?.popViewController(animated: true)
     }
     
