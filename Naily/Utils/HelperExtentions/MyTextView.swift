@@ -14,7 +14,6 @@ class MyTextView: UITextView {
         super.init(frame: frame, textContainer: textContainer)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .white
-        self.heightAnchor.constraint(equalToConstant: 100).isActive = true
         self.font = UIFont.systemFont(ofSize: 14)
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 10

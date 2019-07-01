@@ -205,15 +205,6 @@ class AddClientViewController: UIViewController {
         return frc
     }()
     
-//    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
-//        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
-//        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
-//        fetchRequest.sortDescriptors = [visitDateDescriptors]
-//        let context = CoreDataManager.shared.persistentContainer.viewContext
-//        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-//        return frc
-//    }()
-    
     // MARK: - UIParts
     let clientFormView: UIScrollView = {
         let vi = UIScrollView()
@@ -314,6 +305,7 @@ class AddClientViewController: UIViewController {
     
     let memoTextField: MyTextView = {
         let tv = MyTextView()
+        tv.constraintHeight(equalToConstant: 100)
         return tv
     }()
     

@@ -13,7 +13,14 @@ private let reuseIdentifier = "Cell"
 private let headerId = "headerId"
 private let cellId = "cellId"
 
+protocol CustomerCollectionViewControllerDelegate: class {
+    func selectedClient(client: ClientInfo)
+}
+
 class CustomerCollectionViewController: FetchCollectionViewController, UICollectionViewDelegateFlowLayout {
+    
+    var selectClient = false
+    weak var delegate: CustomerCollectionViewControllerDelegate?
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -45,12 +52,12 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         self.collectionView!.register(CustomerCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         self.collectionView!.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         setRightAddButton()
+        
     }
 
     // MARK: helper methods
     private func setRightAddButton() {
         let iconButton = UIButton(type: .custom)
-//        iconButton.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 20, height: 30))
         let image = UIImage(named: "add-contact")?.withRenderingMode(.alwaysTemplate)
         iconButton.tintColor = #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)
         iconButton.setImage(image, for: .normal)
@@ -118,10 +125,16 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//
-        let detailVC = ClientDetailCollectionViewController()
-        detailVC.client = fetchedClientInfoResultsController.object(at: indexPath)
-        self.navigationController?.pushViewController(detailVC, animated: true)
+        
+        if selectClient {
+            let selectedClient = fetchedClientInfoResultsController.object(at: indexPath)
+            self.delegate?.selectedClient(client: selectedClient)
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            let detailVC = ClientDetailCollectionViewController()
+            detailVC.client = fetchedClientInfoResultsController.object(at: indexPath)
+            self.navigationController?.pushViewController(detailVC, animated: true)
+        }
 
 //        // Delete Item
 //        let clientInfoData = fetchedClientInfoResultsController.object(at: indexPath)

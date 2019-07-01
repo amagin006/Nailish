@@ -8,6 +8,7 @@
 
 import UIKit
 import FSCalendar
+import CoreData
 
 private let cellId = "cellId"
 
@@ -19,7 +20,11 @@ class MainCalenderViewController: UIViewController {
         super.viewDidLoad()
         setupCalendar()
         setupTableViewUI()
-        
+        do {
+            try fetchedAppointmentItemResultsController.performFetch()
+        } catch let err {
+            print(err)
+        }
     }
     
     private func setupCalendar() {
@@ -70,12 +75,19 @@ class MainCalenderViewController: UIViewController {
         appointTableView.backgroundColor = .red
         appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
     }
+    
+    lazy var fetchedAppointmentItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<Appointment> in
+        let fetchRequest = NSFetchRequest<Appointment>(entityName: "Appointment")
+        let appointmentDateDescriptors = NSSortDescriptor(key: "appointmentDate", ascending: true)
+        fetchRequest.sortDescriptors = [appointmentDateDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        return frc
+    }()
 
     @objc func addAppointmentPressed() {
-        print("addAppointmentPressed")
         let addAppointmentVC = AddAppointmentViewController()
-        let addAppointmentNVC = LightStatusNavigationController(rootViewController: addAppointmentVC)
-        present(addAppointmentNVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
 
     
@@ -120,17 +132,31 @@ class MainCalenderViewController: UIViewController {
 }
 
 extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
+        let appointmentData = fetchedAppointmentItemResultsController.object(at: indexPath)
+        cell.appointment = appointmentData
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        if let count = fetchedAppointmentItemResultsController.sections?[section].numberOfObjects {
+            return count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 90
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("select cell")
     }
 
 }

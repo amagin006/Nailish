@@ -18,7 +18,6 @@ class MainTabBarController: UITabBarController {
             createViewController(viewController: MainCalenderViewController(), title: "Calender", imageName: "calendar", headerLarge: false),
             createViewController(viewController: UIViewController(), title: "Analysis", imageName: "analysis", headerLarge: true),
             createViewController(viewController: UIViewController(), title: "Setting", imageName: "settings", headerLarge: true),
-            
         ]
         
     }

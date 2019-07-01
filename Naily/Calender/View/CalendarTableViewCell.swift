@@ -10,14 +10,27 @@ import UIKit
 
 class CalendarTableViewCell: UITableViewCell {
     
+    var appointment: Appointment! {
+        didSet {
+            firstNameLabel.text = appointment.client!.firstName ?? ""
+            lastNameLabel.text = appointment.client!.lastName ?? ""
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            if let startTime = appointment.start {
+                startTimeLabel.text = formatter.string(from: startTime)
+            }
+            if let endTime = appointment.end {
+                startTimeLabel.text = formatter.string(from: endTime)
+            }
+            memuLabel.text = appointment.menu ?? ""
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
     
-    
-
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -51,8 +64,14 @@ class CalendarTableViewCell: UITableViewCell {
         timeSV.translatesAutoresizingMaskIntoConstraints = false
         timeSV.spacing = 5
         timeSV.axis = .horizontal
+        
+        firstNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        let nameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
+        nameSV.translatesAutoresizingMaskIntoConstraints = false
+        nameSV.axis = .horizontal
+        nameSV.spacing = 10
 
-        let textSV = UIStackView(arrangedSubviews: [nameLabel, timeSV, memuLabel])
+        let textSV = UIStackView(arrangedSubviews: [nameSV, timeSV, memuLabel])
         textSV.translatesAutoresizingMaskIntoConstraints = false
         textSV.alignment = .leading
         textSV.distribution = .fill
@@ -80,10 +99,18 @@ class CalendarTableViewCell: UITableViewCell {
         return iv
     }()
     
-    private let nameLabel: UILabel = {
+    private let firstNameLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "Ashry Henderson"
+        lb.text = "Ashry"
+        lb.font = UIFont.systemFont(ofSize: 20)
+        return lb
+    }()
+    
+    private let lastNameLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = " Henderson"
         lb.font = UIFont.systemFont(ofSize: 20)
         return lb
     }()

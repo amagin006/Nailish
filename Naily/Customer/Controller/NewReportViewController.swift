@@ -349,6 +349,7 @@ class NewReportViewController: UIViewController {
 
     let memoTextView: MyTextView = {
         let tv = MyTextView()
+        tv.constraintHeight(equalToConstant: 100)
         tv.font = UIFont.systemFont(ofSize: 18)
         return tv
     }()
