@@ -10,14 +10,30 @@ import UIKit
 
 class CalendarTableViewCell: UITableViewCell {
     
+    var appointment: Appointment! {
+        didSet {
+            if let image = appointment.client!.clientImage {
+                clientImage.image = UIImage(data: image)
+            }
+            firstNameLabel.text = appointment.client!.firstName ?? ""
+            lastNameLabel.text = appointment.client!.lastName ?? ""
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            if let startTime = appointment.start {
+                startTimeLabel.text = formatter.string(from: startTime)
+            }
+            if let endTime = appointment.end {
+                endTimeLabel.text = formatter.string(from: endTime)
+            }
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        
     }
     
-    
-
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -51,8 +67,14 @@ class CalendarTableViewCell: UITableViewCell {
         timeSV.translatesAutoresizingMaskIntoConstraints = false
         timeSV.spacing = 5
         timeSV.axis = .horizontal
+        
+        firstNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        let nameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
+        nameSV.translatesAutoresizingMaskIntoConstraints = false
+        nameSV.axis = .horizontal
+        nameSV.spacing = 10
 
-        let textSV = UIStackView(arrangedSubviews: [nameLabel, timeSV, memuLabel])
+        let textSV = UIStackView(arrangedSubviews: [nameSV, timeSV])
         textSV.translatesAutoresizingMaskIntoConstraints = false
         textSV.alignment = .leading
         textSV.distribution = .fill
@@ -71,7 +93,7 @@ class CalendarTableViewCell: UITableViewCell {
      }
     
     private let clientImage: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "woman4"))
+        let iv = UIImageView(image: #imageLiteral(resourceName: "person2"))
         iv.layer.cornerRadius = 25
         iv.clipsToBounds = true
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -80,10 +102,18 @@ class CalendarTableViewCell: UITableViewCell {
         return iv
     }()
     
-    private let nameLabel: UILabel = {
+    private let firstNameLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "Ashry Henderson"
+        lb.text = "Ashry"
+        lb.font = UIFont.systemFont(ofSize: 20)
+        return lb
+    }()
+    
+    private let lastNameLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = " Henderson"
         lb.font = UIFont.systemFont(ofSize: 20)
         return lb
     }()

@@ -8,18 +8,24 @@
 
 import UIKit
 import FSCalendar
+import CoreData
 
 private let cellId = "cellId"
 
 class MainCalenderViewController: UIViewController {
 
     let gregorian: Calendar = Calendar(identifier: .gregorian)
+    var selectDate = Date()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        calendarView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCalendar()
         setupTableViewUI()
-        
+        getAppointmentdata(date: selectDate)
     }
     
     private func setupCalendar() {
@@ -67,15 +73,31 @@ class MainCalenderViewController: UIViewController {
         appointTableView.delegate = self
         appointTableView.dataSource = self
         appointTableView.separatorColor = .clear
-        appointTableView.backgroundColor = .red
         appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
+    }
+    
+    lazy var fetchedAppointmentItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<Appointment> in
+        let fetchRequest = NSFetchRequest<Appointment>(entityName: "Appointment")
+        let appointmentDateDescriptors = NSSortDescriptor(key: "appointmentDate", ascending: true)
+        fetchRequest.sortDescriptors = [appointmentDateDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        return frc
+    }()
+    
+    private func getAppointmentdata(date: Date) {
+        let predicate = NSPredicate(format: "%@ =< appointmentDate AND appointmentDate < %@", getBeginingAndEndOfDay(date).begining as CVarArg, getBeginingAndEndOfDay(date).end as CVarArg)
+        fetchedAppointmentItemResultsController.fetchRequest.predicate = predicate
+        do {
+            try fetchedAppointmentItemResultsController.performFetch()
+        } catch let err {
+            print(err)
+        }
     }
 
     @objc func addAppointmentPressed() {
-        print("addAppointmentPressed")
         let addAppointmentVC = AddAppointmentViewController()
-        let addAppointmentNVC = LightStatusNavigationController(rootViewController: addAppointmentVC)
-        present(addAppointmentNVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
 
     
@@ -120,23 +142,43 @@ class MainCalenderViewController: UIViewController {
 }
 
 extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
+        getAppointmentdata(date: selectDate)
+        cell.appointment = fetchedAppointmentItemResultsController.object(at: indexPath)
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        if let count = fetchedAppointmentItemResultsController.sections?[section].numberOfObjects {
+            return count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 80
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("select cell")
+        let addAppointmentVC = AddAppointmentViewController()
+        getAppointmentdata(date: selectDate)
+        let appointment = fetchedAppointmentItemResultsController.object(at: indexPath)
+        addAppointmentVC.selectClient = appointment.client
+        addAppointmentVC.selectAppointment = appointment
+        self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
 
 }
 
 extension MainCalenderViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
-    
+
     func getWeekIndex(_ date: Date) -> Int{
         let tmpCalendar = Calendar(identifier: .gregorian)
         return tmpCalendar.component(.weekday, from: date)
@@ -161,10 +203,21 @@ extension MainCalenderViewController: FSCalendarDelegate, FSCalendarDataSource, 
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        let selectDate = getDay(date)
-        print(selectDate)
+        getAppointmentdata(date: date)
+        selectDate = date
+        appointTableView.reloadData()
     }
     
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        getAppointmentdata(date: date)
+        return fetchedAppointmentItemResultsController.fetchedObjects?.count ?? 0
+    }
+    
+    private func getBeginingAndEndOfDay(_ date:Date) -> (begining: Date , end: Date) {
+        let begining = Calendar(identifier: .gregorian).startOfDay(for: date)
+        let end = begining + 24*60*60
+        return (begining, end)
+    }
     //    @objc func swipUp() {
     //        self.calendarView.setScope(.week, animated: true)
     //    }

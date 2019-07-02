@@ -116,25 +116,24 @@ class AddClientViewController: UIViewController {
         
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if client == nil {
-            do {
-                let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
-                
-                if let newClientImage = personImageView.image {
-                    let imageData = newClientImage.jpegData(compressionQuality: 0.1)
-                    newClient.setValue(imageData, forKey: "clientImage")
-                }
-                let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
-                let nameInitial = String(firstNameUpper?.first ?? "#")
-                newClient.setValue(firstNameUpper, forKey: "firstName")
-                newClient.setValue(lastNameTextField.text, forKey: "lastName")
-                newClient.setValue(nameInitial, forKey: "nameInitial")
-                newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
-                newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
-                if DOBTextField.text != "" {
-                    newClient.setValue(DOBTextField.toolbar.datePicker.date, forKey: "dateOfBirth")
-                }
-                newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
+            let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
             
+            if let newClientImage = personImageView.image {
+                let imageData = newClientImage.jpegData(compressionQuality: 0.1)
+                newClient.setValue(imageData, forKey: "clientImage")
+            }
+            let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+            let nameInitial = String(firstNameUpper?.first ?? "#")
+            newClient.setValue(firstNameUpper, forKey: "firstName")
+            newClient.setValue(lastNameTextField.text, forKey: "lastName")
+            newClient.setValue(nameInitial, forKey: "nameInitial")
+            newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
+            newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
+            if DOBTextField.text != "" {
+                newClient.setValue(DOBTextField.toolbar.datePicker.date, forKey: "dateOfBirth")
+            }
+            newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
+            do {
                 try fetchedClientInfoResultsController.managedObjectContext.save()
                 print("new client saved")
             } catch let err {
@@ -142,19 +141,19 @@ class AddClientViewController: UIViewController {
             }
             dismiss(animated: true)
         } else {
+            client?.firstName = firstNameTextField.text
+            client?.nameInitial = String(client.firstName?.first ?? "#")
+            client?.lastName = lastNameTextField.text
+            client?.mailAdress = mailTextField.text ?? ""
+            client?.mobileNumber = mobileTextField.text ?? ""
+            if DOBTextField.text != "" {
+                client?.dateOfBirth = DOBTextField.toolbar.datePicker.date
+            }
+            client?.memo = memoTextField.text ?? ""
+            if let image = personImageView.image {
+                client?.clientImage = image.jpegData(compressionQuality: 0.1)
+            }
             do {
-                client?.firstName = firstNameTextField.text
-                client?.nameInitial = String(client.firstName?.first ?? "#")
-                client?.lastName = lastNameTextField.text
-                client?.mailAdress = mailTextField.text ?? ""
-                client?.mobileNumber = mobileTextField.text ?? ""
-                if DOBTextField.text != "" {
-                    client?.dateOfBirth = DOBTextField.toolbar.datePicker.date
-                }
-                client?.memo = memoTextField.text ?? ""
-                if let image = personImageView.image {
-                    client?.clientImage = image.jpegData(compressionQuality: 0.1)
-                }
                 try fetchedClientInfoResultsController.managedObjectContext.save()
              } catch let err {
                 print("Saved new client failed - \(err)")
@@ -204,15 +203,6 @@ class AddClientViewController: UIViewController {
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: "nameInitial", cacheName: nil)
         return frc
     }()
-    
-//    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
-//        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
-//        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
-//        fetchRequest.sortDescriptors = [visitDateDescriptors]
-//        let context = CoreDataManager.shared.persistentContainer.viewContext
-//        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-//        return frc
-//    }()
     
     // MARK: - UIParts
     let clientFormView: UIScrollView = {
@@ -314,6 +304,7 @@ class AddClientViewController: UIViewController {
     
     let memoTextField: MyTextView = {
         let tv = MyTextView()
+        tv.constraintHeight(equalToConstant: 100)
         return tv
     }()
     

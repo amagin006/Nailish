@@ -71,7 +71,7 @@ class CustomTimeToolbar: UIToolbar {
     var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.date = Date()
-        datePicker.datePickerMode = UIDatePicker.Mode.time
+        datePicker.datePickerMode = .time
         return datePicker
     }()
     

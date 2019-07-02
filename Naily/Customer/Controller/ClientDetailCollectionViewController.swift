@@ -46,7 +46,6 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         
         do {
             fetchedReportItemResultsController.fetchRequest.predicate = NSPredicate(format: "client == %@", client)
-//            fetchedReportItemResultsController.fetchRequest.sortDescriptors = [NSSortDescriptor(key: "visitDate", ascending: false)]
             try fetchedReportItemResultsController.performFetch()
         } catch let err {
             print("Failed fetchedReportItem \(err)")
