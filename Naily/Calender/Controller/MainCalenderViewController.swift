@@ -25,7 +25,6 @@ class MainCalenderViewController: UIViewController {
         super.viewDidLoad()
         setupCalendar()
         setupTableViewUI()
-        
         getAppointmentdata(date: selectDate)
     }
     
@@ -74,7 +73,6 @@ class MainCalenderViewController: UIViewController {
         appointTableView.delegate = self
         appointTableView.dataSource = self
         appointTableView.separatorColor = .clear
-        appointTableView.backgroundColor = .red
         appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
@@ -145,7 +143,6 @@ class MainCalenderViewController: UIViewController {
 
 extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource {
 
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
         getAppointmentdata(date: selectDate)
@@ -161,7 +158,7 @@ extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
+        return 80
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -170,6 +167,12 @@ extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("select cell")
+        let addAppointmentVC = AddAppointmentViewController()
+        getAppointmentdata(date: selectDate)
+        let appointment = fetchedAppointmentItemResultsController.object(at: indexPath)
+        addAppointmentVC.selectClient = appointment.client
+        addAppointmentVC.selectAppointment = appointment
+        self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
 
 }

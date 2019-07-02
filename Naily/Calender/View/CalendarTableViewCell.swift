@@ -12,6 +12,9 @@ class CalendarTableViewCell: UITableViewCell {
     
     var appointment: Appointment! {
         didSet {
+            if let image = appointment.client!.clientImage {
+                clientImage.image = UIImage(data: image)
+            }
             firstNameLabel.text = appointment.client!.firstName ?? ""
             lastNameLabel.text = appointment.client!.lastName ?? ""
             let formatter = DateFormatter()
@@ -90,7 +93,7 @@ class CalendarTableViewCell: UITableViewCell {
      }
     
     private let clientImage: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "woman4"))
+        let iv = UIImageView(image: #imageLiteral(resourceName: "person2"))
         iv.layer.cornerRadius = 25
         iv.clipsToBounds = true
         iv.translatesAutoresizingMaskIntoConstraints = false

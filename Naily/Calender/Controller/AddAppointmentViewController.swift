@@ -11,15 +11,40 @@ import CoreData
 
 class AddAppointmentViewController: UIViewController {
     
-    var selectClient: ClientInfo?
+    var selectClient: ClientInfo! {
+        didSet {
+            if let image = selectClient.clientImage {
+                clientImageView.image = UIImage(data: image)
+            }
+            firstNameLabel.text = selectClient.firstName
+            lastNameLabel.text = selectClient.lastName ?? ""
+        }
+    }
+    
+    var selectAppointment: Appointment! {
+        didSet {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            if let date = selectAppointment.appointmentDate {
+                dateTextView.text = formatter.string(from: date)
+            }
+            formatter.dateFormat = "HH:mm"
+            if let start = selectAppointment.start {
+                startTextView.text = formatter.string(from: start)
+            }
+            if let end = selectAppointment.end {
+                endTextView.text = formatter.string(from: end)
+            }
+            menuTextView.text = selectAppointment.menu ?? ""
+            memoTextView.text = selectAppointment.memo ?? ""
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
         setupNavigationUI()
-        
-
     }
     
     private func setupUI() {
@@ -104,12 +129,11 @@ class AddAppointmentViewController: UIViewController {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
     }
     
     private func setupNavigationUI() {
-        navigationItem.title = "Add Appointment"
-        saveButton.isEnabled = false
+        navigationItem.title = selectAppointment == nil ? "Add Appointment" : "Edit Appointment"
+        saveButton.isEnabled = selectAppointment == nil ? false : true
         navigationItem.rightBarButtonItem = saveButton
     }
     
@@ -134,26 +158,48 @@ class AddAppointmentViewController: UIViewController {
     @objc func saveButtonPressed() {
         print("save")
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-        let newAppointment = NSEntityDescription.insertNewObject(forEntityName: "Appointment", into: manageContext)
-        
-        newAppointment.setValue(dateTextView.toolbar.datePicker.date, forKey: "appointmentDate")
-        newAppointment.setValue(startTextView.toolbar.datePicker.date, forKey: "start")
-        newAppointment.setValue(endTextView.toolbar.datePicker.date, forKey: "end")
-        newAppointment.setValue(selectClient, forKey: "client")
-        if let menu = memoTextView.text {
-            newAppointment.setValue(menu, forKey: "menu")
+        if selectAppointment == nil {
+            let newAppointment = NSEntityDescription.insertNewObject(forEntityName: "Appointment", into: manageContext)
+            
+            newAppointment.setValue(dateTextView.toolbar.datePicker.date, forKey: "appointmentDate")
+            newAppointment.setValue(startTextView.toolbar.datePicker.date, forKey: "start")
+            newAppointment.setValue(endTextView.toolbar.datePicker.date, forKey: "end")
+            newAppointment.setValue(selectClient, forKey: "client")
+            if let menu = memoTextView.text {
+                newAppointment.setValue(menu, forKey: "menu")
+            }
+            if let memo = memoTextView.text {
+                newAppointment.setValue(memo, forKey: "memo")
+            }
+            do {
+                try fetchedAppointmentItemResultsController.managedObjectContext.save()
+            } catch let err {
+                print("failed insert appointment into CoreData - \(err)")
+            }
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            if let client = selectClient {
+                selectAppointment.client = client
+            }
+            if dateTextView.text != "" {
+                selectAppointment.appointmentDate = dateTextView.toolbar.datePicker.date
+            }
+            if startTextView.text != "" {
+                selectAppointment.start = startTextView.toolbar.datePicker.date
+            }
+            if endTextView.text != "" {
+                selectAppointment.end = endTextView.toolbar.datePicker.date
+            }
+            selectAppointment.menu = menuTextView.text ?? ""
+            selectAppointment.memo = memoTextView.text ?? ""
+            do {
+                try fetchedAppointmentItemResultsController.managedObjectContext.save()
+            } catch let err {
+                print("edit appointment failed - \(err)")
+            }
+            self.navigationController?.popViewController(animated: true)
         }
-        if let memo = memoTextView.text {
-            newAppointment.setValue(memo, forKey: "memo")
-        }
         
-        do {
-            try fetchedAppointmentItemResultsController.managedObjectContext.save()
-        } catch let err {
-            print("failed insert appointment into CoreData - \(err)")
-        }
-        
-        self.navigationController?.popViewController(animated: true)
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
@@ -241,8 +287,8 @@ class AddAppointmentViewController: UIViewController {
     
     private let dateTextView: DatePickerKeyboard = {
         let dp = DatePickerKeyboard()
-        dp.widthAnchor.constraint(equalToConstant: 180).isActive = true
-        dp.textAlignment = NSTextAlignment.right
+        dp.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        dp.textAlignment = NSTextAlignment.center
         dp.font = UIFont.systemFont(ofSize: 18)
         return dp
     }()
@@ -256,8 +302,8 @@ class AddAppointmentViewController: UIViewController {
     private let startTextView: TimePickerKeyboard = {
         let tp = TimePickerKeyboard()
         tp.font = UIFont.systemFont(ofSize: 18)
-        tp.textAlignment = NSTextAlignment.right
-        tp.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        tp.textAlignment = NSTextAlignment.center
+        tp.widthAnchor.constraint(equalToConstant: 100).isActive = true
         return tp
     }()
     
@@ -270,8 +316,8 @@ class AddAppointmentViewController: UIViewController {
     private let endTextView: TimePickerKeyboard = {
         let tp = TimePickerKeyboard()
         tp.font = UIFont.systemFont(ofSize: 18)
-        tp.textAlignment = NSTextAlignment.right
-        tp.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        tp.textAlignment = NSTextAlignment.center
+        tp.widthAnchor.constraint(equalToConstant: 100).isActive = true
         return tp
     }()
     
