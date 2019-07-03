@@ -125,7 +125,7 @@ class AddAppointmentViewController: UIViewController {
         formSV.topAnchor.constraint(equalTo: clientInfoView.bottomAnchor, constant: 30).isActive = true
         formSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.7).isActive = true
         formSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
-
+        
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -135,6 +135,15 @@ class AddAppointmentViewController: UIViewController {
         navigationItem.title = selectAppointment == nil ? "Add Appointment" : "Edit Appointment"
         saveButton.isEnabled = selectAppointment == nil ? false : true
         navigationItem.rightBarButtonItem = saveButton
+        
+        if selectAppointment != nil {
+            let cancelButton: UIBarButtonItem = {
+                let bb = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
+                return bb
+            }()
+            navigationItem.leftBarButtonItem = cancelButton
+        }
+
     }
     
     @objc func tappedClientView() {
@@ -199,7 +208,10 @@ class AddAppointmentViewController: UIViewController {
             }
             self.navigationController?.popViewController(animated: true)
         }
-        
+    }
+    
+    @objc func cancelButtonPressed() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
