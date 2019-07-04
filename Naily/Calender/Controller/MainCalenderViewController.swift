@@ -12,7 +12,7 @@ import CoreData
 
 private let cellId = "cellId"
 
-class MainCalenderViewController: UIViewController {
+class MainCalenderViewController: FetchTableViewController {
 
     let gregorian: Calendar = Calendar(identifier: .gregorian)
     var selectDate = Date()
@@ -76,15 +76,6 @@ class MainCalenderViewController: UIViewController {
         appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
-    lazy var fetchedAppointmentItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<Appointment> in
-        let fetchRequest = NSFetchRequest<Appointment>(entityName: "Appointment")
-        let appointmentDateDescriptors = NSSortDescriptor(key: "appointmentDate", ascending: true)
-        fetchRequest.sortDescriptors = [appointmentDateDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        return frc
-    }()
-    
     private func getAppointmentdata(date: Date) {
         let predicate = NSPredicate(format: "%@ =< appointmentDate AND appointmentDate < %@", getBeginingAndEndOfDay(date).begining as CVarArg, getBeginingAndEndOfDay(date).end as CVarArg)
         fetchedAppointmentItemResultsController.fetchRequest.predicate = predicate
@@ -141,7 +132,7 @@ class MainCalenderViewController: UIViewController {
     }()
 }
 
-extension MainCalenderViewController: UITableViewDelegate, UITableViewDataSource {
+extension MainCalenderViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
