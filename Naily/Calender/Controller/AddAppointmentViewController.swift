@@ -187,17 +187,20 @@ class AddAppointmentViewController: UIViewController {
             }
             self.navigationController?.popViewController(animated: true)
         } else {
+            let formatter = DateFormatter()
             if let client = selectClient {
                 selectAppointment.client = client
             }
+            formatter.dateStyle = .medium
             if dateTextView.text != "" {
-                selectAppointment.appointmentDate = dateTextView.toolbar.datePicker.date
+                selectAppointment.appointmentDate = formatter.date(from: dateTextView.text)
             }
+            formatter.dateFormat = "HH:mm"
             if startTextView.text != "" {
-                selectAppointment.start = startTextView.toolbar.datePicker.date
+                selectAppointment.start = formatter.date(from: startTextView.text)
             }
             if endTextView.text != "" {
-                selectAppointment.end = endTextView.toolbar.datePicker.date
+                selectAppointment.end = formatter.date(from: endTextView.text)
             }
             selectAppointment.menu = menuTextView.text ?? ""
             selectAppointment.memo = memoTextView.text ?? ""

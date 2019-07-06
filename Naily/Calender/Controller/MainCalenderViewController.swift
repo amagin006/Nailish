@@ -12,7 +12,7 @@ import CoreData
 
 private let cellId = "cellId"
 
-class MainCalenderViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFetchedResultsControllerDelegate {
 
     let gregorian: Calendar = Calendar(identifier: .gregorian)
     var selectDate = Date()
@@ -78,7 +78,7 @@ class MainCalenderViewController: UITableViewController, NSFetchedResultsControl
     
     lazy var fetchedAppointmentItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<Appointment> in
         let fetchRequest = NSFetchRequest<Appointment>(entityName: "Appointment")
-        let appointmentDateDescriptors = NSSortDescriptor(key: "appointmentDate", ascending: true)
+        let appointmentDateDescriptors = NSSortDescriptor(key: "start", ascending: true)
         fetchRequest.sortDescriptors = [appointmentDateDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
@@ -111,42 +111,6 @@ class MainCalenderViewController: UITableViewController, NSFetchedResultsControl
         appointTableView.endUpdates()
         print("appointTableView.endUpdates()")
     }
-    
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-//                    didChange anObject: Any,
-//                    at indexPath: IndexPath?,
-//                    for type: NSFetchedResultsChangeType,
-//                    newIndexPath: IndexPath?) {
-//        switch (type) {
-//        case .insert:
-//            if let indexPath = newIndexPath {
-//                appointTableView.insertRows(at: [indexPath], with: .fade)
-//            }
-//            print("insert")
-//        case .delete:
-//            if let indexPath = indexPath {
-//                appointTableView.deleteRows(at: [indexPath], with: .fade)
-//            }
-//            print("delete")
-//        case .update:
-////            if let indexPath = indexPath, let cell = appointTableView.cellForRow(at: indexPath) {
-////                configureCell(cell, at: indexPath)
-////            }
-//            print("update")
-//        case .move:
-//            if let indexPath = indexPath {
-//                appointTableView.deleteRows(at: [indexPath], with: .fade)
-//            }
-//            print("move")
-//            if let newIndexPath = newIndexPath {
-//                appointTableView.insertRows(at: [newIndexPath], with: .fade)
-//            }
-//            break;
-//        @unknown default:
-//            fatalError()
-//        }
-//    }
-    
     
     // UI Parts
     let calendarView: FSCalendar = {
@@ -188,31 +152,31 @@ class MainCalenderViewController: UITableViewController, NSFetchedResultsControl
     }()
 }
 
-extension MainCalenderViewController {
+extension MainCalenderViewController: UITableViewDelegate {
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
         getAppointmentdata(date: selectDate)
         cell.appointment = fetchedAppointmentItemResultsController.object(at: indexPath)
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let count = fetchedAppointmentItemResultsController.sections?[section].numberOfObjects {
             return count
         }
         return 0
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("select cell")
         let addAppointmentVC = AddAppointmentViewController()
         getAppointmentdata(date: selectDate)
@@ -222,10 +186,7 @@ extension MainCalenderViewController {
         self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
     
-    func configureCell(_ cell: UITableViewCell, at indexPath: IndexPath) {
-        let note = fetchedAppointmentItemResultsController.object(at: indexPath)
-        
-    }
+    
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                     didChange anObject: Any,
@@ -235,28 +196,27 @@ extension MainCalenderViewController {
         switch (type) {
         case .insert:
             if let indexPath = newIndexPath {
-                tableView.insertRows(at: [indexPath], with: .fade)
+                appointTableView.insertRows(at: [indexPath], with: .fade)
             }
             print("insert")
         case .delete:
             if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
+                appointTableView.deleteRows(at: [indexPath], with: .fade)
             }
             print("delete")
         case .update:
-            if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) {
-                configureCell(cell, at: indexPath)
+            if let indexPath = indexPath {
+                appointTableView.reloadRows(at: [indexPath], with: .automatic)
             }
             print("update")
         case .move:
             if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
+                appointTableView.deleteRows(at: [indexPath], with: .fade)
             }
             print("move")
             if let newIndexPath = newIndexPath {
-                tableView.insertRows(at: [newIndexPath], with: .fade)
+                appointTableView.insertRows(at: [newIndexPath], with: .fade)
             }
-            break;
         @unknown default:
             fatalError()
         }
