@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		430379A522CDB7E200405E9B /* FetchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430379A422CDB7E200405E9B /* FetchTableViewController.swift */; };
 		4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */; };
 		4337059222ADE57A00EBC58B /* ReportImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337059122ADE57A00EBC58B /* ReportImageCollectionViewCell.swift */; };
 		4337059D22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337059C22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift */; };
@@ -38,7 +37,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		430379A422CDB7E200405E9B /* FetchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchTableViewController.swift; sourceTree = "<group>"; };
 		4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomerCollectionViewController.swift; path = ../CustomerCollectionViewController.swift; sourceTree = "<group>"; };
 		4337059122ADE57A00EBC58B /* ReportImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		4337059C22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDetailCollectionViewController.swift; sourceTree = "<group>"; };
@@ -118,7 +116,6 @@
 				433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */,
 				433705AB22AEEFF900EBC58B /* UIView+ConstraintLayout.swift */,
 				43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */,
-				430379A422CDB7E200405E9B /* FetchTableViewController.swift */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -333,7 +330,6 @@
 				43ED0B0322BD8D5B00781893 /* Extensions.swift in Sources */,
 				43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */,
 				437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */,
-				430379A522CDB7E200405E9B /* FetchTableViewController.swift in Sources */,
 				435C903B22C50A3B009D6D4E /* CalendarTableViewCell.swift in Sources */,
 				43DA461822C7E13B00000FB5 /* AddAppointmentViewController.swift in Sources */,
 				43E6915422AB0B8A0097C2B6 /* CoreDataManager.swift in Sources */,
