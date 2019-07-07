@@ -135,7 +135,6 @@ class AddClientViewController: UIViewController {
             newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
             do {
                 try fetchedClientInfoResultsController.managedObjectContext.save()
-                print("new client saved")
             } catch let err {
                 print("Saved new client failed - \(err)")
             }
@@ -147,7 +146,9 @@ class AddClientViewController: UIViewController {
             client?.mailAdress = mailTextField.text ?? ""
             client?.mobileNumber = mobileTextField.text ?? ""
             if DOBTextField.text != "" {
-                client?.dateOfBirth = DOBTextField.toolbar.datePicker.date
+                let formatter = DateFormatter()
+                formatter.dateStyle = .medium
+                client?.dateOfBirth = formatter.date(from: DOBTextField.text)
             }
             client?.memo = memoTextField.text ?? ""
             if let image = personImageView.image {

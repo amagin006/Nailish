@@ -65,13 +65,14 @@ class CustomDateToolbar: UIToolbar {
 }
 
 class CustomTimeToolbar: UIToolbar {
-    
+
     var didSelectTime: ((String, Bool) -> ())?
     
     var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.date = Date()
         datePicker.datePickerMode = .time
+        datePicker.locale = Locale(identifier: "en_GB")
         return datePicker
     }()
     

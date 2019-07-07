@@ -27,7 +27,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.collectionView.reloadData()
+        collectionView.reloadData()
     }
         
     override func viewDidLoad() {
