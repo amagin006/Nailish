@@ -34,25 +34,25 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        do {
-            try fetchedClientInfoResultsController.performFetch()
-        } catch let err {
-            print(err)
-        }
+        fetchClient()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        do {
-            try fetchedClientInfoResultsController.performFetch()
-        } catch let err {
-            print(err)
-        }
-        
+        fetchClient()
+
         self.collectionView!.register(CustomerCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         self.collectionView!.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         setRightAddButton()
         
+    }
+    
+    func fetchClient() {
+        do {
+            try fetchedClientInfoResultsController.performFetch()
+        } catch let err {
+            print("can't fetch clientInfo - \(err)")
+        }
     }
 
     // MARK: helper methods
@@ -96,6 +96,17 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         
         let clientInfoData = fetchedClientInfoResultsController.object(at: indexPath)
         cell.clientInfo = clientInfoData
+
+        do {
+            fetchedReportItemResultsController.fetchRequest.predicate = NSPredicate(format: "client == %@", clientInfoData)
+            try fetchedReportItemResultsController.performFetch()
+        } catch let err {
+            print("Failed fetchedReportItem \(err)")
+        }
+        let reports = fetchedReportItemResultsController.fetchedObjects!
+        if !reports.isEmpty {
+            cell.clientReport = reports[0]
+        }
         
         return cell
     }

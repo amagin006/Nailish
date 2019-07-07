@@ -14,11 +14,20 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         didSet {
             if let imageDate = clientInfo.clientImage {
                 cellImageView.image = UIImage(data: imageDate)
-                
             }
             firstNameLabel.text = clientInfo.firstName!
             lastNameLabel.text = clientInfo.lastName!
-//            lastVistiDate.text = clientInfo.lastVisit!
+            
+        }
+    }
+    
+    var clientReport: ReportItem! {
+        didSet {
+            if let lastVisit = clientReport.visitDate {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "YYYY/MM/dd"
+                lastVistiDate.text = formatter.string(from: lastVisit)
+            }
         }
     }
     
@@ -31,7 +40,12 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         nameSV.spacing = 10
         nameSV.alignment = .center
         
-        let labelSV = UIStackView(arrangedSubviews: [nameSV, lastVistiDate])
+        let visitDaySV = UIStackView(arrangedSubviews: [lastVistDateLabel, lastVistiDate])
+        visitDaySV.translatesAutoresizingMaskIntoConstraints = false
+        visitDaySV.axis = .horizontal
+        visitDaySV.spacing = 4
+        
+        let labelSV = UIStackView(arrangedSubviews: [nameSV, visitDaySV])
         labelSV.translatesAutoresizingMaskIntoConstraints = false
         labelSV.alignment = .leading
         labelSV.spacing = 4
@@ -83,9 +97,18 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         return lb
     }()
     
+    let lastVistDateLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Last Visit: "
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.systemFont(ofSize: 12.0)
+        lb.textColor = UIColor.lightGray
+        return lb
+    }()
+    
     let lastVistiDate: UILabel = {
         let lb = UILabel()
-        lb.text = "2019/05/21"
+        lb.text = ""
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 12.0)
         lb.textColor = UIColor.lightGray

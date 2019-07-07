@@ -227,7 +227,11 @@ class NewReportViewController: UIViewController {
             report?.snapshot2 = reportImageViews[1].image?.jpegData(compressionQuality: 0.1)
             report?.snapshot3 = reportImageViews[2].image?.jpegData(compressionQuality: 0.1)
             report?.snapshot4 = reportImageViews[3].image?.jpegData(compressionQuality: 0.1)
-            report?.visitDate = visitTextField.toolbar.datePicker.date
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            if let visitDateStr = visitTextField.text {
+                report?.visitDate = formatter.date(from: visitDateStr)
+            }
             report?.menu = menuTextField.text ?? ""
             report?.price = Int32(priceTextField.text ?? "0")!
             report?.tips = Int32(tipsTextField.text ?? "0")!

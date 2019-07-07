@@ -22,9 +22,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
             lastNameLabel.text = client?.lastName ?? ""
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
-            if let date = client?.lastVisit {
-                lastVisitLabel.text = formatter.string(from: date)
-            }
             memoTextLabel.text = client?.memo ?? ""
             if let image = client?.clientImage {
                 clientImage.image = UIImage(data: image)
@@ -47,18 +44,13 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     private func setupUI() {
         
-        let lastTimeSV = UIStackView(arrangedSubviews: [lastVisitTitleLabel, lastVisitLabel])
-        lastTimeSV.axis = .horizontal
-        lastTimeSV.translatesAutoresizingMaskIntoConstraints = false
-        lastTimeSV.spacing = 2
-        
         let fullNameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
         fullNameSV.axis = .horizontal
         fullNameSV.translatesAutoresizingMaskIntoConstraints = false
         fullNameSV.distribution = .fillEqually
         fullNameSV.spacing = 2
         
-        let nametitleSV = UIStackView(arrangedSubviews: [lastTimeSV, nameTitleLabel, fullNameSV])
+        let nametitleSV = UIStackView(arrangedSubviews: [nameTitleLabel, fullNameSV])
         nametitleSV.axis = .vertical
         nametitleSV.translatesAutoresizingMaskIntoConstraints = false
 
