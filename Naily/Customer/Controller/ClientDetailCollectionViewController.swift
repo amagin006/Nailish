@@ -42,6 +42,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
             let bb = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonPressed))
             return bb
         }()
+
         navigationItem.rightBarButtonItem = editButton
         
         do {
@@ -58,6 +59,11 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         editVC.delegate = self
         editVC.client = client
         present(editNVC, animated: true, completion: nil)
+    }
+    
+    @objc private func deleteButtonPressed() {
+        print("deletePress")
+        
     }
     
     // MARK: UICollectionViewDataSource
@@ -117,8 +123,8 @@ extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDe
         self.client = client
     }
     
-    func addClientDidFinish(client: ClientInfo) {
-        
+    func deleteClientButtonPressed() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     // ClientDetailHeaderReusableViewDelegate
