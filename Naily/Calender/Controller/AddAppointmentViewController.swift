@@ -39,7 +39,7 @@ class AddAppointmentViewController: UIViewController {
             memoTextView.text = selectAppointment.memo ?? ""
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -143,7 +143,6 @@ class AddAppointmentViewController: UIViewController {
             }()
             navigationItem.leftBarButtonItem = cancelButton
         }
-
     }
     
     @objc func tappedClientView() {
@@ -164,12 +163,24 @@ class AddAppointmentViewController: UIViewController {
         return frc
     }()
     
+    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
+        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
+        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: false)
+        fetchRequest.sortDescriptors = [visitDateDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                             managedObjectContext: context,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
+        return frc
+    }()
+    
+    
     @objc func saveButtonPressed() {
         print("save")
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if selectAppointment == nil {
             let newAppointment = NSEntityDescription.insertNewObject(forEntityName: "Appointment", into: manageContext)
-            
             newAppointment.setValue(dateTextView.toolbar.datePicker.date, forKey: "appointmentDate")
             newAppointment.setValue(startTextView.toolbar.datePicker.date, forKey: "start")
             newAppointment.setValue(endTextView.toolbar.datePicker.date, forKey: "end")
@@ -180,10 +191,30 @@ class AddAppointmentViewController: UIViewController {
             if let memo = memoTextView.text {
                 newAppointment.setValue(memo, forKey: "memo")
             }
+            let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
+            newReport.setValue(dateTextView.toolbar.datePicker.date, forKey: "visitDate")
+            if let menu = memoTextView.text {
+                newReport.setValue(menu, forKey: "menu")
+            }
+            if let memo = memoTextView.text {
+                newReport.setValue(memo, forKey: "memo")
+            }
+            for i in 0..<4 {
+                let image = #imageLiteral(resourceName: "imagePlaceholder")
+                let imageData = image.jpegData(compressionQuality: 0.1)
+                newReport.setValue(imageData, forKey: "snapshot\(i + 1)" )
+            }
+            newReport.setValue(selectClient, forKey: "client")
+            
             do {
                 try fetchedAppointmentItemResultsController.managedObjectContext.save()
             } catch let err {
                 print("failed insert appointment into CoreData - \(err)")
+            }
+            do {
+                try fetchedReportItemResultsController.managedObjectContext.save()
+            } catch let err {
+                print("failed save Report - \(err)")
             }
             self.navigationController?.popViewController(animated: true)
         } else {
