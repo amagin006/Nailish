@@ -23,6 +23,11 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let addButton: UIBarButtonItem = {
+            let bt = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAppointmentPressed))
+            return bt
+        }()
+        navigationItem.rightBarButtonItem = addButton
         setupCalendar()
         setupTableViewUI()
         getAppointmentdata(date: selectDate)
@@ -177,7 +182,6 @@ extension MainCalenderViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("select cell")
         let addAppointmentVC = AddAppointmentViewController()
         getAppointmentdata(date: selectDate)
         let appointment = fetchedAppointmentItemResultsController.object(at: indexPath)
@@ -185,8 +189,6 @@ extension MainCalenderViewController: UITableViewDelegate {
         addAppointmentVC.selectAppointment = appointment
         self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
-    
-    
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                     didChange anObject: Any,

@@ -146,7 +146,6 @@ class AddAppointmentViewController: UIViewController {
     }
     
     @objc func tappedClientView() {
-        print("tappedClientView")
         let custmerVC = CustomerCollectionViewController()
         custmerVC.title = "Select Client"
         custmerVC.selectClient = true

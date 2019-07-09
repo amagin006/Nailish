@@ -18,9 +18,8 @@ protocol CustomerCollectionViewControllerDelegate: class {
 }
 
 class CustomerCollectionViewController: FetchCollectionViewController, UICollectionViewDelegateFlowLayout {
-    
+
     var selectClient = false
-    
     private var searchController: UISearchController!
     private var filteredTitles = [String]()
     
@@ -46,12 +45,26 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         fetchClient()
         self.collectionView!.register(CustomerCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         self.collectionView!.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
-        setRightAddButton()
-        
         searchController = UISearchController(searchResultsController: nil)
-        
         setupSearchBar()
-        
+        setRightAddButton()
+//        if selectClient {
+//            let cancelButton: UIBarButtonItem = {
+//                let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
+//                return bt
+//            }()
+//            navigationItem.leftBarButtonItem = cancelButton
+//        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if selectClient {
+            let cancelButton: UIBarButtonItem = {
+                let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
+                return bt
+            }()
+            navigationItem.leftBarButtonItem = cancelButton
+        }
     }
 
     func fetchClient() {
@@ -93,6 +106,10 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         let addVC = AddClientViewController()
         let addNVC = LightStatusNavigationController(rootViewController: addVC)
         present(addNVC, animated: true, completion: nil)
+    }
+    
+    @objc func cancelButtonPressed() {
+        navigationController?.popViewController(animated: true)
     }
     
     // MARK: UICollectionViewDataSource
@@ -155,7 +172,6 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         if selectClient {
             let selectedClient = fetchedClientInfoResultsController.object(at: indexPath)
             self.delegate?.selectedClient(client: selectedClient)

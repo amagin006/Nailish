@@ -17,7 +17,6 @@ class CustomerCollectionViewCell: UICollectionViewCell {
             }
             firstNameLabel.text = clientInfo.firstName!
             lastNameLabel.text = clientInfo.lastName!
-            
         }
     }
     
@@ -82,6 +81,8 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         iv.widthAnchor.constraint(equalToConstant: 60).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 60).isActive = true
         iv.clipsToBounds = true
+        iv.layer.borderWidth = 2
+        iv.layer.borderColor = UIColor.white.cgColor
         return iv
     }()
     
