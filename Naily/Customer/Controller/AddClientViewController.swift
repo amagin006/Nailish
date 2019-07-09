@@ -117,6 +117,7 @@ class AddClientViewController: UIViewController {
     @objc func seveButtonPressed() {
         
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+        
         if client == nil {
             let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
             
@@ -125,9 +126,11 @@ class AddClientViewController: UIViewController {
                 newClient.setValue(imageData, forKey: "clientImage")
             }
             let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+            let fullName = "\(firstNameUpper!) \(lastNameTextField.text ?? "")"
             let nameInitial = String(firstNameUpper?.first ?? "#")
             newClient.setValue(firstNameUpper, forKey: "firstName")
             newClient.setValue(lastNameTextField.text, forKey: "lastName")
+            newClient.setValue(fullName, forKey: "fullName")
             newClient.setValue(nameInitial, forKey: "nameInitial")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
@@ -142,11 +145,14 @@ class AddClientViewController: UIViewController {
             }
             dismiss(animated: true)
         } else {
-            client?.firstName = firstNameTextField.text
-            client?.nameInitial = String(client.firstName?.first ?? "#")
-            client?.lastName = lastNameTextField.text
-            client?.mailAdress = mailTextField.text ?? ""
-            client?.mobileNumber = mobileTextField.text ?? ""
+            let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+            client.firstName = firstNameUpper
+            client.nameInitial = String(client.firstName?.first ?? "#")
+            client.lastName = lastNameTextField.text
+            let fullName = "\(firstNameUpper!) \(lastNameTextField.text ?? "")"
+            client.fullName = fullName
+            client.mailAdress = mailTextField.text ?? ""
+            client.mobileNumber = mobileTextField.text ?? ""
             if DOBTextField.text != "" {
                 let formatter = DateFormatter()
                 formatter.dateStyle = .medium

@@ -20,6 +20,10 @@ protocol CustomerCollectionViewControllerDelegate: class {
 class CustomerCollectionViewController: FetchCollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var selectClient = false
+    
+    private var searchController: UISearchController!
+    private var filteredTitles = [String]()
+    
     weak var delegate: CustomerCollectionViewControllerDelegate?
     
     init() {
@@ -40,13 +44,16 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchClient()
-
         self.collectionView!.register(CustomerCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         self.collectionView!.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         setRightAddButton()
         
+        searchController = UISearchController(searchResultsController: nil)
+        
+        setupSearchBar()
+        
     }
-    
+
     func fetchClient() {
         do {
             try fetchedClientInfoResultsController.performFetch()
@@ -54,7 +61,19 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
             print("can't fetch clientInfo - \(err)")
         }
     }
-
+    
+    private func setupSearchBar() {
+        navigationItem.searchController = self.searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.delegate = self
+        searchController.searchBar.placeholder = "Search"
+        searchController.searchBar.autocapitalizationType = .none
+        searchController.dimsBackgroundDuringPresentation = false
+    }
+    
     // MARK: helper methods
     private func setRightAddButton() {
         let iconButton = UIButton(type: .custom)
@@ -146,13 +165,10 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
             detailVC.client = fetchedClientInfoResultsController.object(at: indexPath)
             self.navigationController?.pushViewController(detailVC, animated: true)
         }
-
-//        // Delete Item
-//        let clientInfoData = fetchedClientInfoResultsController.object(at: indexPath)
-//        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-//        manageContext.delete(clientInfoData)
     }
 }
+
+
 
 class SectionHeader: UICollectionReusableView {
     
@@ -176,3 +192,35 @@ class SectionHeader: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+extension CustomerCollectionViewController: UISearchResultsUpdating {
+    
+}
+
+extension CustomerCollectionViewController: UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text ?? ""
+        var predicate: NSPredicate?
+        if searchText.count > 0 {
+            predicate = NSPredicate(format: "fullName beginswith[c] %@", searchText)
+        } else {
+            predicate = nil
+        }
+        
+        fetchedClientInfoResultsController.fetchRequest.predicate = predicate
+        
+        do {
+            try fetchedClientInfoResultsController.performFetch()
+            collectionView.reloadData()
+        } catch let err {
+            print(err)
+        }
+        
+    }
+}
+
+extension CustomerCollectionViewController: UISearchControllerDelegate {
+    
+}
+
+

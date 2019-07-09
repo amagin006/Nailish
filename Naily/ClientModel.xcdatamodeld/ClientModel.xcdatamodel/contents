@@ -12,6 +12,7 @@
         <attribute name="clientImage" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="dateOfBirth" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastVistDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -37,7 +38,7 @@
     </entity>
     <elements>
         <element name="Appointment" positionX="-225" positionY="135" width="128" height="135"/>
-        <element name="ClientInfo" positionX="-52.82421875" positionY="-21.88671875" width="128" height="225"/>
+        <element name="ClientInfo" positionX="-52.82421875" positionY="-21.88671875" width="128" height="240"/>
         <element name="ReportItem" positionX="-391.0234375" positionY="101.546875" width="128" height="210"/>
     </elements>
 </model>
