@@ -10,8 +10,8 @@ import UIKit
 import CoreData
 
 protocol AddClientViewControllerDelegate:class {
-    func addClientDidFinish(client: ClientInfo)
     func editClientDidFinish(client: ClientInfo)
+    func deleteClientButtonPressed()
 }
 
 class AddClientViewController: UIViewController {
@@ -39,7 +39,6 @@ class AddClientViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUI()
         setupNavigationUI()
     }
@@ -81,8 +80,14 @@ class AddClientViewController: UIViewController {
         hStackView.distribution = .equalSpacing
         hStackView.spacing = 10
         
-        let notificationCenter = NotificationCenter.default
+        if client != nil {
+            clientFormView.addSubview(deleteButton)
+            deleteButton.topAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 50).isActive = true
+            deleteButton.widthAnchor.constraint(greaterThanOrEqualTo: clientFormView.widthAnchor, multiplier: 0.4).isActive = true
+            deleteButton.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
+        }
         
+        let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeShown), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
@@ -94,7 +99,6 @@ class AddClientViewController: UIViewController {
             return bt
         }()
         navigationItem.leftBarButtonItem = cancelButton
-        
         let saveButton: UIBarButtonItem = {
             let bt = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(seveButtonPressed))
             return bt
@@ -104,17 +108,16 @@ class AddClientViewController: UIViewController {
     
     @objc func selectImage() {
         print("press selectImage")
-        
         let imagePickController = UIImagePickerController()
         imagePickController.delegate = self
         imagePickController.allowsEditing = true
-        
         present(imagePickController, animated: true, completion: nil)
     }
     
     @objc func seveButtonPressed() {
         
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+        
         if client == nil {
             let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
             
@@ -123,9 +126,11 @@ class AddClientViewController: UIViewController {
                 newClient.setValue(imageData, forKey: "clientImage")
             }
             let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+            let fullName = "\(firstNameUpper!) \(lastNameTextField.text ?? "")"
             let nameInitial = String(firstNameUpper?.first ?? "#")
             newClient.setValue(firstNameUpper, forKey: "firstName")
             newClient.setValue(lastNameTextField.text, forKey: "lastName")
+            newClient.setValue(fullName, forKey: "fullName")
             newClient.setValue(nameInitial, forKey: "nameInitial")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
@@ -140,11 +145,14 @@ class AddClientViewController: UIViewController {
             }
             dismiss(animated: true)
         } else {
-            client?.firstName = firstNameTextField.text
-            client?.nameInitial = String(client.firstName?.first ?? "#")
-            client?.lastName = lastNameTextField.text
-            client?.mailAdress = mailTextField.text ?? ""
-            client?.mobileNumber = mobileTextField.text ?? ""
+            let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
+            client.firstName = firstNameUpper
+            client.nameInitial = String(client.firstName?.first ?? "#")
+            client.lastName = lastNameTextField.text
+            let fullName = "\(firstNameUpper!) \(lastNameTextField.text ?? "")"
+            client.fullName = fullName
+            client.mailAdress = mailTextField.text ?? ""
+            client.mobileNumber = mobileTextField.text ?? ""
             if DOBTextField.text != "" {
                 let formatter = DateFormatter()
                 formatter.dateStyle = .medium
@@ -166,8 +174,32 @@ class AddClientViewController: UIViewController {
     }
     
     @objc func cancelButtonPressed() {
-        print("cancelButtonPressed")
         dismiss(animated: true)
+    }
+    
+    @objc func deleteClient() {
+        let alert: UIAlertController = UIAlertController(title: "Delete Client", message: "Are you sure you want to delete client?", preferredStyle: .alert)
+
+        let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
+            (action: UIAlertAction!) in
+            
+            let managementContent = CoreDataManager.shared.persistentContainer.viewContext
+            managementContent.delete(self.client)
+            do {
+                try self.fetchedClientInfoResultsController.managedObjectContext.save()
+            } catch let err {
+                print("failed delete client - \(err)")
+            }
+            self.delegate?.deleteClientButtonPressed()
+            self.dismiss(animated: true)
+        })
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
+            (action: UIAlertAction!) in
+            
+        })
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
     }
 
     @objc func keyboardWillBeShown(notification: NSNotification) {
@@ -309,6 +341,15 @@ class AddClientViewController: UIViewController {
         return tv
     }()
     
+    let deleteButton: UIButton = {
+        let bt = UIButton()
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.setTitle("Delete Client", for: .normal)
+        bt.backgroundColor = .red
+        bt.addTarget(self, action: #selector(deleteClient), for: .touchUpInside)
+        bt.layer.cornerRadius = 10
+        return bt
+    }()
 }
 
 extension AddClientViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

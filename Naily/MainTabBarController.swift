@@ -16,8 +16,8 @@ class MainTabBarController: UITabBarController {
         viewControllers = [
             createViewController(viewController: CustomerCollectionViewController(), title: "Customer", imageName: "customer", headerLarge: false),
             createViewController(viewController: MainCalenderViewController(), title: "Calender", imageName: "calendar", headerLarge: false),
-            createViewController(viewController: UIViewController(), title: "Analysis", imageName: "analysis", headerLarge: true),
-            createViewController(viewController: UIViewController(), title: "Setting", imageName: "settings", headerLarge: true),
+//            createViewController(viewController: UIViewController(), title: "Analysis", imageName: "analysis", headerLarge: true),
+//            createViewController(viewController: UIViewController(), title: "Setting", imageName: "settings", headerLarge: true),
         ]
         
     }

@@ -209,7 +209,6 @@ class NewReportViewController: UIViewController {
                 let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
                 newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
             }
-            
             newReport.setValue(visitTextField.toolbar.datePicker.date, forKey: "visitDate")
             newReport.setValue(menuTextField.text ?? "", forKey: "menu")
             newReport.setValue(Int(priceTextField.text ?? "0"), forKey: "price")
