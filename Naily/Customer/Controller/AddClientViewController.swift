@@ -20,10 +20,12 @@ class AddClientViewController: UIViewController {
     
     var client: ClientInfo! {
         didSet {
-            firstNameTextField.text = client?.firstName
-            lastNameTextField.text = client?.lastName ?? ""
-            mailTextField.text = client?.mailAdress ?? ""
-            mobileTextField.text = client?.mobileNumber ?? ""
+            firstNameTextField.text = client.firstName
+            lastNameTextField.text = client.lastName ?? ""
+            instagramTextField.text = client.instagram ?? ""
+            twitterTextField.text = client.twitter ?? ""
+            mailTextField.text = client.mailAdress ?? ""
+            mobileTextField.text = client.mobileNumber ?? ""
             if let date = client?.dateOfBirth {
                 let formatter = DateFormatter()
                 formatter.dateStyle = .medium

@@ -8,14 +8,16 @@
 
 import UIKit
 import CoreData
+import WebKit
 
 private let headerIdentifier = "ClientDetailheaderCell"
 private let reportIdentifier = "ClientDetailReportCell"
 
-class ClientDetailCollectionViewController: FetchCollectionViewController, UICollectionViewDelegateFlowLayout {
+class ClientDetailCollectionViewController: FetchCollectionViewController, UICollectionViewDelegateFlowLayout, WKUIDelegate {
     
     var client: ClientInfo!
     var reportItems: [ReportItem]!
+    var webView: WKWebView!
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -106,7 +108,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         emptyLabel.text = client.memo
         emptyLabel.sizeToFit()
 
-        return .init(width: view.frame.width, height: emptyLabel.frame.height + 325)
+        return .init(width: view.frame.width, height: emptyLabel.frame.height + 350)
     }
     
     var layout: UICollectionViewFlowLayout = {
@@ -144,5 +146,18 @@ extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDe
         present(editReportNVC, animated: true, completion: nil)
     }
     
+    func snsTappedWebView(url: URL) {
+        let webConfiguration = WKWebViewConfiguration()
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.uiDelegate = self
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(webView)
+        webView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        webView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        webView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        let myRequest = URLRequest(url: url)
+        webView.load(myRequest)
+    }
     
 }

@@ -10,20 +10,23 @@ import UIKit
 
 protocol ClientDetailHeaderReusableViewDelegate: class {
     func newReportButtonPressed()
+    func snsTappedWebView(url: URL)
 }
 
 class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     weak var delegate: ClientDetailHeaderReusableViewDelegate?
     
-    var client: ClientInfo? {
+    var client: ClientInfo! {
         didSet {
-            firstNameLabel.text = client?.firstName!
-            lastNameLabel.text = client?.lastName ?? ""
+            firstNameLabel.text = client.firstName!
+            lastNameLabel.text = client.lastName ?? ""
+            instagramLabel.text = client.instagram ?? ""
+            twitterLabel.text = client.twitter ?? ""
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
-            memoTextLabel.text = client?.memo ?? ""
-            if let image = client?.clientImage {
+            memoTextLabel.text = client.memo ?? ""
+            if let image = client.clientImage {
                 clientImage.image = UIImage(data: image)
             }
         }
@@ -44,7 +47,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     }
     
     private func setupUI() {
-        
         addSubview(clientImage)
         clientImage.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         clientImage.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -60,10 +62,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         fullNameSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
         fullNameSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        
-//        let nametitleSV = UIStackView(arrangedSubviews: [nameTitleLabel, fullNameSV])
-//        nametitleSV.axis = .vertical
-//        nametitleSV.translatesAutoresizingMaskIntoConstraints = false
         instagramLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
         let instagramSV = UIStackView(arrangedSubviews: [instagramTitleLabel, instagramLabel])
         instagramSV.axis = .horizontal
@@ -75,17 +73,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         twitterSV.axis = .horizontal
         twitterSV.spacing = 10
         twitterSV.translatesAutoresizingMaskIntoConstraints = false
-//
-//        let clientInfoRight = UIStackView(arrangedSubviews: [nameTitleLabel, fullNameSV, instagramSV, twitterSV])
-//        clientInfoRight.axis = .vertical
-//        clientInfoRight.translatesAutoresizingMaskIntoConstraints = false
-        
-//        let clientTopSV = UIStackView(arrangedSubviews: [clientImage, clientInfoRight])
-//        clientTopSV.axis = .horizontal
-//        clientTopSV.translatesAutoresizingMaskIntoConstraints = false
-//        clientTopSV.spacing = 20
-//        clientTopSV.alignment = .top
-//        clientTopSV.distribution = .fill
         
         let memoSV = UIStackView(arrangedSubviews: [memoTitleLabel, memoTextLabel])
         memoSV.axis = .vertical
@@ -119,9 +106,27 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     @objc func tapSNS(_ sender: UITapGestureRecognizer) {
         if sender.view?.tag == 1 {
-            print("instagram")
+            let account = instagramLabel.text!
+            let url = URL(string: "instagram://user?username=\(account)")!
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // WKWebView
+                print("NO instagram")
+                let instagramUrl = URL(string: "https://www.instagram.com/\(account)")
+                self.delegate?.snsTappedWebView(url: instagramUrl!)
+            }
         } else if sender.view?.tag == 2 {
-            print("twitter")
+            let account = twitterLabel.text!
+            let url = URL(string: "twitter://user?id=\(account)")!
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // WKWebView
+                print("NO twitter")
+                let twitterUrl = URL(string: "https://twitter.com/\(account)")
+                self.delegate?.snsTappedWebView(url: twitterUrl!)
+            }
         }
     }
     
@@ -181,22 +186,13 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.font = UIFont.italicSystemFont(ofSize: 12)
         return lb
     }()
-    
-    let memoTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Memo"
-        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.systemFont(ofSize: 12)
-        return lb
-    }()
-    
+
     let instagramTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Instagram"
         lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.font = UIFont.systemFont(ofSize: 12)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return lb
     }()
@@ -217,7 +213,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.text = "twitter"
         lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.font = UIFont.systemFont(ofSize: 12)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return lb
     }()
@@ -231,6 +227,15 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.isUserInteractionEnabled = true
         lb.isUserInteractionEnabled = true
         lb.font = UIFont.systemFont(ofSize: 14)
+        return lb
+    }()
+    
+    let memoTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Memo"
+        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.systemFont(ofSize: 12)
         return lb
     }()
 
