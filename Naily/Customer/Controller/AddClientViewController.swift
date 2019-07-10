@@ -20,10 +20,12 @@ class AddClientViewController: UIViewController {
     
     var client: ClientInfo! {
         didSet {
-            firstNameTextField.text = client?.firstName
-            lastNameTextField.text = client?.lastName ?? ""
-            mailTextField.text = client?.mailAdress ?? ""
-            mobileTextField.text = client?.mobileNumber ?? ""
+            firstNameTextField.text = client.firstName
+            lastNameTextField.text = client.lastName ?? ""
+            instagramTextField.text = client.instagram ?? ""
+            twitterTextField.text = client.twitter ?? ""
+            mailTextField.text = client.mailAdress ?? ""
+            mobileTextField.text = client.mobileNumber ?? ""
             if let date = client?.dateOfBirth {
                 let formatter = DateFormatter()
                 formatter.dateStyle = .medium
@@ -58,6 +60,13 @@ class AddClientViewController: UIViewController {
         personImageView.widthAnchor.constraint(equalToConstant: 160).isActive = true
         personImageView.heightAnchor.constraint(equalToConstant: 160).isActive = true
         
+        clientFormView.addSubview(addClientImage)
+        addClientImage.contentMode = .center
+        addClientImage.bottomAnchor.constraint(equalTo: personImageView.bottomAnchor, constant: 8).isActive = true
+        addClientImage.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        addClientImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        addClientImage.trailingAnchor.constraint(equalTo: personImageView.trailingAnchor, constant: -8).isActive = true
+        
         let firstNameStackView = UIStackView(arrangedSubviews: [firstNameLabel, firstNameTextField])
         firstNameStackView.axis = .vertical
         let lastNameStackView = UIStackView(arrangedSubviews: [lastNameLabel, lastNameTextField])
@@ -67,7 +76,7 @@ class AddClientViewController: UIViewController {
         nameStackView.distribution = .fillEqually
         nameStackView.spacing = 10
         
-        let hStackView = UIStackView(arrangedSubviews: [nameStackView, mailLabel, mailTextField, mobileLabel, mobileTextField, DOBLabel, DOBTextField, memoLabel, memoTextField])
+        let hStackView = UIStackView(arrangedSubviews: [nameStackView, instagramLabel, instagramTextField, twitterLabel, twitterTextField, mailLabel, mailTextField, mobileLabel, mobileTextField, DOBLabel, DOBTextField, memoLabel, memoTextField])
         hStackView.translatesAutoresizingMaskIntoConstraints = false
         clientFormView.addSubview(hStackView)
         hStackView.axis = .vertical
@@ -132,6 +141,8 @@ class AddClientViewController: UIViewController {
             newClient.setValue(lastNameTextField.text, forKey: "lastName")
             newClient.setValue(fullName, forKey: "fullName")
             newClient.setValue(nameInitial, forKey: "nameInitial")
+            newClient.setValue(instagramTextField.text ?? "", forKey: "instagram")
+            newClient.setValue(twitterTextField.text ?? "", forKey: "twitter")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
             if DOBTextField.text != "" {
@@ -152,6 +163,8 @@ class AddClientViewController: UIViewController {
             let fullName = "\(firstNameUpper!) \(lastNameTextField.text ?? "")"
             client.fullName = fullName
             client.mailAdress = mailTextField.text ?? ""
+            client.instagram = instagramTextField.text ?? ""
+            client.twitter = twitterTextField.text ?? ""
             client.mobileNumber = mobileTextField.text ?? ""
             if DOBTextField.text != "" {
                 let formatter = DateFormatter()
@@ -214,7 +227,6 @@ class AddClientViewController: UIViewController {
     }
     
     @objc func keyboardWillBeHidden(notification: NSNotification) {
- 
         if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
             guard let userInfo = notification.userInfo else { return }
             print(userInfo)
@@ -224,7 +236,6 @@ class AddClientViewController: UIViewController {
                 self.view.frame.origin.y += keyboardFrame.height
             }
         }
-        
     }
     
     lazy var fetchedClientInfoResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ClientInfo> in
@@ -240,6 +251,7 @@ class AddClientViewController: UIViewController {
     // MARK: - UIParts
     let clientFormView: UIScrollView = {
         let vi = UIScrollView()
+        vi.backgroundColor = UIColor(red: 123/255, green: 204/255, blue: 172/255, alpha: 1)
         vi.translatesAutoresizingMaskIntoConstraints = false
         vi.contentSize.height = 800
         return vi
@@ -251,10 +263,24 @@ class AddClientViewController: UIViewController {
         iv.isUserInteractionEnabled = true
         iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectImage)))
         iv.layer.cornerRadius = 80
+        iv.layer.borderColor = UIColor.white.cgColor
+        iv.layer.borderWidth = 4
         iv.clipsToBounds = true
         iv.backgroundColor = .white
         return iv
     }()
+    
+    let addClientImage: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "camera"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.layer.cornerRadius = 25
+        iv.clipsToBounds = true
+        iv.layer.borderWidth = 2
+        iv.layer.borderColor = UIColor.white.cgColor
+        iv.backgroundColor = .white
+        return iv
+    }()
+    
     
     let firstNameLabel: UILabel = {
         let lb = UILabel()
@@ -281,6 +307,36 @@ class AddClientViewController: UIViewController {
     let lastNameTextField: MyTextField = {
         let tf = MyTextField()
         tf.placeholder = "Last Name..."
+        return tf
+    }()
+    
+    let instagramLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Instagram"
+        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let instagramTextField: MyTextField = {
+        let tf = MyTextField()
+        tf.placeholder = "example006"
+        tf.keyboardType = UIKeyboardType.emailAddress
+        return tf
+    }()
+    
+    let twitterLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Twitter"
+        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let twitterTextField: MyTextField = {
+        let tf = MyTextField()
+        tf.placeholder = "@twitter"
+        tf.keyboardType = UIKeyboardType.emailAddress
         return tf
     }()
     

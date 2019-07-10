@@ -14,12 +14,14 @@
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="instagram" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastVistDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mailAdress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="memo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mobileNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nameInitial" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitter" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="appointment" toMany="YES" deletionRule="Nullify" destinationEntity="Appointment" inverseName="client" inverseEntity="Appointment" syncable="YES"/>
         <relationship name="items" toMany="YES" deletionRule="Cascade" destinationEntity="ReportItem" inverseName="client" inverseEntity="ReportItem" syncable="YES"/>
     </entity>
@@ -38,7 +40,7 @@
     </entity>
     <elements>
         <element name="Appointment" positionX="-225" positionY="135" width="128" height="135"/>
-        <element name="ClientInfo" positionX="-52.82421875" positionY="-21.88671875" width="128" height="240"/>
+        <element name="ClientInfo" positionX="-52.82421875" positionY="-21.88671875" width="128" height="270"/>
         <element name="ReportItem" positionX="-391.0234375" positionY="101.546875" width="128" height="210"/>
     </elements>
 </model>

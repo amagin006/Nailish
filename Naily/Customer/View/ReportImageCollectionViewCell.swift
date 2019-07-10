@@ -56,7 +56,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = UIColor(red: 10/255, green: 20/255, blue: 15/255, alpha: 0.2)
+        contentView.backgroundColor = UIColor(red: 253/255, green: 193/255, blue: 104/255, alpha: 1)
         contentView.translatesAutoresizingMaskIntoConstraints = false
     }
     

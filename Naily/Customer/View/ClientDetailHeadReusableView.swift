@@ -10,20 +10,23 @@ import UIKit
 
 protocol ClientDetailHeaderReusableViewDelegate: class {
     func newReportButtonPressed()
+    func snsTappedWebView(url: URL)
 }
 
 class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     weak var delegate: ClientDetailHeaderReusableViewDelegate?
     
-    var client: ClientInfo? {
+    var client: ClientInfo! {
         didSet {
-            firstNameLabel.text = client?.firstName!
-            lastNameLabel.text = client?.lastName ?? ""
+            firstNameLabel.text = client.firstName!
+            lastNameLabel.text = client.lastName ?? ""
+            instagramLabel.text = client.instagram ?? ""
+            twitterLabel.text = client.twitter ?? ""
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
-            memoTextLabel.text = client?.memo ?? ""
-            if let image = client?.clientImage {
+            memoTextLabel.text = client.memo ?? ""
+            if let image = client.clientImage {
                 clientImage.image = UIImage(data: image)
             }
         }
@@ -31,6 +34,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = UIColor(red: 253/255, green: 193/255, blue: 104/255, alpha: 1)
         setupUI()
     }
     
@@ -43,35 +47,44 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     }
     
     private func setupUI() {
+        addSubview(clientImage)
+        clientImage.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        clientImage.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         let fullNameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
         fullNameSV.axis = .horizontal
         fullNameSV.translatesAutoresizingMaskIntoConstraints = false
-        fullNameSV.distribution = .fillEqually
+        fullNameSV.distribution = .equalSpacing
         fullNameSV.spacing = 2
         
-        let nametitleSV = UIStackView(arrangedSubviews: [nameTitleLabel, fullNameSV])
-        nametitleSV.axis = .vertical
-        nametitleSV.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(fullNameSV)
+        fullNameSV.topAnchor.constraint(equalTo: clientImage.bottomAnchor, constant: 20).isActive = true
+        fullNameSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
+        fullNameSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        
+        instagramLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
+        let instagramSV = UIStackView(arrangedSubviews: [instagramTitleLabel, instagramLabel])
+        instagramSV.axis = .horizontal
+        instagramSV.spacing = 10
+        instagramSV.translatesAutoresizingMaskIntoConstraints = false
 
+        twitterLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
+        let twitterSV = UIStackView(arrangedSubviews: [twitterTitleLabel, twitterLabel])
+        twitterSV.axis = .horizontal
+        twitterSV.spacing = 10
+        twitterSV.translatesAutoresizingMaskIntoConstraints = false
         
         let memoSV = UIStackView(arrangedSubviews: [memoTitleLabel, memoTextLabel])
         memoSV.axis = .vertical
         memoSV.translatesAutoresizingMaskIntoConstraints = false
         memoSV.spacing = 2
         
-        let clientTopSV = UIStackView(arrangedSubviews: [clientImage, nametitleSV])
-        clientTopSV.axis = .horizontal
-        clientTopSV.translatesAutoresizingMaskIntoConstraints = false
-        clientTopSV.spacing = 20
-        clientTopSV.distribution = .fill
-        
-        let headerInfoSV = UIStackView(arrangedSubviews: [clientTopSV, memoSV])
+        let headerInfoSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV, memoSV])
         addSubview(headerInfoSV)
         headerInfoSV.translatesAutoresizingMaskIntoConstraints = false
         headerInfoSV.axis = .vertical
         headerInfoSV.spacing = 10
-        headerInfoSV.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        headerInfoSV.topAnchor.constraint(equalTo: fullNameSV.bottomAnchor, constant: 20).isActive = true
         headerInfoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         headerInfoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         
@@ -91,13 +104,42 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         self.delegate?.newReportButtonPressed()
     }
     
+    @objc func tapSNS(_ sender: UITapGestureRecognizer) {
+        if sender.view?.tag == 1 {
+            let account = instagramLabel.text!
+            let url = URL(string: "instagram://user?username=\(account)")!
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // WKWebView
+                print("NO instagram")
+                let instagramUrl = URL(string: "https://www.instagram.com/\(account)")
+                self.delegate?.snsTappedWebView(url: instagramUrl!)
+            }
+        } else if sender.view?.tag == 2 {
+            let account = twitterLabel.text!
+            let url = URL(string: "twitter://user?id=\(account)")!
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                // WKWebView
+                print("NO twitter")
+                let twitterUrl = URL(string: "https://twitter.com/\(account)")
+                self.delegate?.snsTappedWebView(url: twitterUrl!)
+            }
+        }
+    }
+    
+    // UIParts
     var clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.layer.cornerRadius = 45
-        iv.widthAnchor.constraint(equalToConstant: 90).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        iv.layer.cornerRadius = 60
+        iv.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 120).isActive = true
         iv.clipsToBounds = true
+        iv.layer.borderWidth = 4
+        iv.layer.borderColor = UIColor.white.cgColor
         iv.backgroundColor = .white
         return iv
     }()
@@ -105,6 +147,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     let nameTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Name"
+        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
@@ -143,16 +186,59 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.font = UIFont.italicSystemFont(ofSize: 12)
         return lb
     }()
+
+    let instagramTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Instagram"
+        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.systemFont(ofSize: 12)
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        return lb
+    }()
+    
+    let instagramLabel: UnderlineUILabel = {
+        let lb = UnderlineUILabel()
+        lb.text = "instagram001"
+        lb.tag = 1
+        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.isUserInteractionEnabled = true
+        lb.font = UIFont.systemFont(ofSize: 14)
+        return lb
+    }()
+    
+    let twitterTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "twitter"
+        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.systemFont(ofSize: 12)
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        return lb
+    }()
+    
+    let twitterLabel: UnderlineUILabel = {
+        let lb = UnderlineUILabel   ()
+        lb.text = "@twitter"
+        lb.tag = 2
+        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.isUserInteractionEnabled = true
+        lb.isUserInteractionEnabled = true
+        lb.font = UIFont.systemFont(ofSize: 14)
+        return lb
+    }()
     
     let memoTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Memo"
+        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 12)
-
         return lb
     }()
-    
+
     let memoTextLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
@@ -167,7 +253,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     let reportTitleView: UIView = {
         let vi = UIView()
         vi.translatesAutoresizingMaskIntoConstraints = false
-        vi.backgroundColor = .blue
+        vi.backgroundColor = UIColor(red: 236/255, green: 123/255, blue: 125/255, alpha: 1)
         return vi
     }()
     
