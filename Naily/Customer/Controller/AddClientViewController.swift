@@ -23,7 +23,9 @@ class AddClientViewController: UIViewController {
             firstNameTextField.text = client.firstName
             lastNameTextField.text = client.lastName ?? ""
             instagramTextField.text = client.instagram ?? ""
-            twitterTextField.text = client.twitter ?? ""
+//            twitterTextField.text = client.twitter ?? ""
+//            facebookTextField.text = client.facebook ?? ""
+            lineTextField.text = client.line ?? ""
             mailTextField.text = client.mailAdress ?? ""
             mobileTextField.text = client.mobileNumber ?? ""
             if let date = client?.dateOfBirth {
@@ -35,7 +37,6 @@ class AddClientViewController: UIViewController {
             if let image = client?.clientImage {
                 personImageView.image = UIImage(data: image)
             }
-            
         }
     }
 
@@ -43,6 +44,9 @@ class AddClientViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupNavigationUI()
+        if client != nil {
+            saveButton.isEnabled = true
+        }
     }
     
     private func setupUI() {
@@ -67,16 +71,62 @@ class AddClientViewController: UIViewController {
         addClientImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
         addClientImage.trailingAnchor.constraint(equalTo: personImageView.trailingAnchor, constant: -8).isActive = true
         
-        let firstNameStackView = UIStackView(arrangedSubviews: [firstNameLabel, firstNameTextField])
+        firstNameTextField.addTarget(self, action: #selector(firstNameChage), for: .editingChanged)
+        let firstNameTitleSV = UIStackView(arrangedSubviews: [firstNameLabel, requireLabel])
+        firstNameTitleSV.axis = .horizontal
+        firstNameTitleSV.spacing = 2
+        firstNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
+        let firstNameStackView = UIStackView(arrangedSubviews: [firstNameTitleSV, firstNameTextField])
         firstNameStackView.axis = .vertical
+        firstNameStackView.spacing = 6
+        
         let lastNameStackView = UIStackView(arrangedSubviews: [lastNameLabel, lastNameTextField])
         lastNameStackView.axis = .vertical
+        lastNameStackView.spacing = 6
+        
         let nameStackView = UIStackView(arrangedSubviews: [firstNameStackView, lastNameStackView])
         nameStackView.axis = .horizontal
         nameStackView.distribution = .fillEqually
         nameStackView.spacing = 10
         
-        let hStackView = UIStackView(arrangedSubviews: [nameStackView, instagramLabel, instagramTextField, twitterLabel, twitterTextField, mailLabel, mailTextField, mobileLabel, mobileTextField, DOBLabel, DOBTextField, memoLabel, memoTextField])
+        let instagramSV = UIStackView(arrangedSubviews: [instagramImageView, instagramLabel, instagramTextField])
+        instagramSV.axis = .horizontal
+        instagramSV.alignment = .center
+        instagramSV.spacing = 10
+        
+        let twitterSV = UIStackView(arrangedSubviews: [twitterImageView, twitterLabel, twitterTextField])
+        twitterSV.axis = .horizontal
+        twitterSV.alignment = .center
+        twitterSV.spacing = 10
+        
+//        let facebookSV = UIStackView(arrangedSubviews: [facebookImageView, facebookLabel, facebookTextField])
+//        facebookSV.axis = .horizontal
+//        facebookSV.alignment = .center
+//        facebookSV.spacing = 10
+//
+//        let lineSV = UIStackView(arrangedSubviews: [lineImageView, lineLabel, lineTextField])
+//        lineSV.axis = .horizontal
+//        lineSV.alignment = .center
+//        lineSV.spacing = 10
+        
+        let snsSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV])
+        snsSV.axis = .vertical
+        snsSV.spacing = 4
+        
+        let mobileSV = UIStackView(arrangedSubviews: [mobileLabel, mobileTextField])
+        mobileSV.axis = .horizontal
+        mobileSV.spacing = 10
+        
+        let dobSV = UIStackView(arrangedSubviews: [DOBLabel, DOBTextField])
+        dobSV.axis = .horizontal
+        dobSV.spacing = 10
+        
+        let mailSV = UIStackView(arrangedSubviews: [mailLabel, mailTextField])
+        mailSV.axis = .vertical
+        mailSV.spacing = 6
+        
+        let hStackView = UIStackView(arrangedSubviews: [nameStackView, snsSV, mailSV, mobileSV, dobSV, memoLabel, memoTextField])
         hStackView.translatesAutoresizingMaskIntoConstraints = false
         clientFormView.addSubview(hStackView)
         hStackView.axis = .vertical
@@ -87,13 +137,14 @@ class AddClientViewController: UIViewController {
         hStackView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor, multiplier: 0.8).isActive = true
         hStackView.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
         hStackView.distribution = .equalSpacing
-        hStackView.spacing = 10
+        hStackView.spacing = 16
         
         if client != nil {
             clientFormView.addSubview(deleteButton)
             deleteButton.topAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 50).isActive = true
             deleteButton.widthAnchor.constraint(greaterThanOrEqualTo: clientFormView.widthAnchor, multiplier: 0.4).isActive = true
             deleteButton.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
+            clientFormView.contentSize.height = 900
         }
         
         let notificationCenter = NotificationCenter.default
@@ -103,16 +154,16 @@ class AddClientViewController: UIViewController {
 
     private func setupNavigationUI() {
         navigationItem.title = client == nil ? "Add Client": "Edit Client"
-        let cancelButton: UIBarButtonItem = {
-            let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
-            return bt
-        }()
         navigationItem.leftBarButtonItem = cancelButton
-        let saveButton: UIBarButtonItem = {
-            let bt = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(seveButtonPressed))
-            return bt
-        }()
         navigationItem.rightBarButtonItem = saveButton
+    }
+    
+    @objc func firstNameChage() {
+        if firstNameTextField.text != "" {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
     }
     
     @objc func selectImage() {
@@ -142,7 +193,9 @@ class AddClientViewController: UIViewController {
             newClient.setValue(fullName, forKey: "fullName")
             newClient.setValue(nameInitial, forKey: "nameInitial")
             newClient.setValue(instagramTextField.text ?? "", forKey: "instagram")
-            newClient.setValue(twitterTextField.text ?? "", forKey: "twitter")
+//            newClient.setValue(twitterTextField.text ?? "", forKey: "twitter")
+//            newClient.setValue(facebookTextField.text ?? "", forKey: "facebook")
+            newClient.setValue(lineTextField.text ?? "", forKey: "line")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
             if DOBTextField.text != "" {
@@ -164,7 +217,9 @@ class AddClientViewController: UIViewController {
             client.fullName = fullName
             client.mailAdress = mailTextField.text ?? ""
             client.instagram = instagramTextField.text ?? ""
-            client.twitter = twitterTextField.text ?? ""
+//            client.twitter = twitterTextField.text ?? ""
+//            client.facebook = facebookTextField.text ?? ""
+            client.line = lineTextField.text ?? ""
             client.mobileNumber = mobileTextField.text ?? ""
             if DOBTextField.text != "" {
                 let formatter = DateFormatter()
@@ -270,6 +325,17 @@ class AddClientViewController: UIViewController {
         return iv
     }()
     
+    lazy var saveButton: UIBarButtonItem = {
+        let bt = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(seveButtonPressed))
+        bt.isEnabled = false
+        return bt
+    }()
+    
+    lazy var cancelButton: UIBarButtonItem = {
+        let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
+        return bt
+    }()
+    
     let addClientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "camera"))
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -286,7 +352,17 @@ class AddClientViewController: UIViewController {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "First Name"
-        lb.font = UIFont.boldSystemFont(ofSize: 20)
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        return lb
+    }()
+    
+    let requireLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "*"
+        lb.font = UIFont.systemFont(ofSize: 18)
+        lb.textColor = .red
         return lb
     }()
     
@@ -300,7 +376,8 @@ class AddClientViewController: UIViewController {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Last Name"
-        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         return lb
     }()
     
@@ -310,32 +387,114 @@ class AddClientViewController: UIViewController {
         return tf
     }()
     
+    let instagramImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "instagram"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+    
     let instagramLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Instagram"
-        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         return lb
     }()
     
     let instagramTextField: MyTextField = {
         let tf = MyTextField()
+        tf.autocapitalizationType =  UITextAutocapitalizationType.none
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tf.placeholder = "example006"
         tf.keyboardType = UIKeyboardType.emailAddress
         return tf
+    }()
+    
+    let twitterImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "twitter"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
     }()
     
     let twitterLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Twitter"
-        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         return lb
     }()
     
     let twitterTextField: MyTextField = {
         let tf = MyTextField()
+        tf.autocapitalizationType =  UITextAutocapitalizationType.none
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tf.placeholder = "@twitter"
+        tf.keyboardType = UIKeyboardType.emailAddress
+        return tf
+    }()
+    
+    let facebookImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "facebook"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+    
+    let facebookLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Facebook"
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        return lb
+    }()
+    
+    let facebookTextField: MyTextField = {
+        let tf = MyTextField()
+        tf.autocapitalizationType =  UITextAutocapitalizationType.none
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        tf.placeholder = "Facebook ID"
+        tf.keyboardType = UIKeyboardType.emailAddress
+        return tf
+    }()
+    
+    let lineImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "line"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+    
+    let lineLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "Line"
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        return lb
+    }()
+    
+    let lineTextField: MyTextField = {
+        let tf = MyTextField()
+        tf.autocapitalizationType =  UITextAutocapitalizationType.none
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        tf.placeholder = "Line ID"
         tf.keyboardType = UIKeyboardType.emailAddress
         return tf
     }()
@@ -344,7 +503,8 @@ class AddClientViewController: UIViewController {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Mail address"
-        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         return lb
     }()
     
@@ -358,13 +518,17 @@ class AddClientViewController: UIViewController {
     let mobileLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "Phone Number"
-        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        lb.text = "Mobile Number"
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         return lb
     }()
     
     let mobileTextField: MyTextField = {
         let tf = MyTextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tf.placeholder = "000-000-0000"
         tf.keyboardType = UIKeyboardType.phonePad
         return tf
@@ -374,12 +538,18 @@ class AddClientViewController: UIViewController {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Date of Birth"
-        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         return lb
     }()
     
     let DOBTextField: DatePickerKeyboard = {
         let tf = DatePickerKeyboard()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        tf.font = UIFont.systemFont(ofSize: 16)
+        tf.textAlignment = .center
         return tf
     }()
     
@@ -387,7 +557,8 @@ class AddClientViewController: UIViewController {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Memo"
-        lb.font = UIFont.boldSystemFont(ofSize: 16)
+        lb.font = UIFont.systemFont(ofSize: 14)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         return lb
     }()
     

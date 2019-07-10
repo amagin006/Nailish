@@ -108,7 +108,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         emptyLabel.text = client.memo
         emptyLabel.sizeToFit()
 
-        return .init(width: view.frame.width, height: emptyLabel.frame.height + 350)
+        return .init(width: view.frame.width, height: emptyLabel.frame.height + 400)
     }
     
     var layout: UICollectionViewFlowLayout = {
