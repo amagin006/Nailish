@@ -11,6 +11,7 @@ import UIKit
 protocol ClientDetailHeaderReusableViewDelegate: class {
     func newReportButtonPressed()
     func snsTappedWebView(url: URL)
+    func openEmail(address: String)
 }
 
 class ClientDetailHeaderReusableView: UICollectionReusableView {
@@ -23,6 +24,8 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
             lastNameLabel.text = client.lastName ?? ""
             instagramLabel.text = client.instagram ?? ""
             twitterLabel.text = client.twitter ?? ""
+//            facebookLabel.text = client.facebook ?? ""
+//            lineLabel.text =  client.line ?? ""
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             memoTextLabel.text = client.memo ?? ""
@@ -62,34 +65,71 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         fullNameSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
         fullNameSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        instagramLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
-        let instagramSV = UIStackView(arrangedSubviews: [instagramTitleLabel, instagramLabel])
+        instagramLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
+        let instagramSV = UIStackView(arrangedSubviews: [instagramImageView, instagramTitleLabel, instagramLabel])
         instagramSV.axis = .horizontal
         instagramSV.spacing = 10
         instagramSV.translatesAutoresizingMaskIntoConstraints = false
 
-        twitterLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
-        let twitterSV = UIStackView(arrangedSubviews: [twitterTitleLabel, twitterLabel])
+        twitterLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
+        let twitterSV = UIStackView(arrangedSubviews: [twitterImageView, twitterTitleLabel, twitterLabel])
         twitterSV.axis = .horizontal
         twitterSV.spacing = 10
         twitterSV.translatesAutoresizingMaskIntoConstraints = false
         
+        mailLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
+        let mailSV = UIStackView(arrangedSubviews: [mailImageView, mailTitleLabel, mailLabel])
+        mailSV.axis = .horizontal
+        mailSV.spacing = 10
+        
+        mobileLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
+        let mobileSV = UIStackView(arrangedSubviews: [mobileImageView, mobileTitleLabel, mobileLabel])
+        mobileSV.axis = .horizontal
+        mobileSV.spacing = 10
+        
+        let dobSV = UIStackView(arrangedSubviews: [DOBImageView, DOBTitleLabel, DOBLabel])
+        dobSV.axis = .horizontal
+        dobSV.spacing = 10
+        
+        
+//        facebookLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
+//        let facebookSV = UIStackView(arrangedSubviews: [facebookTitleLabel, facebookLabel])
+//        facebookSV.axis = .horizontal
+//        facebookSV.spacing = 10
+//        facebookSV.translatesAutoresizingMaskIntoConstraints = false
+//
+//        lineLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
+//        let lineSV = UIStackView(arrangedSubviews: [lineTitleLabel, lineLabel])
+//        lineSV.axis = .horizontal
+//        lineSV.spacing = 10
+//        lineSV.translatesAutoresizingMaskIntoConstraints = false
+//
+//        let snsSecondRow = UIStackView(arrangedSubviews: [facebookSV, lineSV])
+//        snsSecondRow.axis = .horizontal
+//        snsSecondRow.distribution = .fillEqually
+        
+
         let memoSV = UIStackView(arrangedSubviews: [memoTitleLabel, memoTextLabel])
         memoSV.axis = .vertical
         memoSV.translatesAutoresizingMaskIntoConstraints = false
-        memoSV.spacing = 2
+        memoSV.spacing = 6
         
-        let headerInfoSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV, memoSV])
+        let headerInfoSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV, mailSV, mobileSV, dobSV])
         addSubview(headerInfoSV)
         headerInfoSV.translatesAutoresizingMaskIntoConstraints = false
         headerInfoSV.axis = .vertical
         headerInfoSV.spacing = 10
         headerInfoSV.topAnchor.constraint(equalTo: fullNameSV.bottomAnchor, constant: 20).isActive = true
         headerInfoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        headerInfoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
+        headerInfoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
+        
+        addSubview(memoSV)
+        memoSV.topAnchor.constraint(equalTo: headerInfoSV.bottomAnchor, constant: 20).isActive = true
+        memoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
+        memoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         addSubview(reportTitleView)
-        reportTitleView.topAnchor.constraint(equalTo: headerInfoSV.bottomAnchor, constant: 10).isActive = true
+        reportTitleView.topAnchor.constraint(equalTo: memoSV.bottomAnchor, constant: 10).isActive = true
         reportTitleView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         reportTitleView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         reportTitleView.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -104,29 +144,71 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         self.delegate?.newReportButtonPressed()
     }
     
-    @objc func tapSNS(_ sender: UITapGestureRecognizer) {
-        if sender.view?.tag == 1 {
+    enum ContactType: Int {
+        case instagram = 1
+        case twitter
+        case facebook
+        case line
+        case email
+        case mobile
+    }
+    
+    @objc func tapContact(_ sender: UITapGestureRecognizer) {
+        switch sender.view?.tag {
+        case ContactType.instagram.rawValue:
             let account = instagramLabel.text!
             let url = URL(string: "instagram://user?username=\(account)")!
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
-                // WKWebView
-                print("NO instagram")
                 let instagramUrl = URL(string: "https://www.instagram.com/\(account)")
                 self.delegate?.snsTappedWebView(url: instagramUrl!)
             }
-        } else if sender.view?.tag == 2 {
+        case ContactType.twitter.rawValue:
             let account = twitterLabel.text!
             let url = URL(string: "twitter://user?id=\(account)")!
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
-                // WKWebView
-                print("NO twitter")
                 let twitterUrl = URL(string: "https://twitter.com/\(account)")
                 self.delegate?.snsTappedWebView(url: twitterUrl!)
             }
+        case ContactType.facebook.rawValue:
+            print("facebook")
+//            let account = facebookLabel.text!
+//            let url = URL(string: "fb://profile/\(account)")!
+//            if UIApplication.shared.canOpenURL(url) {
+//                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//            } else {
+//                let twitterUrl = URL(string: "https://www.facebook.com/\(account)")
+//                self.delegate?.snsTappedWebView(url: twitterUrl!)
+//            }
+        case ContactType.line.rawValue:
+            print("line")
+//            let account = lineLabel.text!
+//            let url = URL(string: "line://ti/p/\(account)")!
+//            if UIApplication.shared.canOpenURL(url) {
+//                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//            } else {
+//                let twitterUrl = URL(string: "https://line.me/R/")
+//                self.delegate?.snsTappedWebView(url: twitterUrl!)
+//            }
+        case ContactType.email.rawValue:
+            print("email")
+            let address = mailLabel.text!
+            self.delegate?.openEmail(address: address )
+            
+        case ContactType.mobile.rawValue:
+            print("tel")
+            let number = mobileLabel.text!
+            let url = NSURL(string: number)!
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url as URL)
+            } else {
+                UIApplication.shared.openURL(url as URL)
+            }
+        default:
+            print("")
         }
     }
     
@@ -147,12 +229,11 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     let nameTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Name"
-        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
-    
     
     let firstNameLabel: UILabel = {
         let lb = UILabel()
@@ -170,30 +251,22 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         return lb
     }()
     
-    let lastVisitTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "LastTime:"
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        lb.font = UIFont.systemFont(ofSize: 12)
-        return lb
-    }()
-    
-    let lastVisitLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "2019/05/12"
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.italicSystemFont(ofSize: 12)
-        return lb
+    let instagramImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "instagram"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
     }()
 
     let instagramTitleLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "Instagram"
-        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        lb.text = "Instagram:"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.systemFont(ofSize: 12)
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return lb
     }()
     
@@ -208,39 +281,179 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         return lb
     }()
     
+    let twitterImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "twitter2"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+    
     let twitterTitleLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "twitter"
-        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        lb.text = "Twitter:"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.systemFont(ofSize: 12)
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return lb
     }()
     
     let twitterLabel: UnderlineUILabel = {
-        let lb = UnderlineUILabel   ()
+        let lb = UnderlineUILabel()
         lb.text = "@twitter"
         lb.tag = 2
         lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.isUserInteractionEnabled = true
+        lb.font = UIFont.systemFont(ofSize: 14)
+        return lb
+    }()
+    
+    let facebookTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Facebook:"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        return lb
+    }()
+    
+    let facebookLabel: UnderlineUILabel = {
+        let lb = UnderlineUILabel()
+        lb.text = "Facebook ID"
+        lb.tag = 3
+        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
         lb.isUserInteractionEnabled = true
         lb.font = UIFont.systemFont(ofSize: 14)
         return lb
     }()
     
+    let lineTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Line:"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        return lb
+    }()
+    
+    let lineLabel: UnderlineUILabel = {
+        let lb = UnderlineUILabel()
+        lb.text = "Line ID"
+        lb.tag = 4
+        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.isUserInteractionEnabled = true
+        lb.font = UIFont.systemFont(ofSize: 14)
+        return lb
+    }()
+    
+    let mailImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "mail1"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+    
+    let mailTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Mail:"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        return lb
+    }()
+    
+    let mailLabel: UnderlineUILabel = {
+        let lb = UnderlineUILabel()
+        lb.text = "example@gmail.com"
+        lb.tag = 5
+        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.isUserInteractionEnabled = true
+        lb.font = UIFont.systemFont(ofSize: 14)
+        return lb
+    }()
+    
+    let mobileImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "mobile1"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+    
+    let mobileTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Mobile:"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        return lb
+    }()
+    
+    let mobileLabel: UnderlineUILabel = {
+        let lb = UnderlineUILabel()
+        lb.text = "0000000000"
+        lb.tag = 6
+        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.isUserInteractionEnabled = true
+        lb.font = UIFont.systemFont(ofSize: 14)
+        return lb
+    }()
+    
+    let DOBImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "birthday"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+
+    let DOBTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Date of Birth:"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        return lb
+    }()
+    
+    let DOBLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "1999/06/22"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.isUserInteractionEnabled = true
+        lb.font = UIFont.systemFont(ofSize: 14)
+        return lb
+    }()
+
     let memoTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Memo"
-        lb.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.systemFont(ofSize: 12)
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
 
     let memoTextLabel: UILabel = {
         let lb = UILabel()
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.numberOfLines = 0
         lb.sizeToFit()

@@ -268,7 +268,6 @@ class AddAppointmentViewController: UIViewController {
         }
     }
     
-    
     // UIParts
     private let formScrollView: UIScrollView = {
         let sv = UIScrollView()

@@ -89,17 +89,17 @@ private extension FetchCollectionViewController {
     func performCollectionViewContentsChange(_ contentChange: CollectionViewContentChange) {
         switch contentChange.type {
         case .insert:
-            print("insert")
+            print("insert===")
             collectionView.insertItems(at: [contentChange.newIndexPath!])
         case .update:
-            print("update")
+            print("update===")
             collectionView.reloadItems(at: [contentChange.indexPath!])
         case .move:
-            print("move")
+            print("move===")
             collectionView.deleteItems(at: [contentChange.indexPath!])
             collectionView.insertItems(at: [contentChange.newIndexPath!])
         case .delete:
-            print("delete")
+            print("delete===")
             collectionView.deleteItems(at: [contentChange.indexPath!])
         @unknown default:
             fatalError()
