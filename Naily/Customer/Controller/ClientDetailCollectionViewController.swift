@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import WebKit
+import MessageUI
 
 private let headerIdentifier = "ClientDetailheaderCell"
 private let reportIdentifier = "ClientDetailReportCell"
@@ -108,7 +109,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         emptyLabel.text = client.memo
         emptyLabel.sizeToFit()
 
-        return .init(width: view.frame.width, height: emptyLabel.frame.height + 400)
+        return .init(width: view.frame.width, height: emptyLabel.frame.height + 460)
     }
     
     var layout: UICollectionViewFlowLayout = {
@@ -119,8 +120,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     }()
 }
 
-extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, ReportImageCollectionViewCellDelegate, AddClientViewControllerDelegate {
-
+extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, ReportImageCollectionViewCellDelegate, AddClientViewControllerDelegate, MFMailComposeViewControllerDelegate {
     func editClientDidFinish(client: ClientInfo) {
         self.client = client
     }
@@ -160,4 +160,22 @@ extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDe
         webView.load(myRequest)
     }
     
+    func openEmail(address: String) {
+        if MFMailComposeViewController.canSendMail() {
+            print("open mail")
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients([address])
+            mail.setMessageBody("", isHTML: false)
+            self.present(mail, animated: true, completion: nil)
+        } else {
+            print("failed to open mail")
+            // show failure alert
+        }
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true, completion: nil)
+    }
+
 }

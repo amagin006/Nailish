@@ -11,6 +11,7 @@ import UIKit
 protocol ClientDetailHeaderReusableViewDelegate: class {
     func newReportButtonPressed()
     func snsTappedWebView(url: URL)
+    func openEmail(address: String)
 }
 
 class ClientDetailHeaderReusableView: UICollectionReusableView {
@@ -64,27 +65,29 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         fullNameSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
         fullNameSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        instagramLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
+        instagramLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
         let instagramSV = UIStackView(arrangedSubviews: [instagramImageView, instagramTitleLabel, instagramLabel])
         instagramSV.axis = .horizontal
         instagramSV.spacing = 10
         instagramSV.translatesAutoresizingMaskIntoConstraints = false
 
-        twitterLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
+        twitterLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
         let twitterSV = UIStackView(arrangedSubviews: [twitterImageView, twitterTitleLabel, twitterLabel])
         twitterSV.axis = .horizontal
         twitterSV.spacing = 10
         twitterSV.translatesAutoresizingMaskIntoConstraints = false
         
-        let mailSV = UIStackView(arrangedSubviews: [mailTitleLabel, mailLabel])
+        mailLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
+        let mailSV = UIStackView(arrangedSubviews: [mailImageView, mailTitleLabel, mailLabel])
         mailSV.axis = .horizontal
         mailSV.spacing = 10
         
-        let mobileSV = UIStackView(arrangedSubviews: [mobileTitleLabel, mobileLabel])
+        mobileLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
+        let mobileSV = UIStackView(arrangedSubviews: [mobileImageView, mobileTitleLabel, mobileLabel])
         mobileSV.axis = .horizontal
         mobileSV.spacing = 10
         
-        let dobSV = UIStackView(arrangedSubviews: [DOBTitleLabel, DOBLabel])
+        let dobSV = UIStackView(arrangedSubviews: [DOBImageView, DOBTitleLabel, DOBLabel])
         dobSV.axis = .horizontal
         dobSV.spacing = 10
         
@@ -141,8 +144,18 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         self.delegate?.newReportButtonPressed()
     }
     
-    @objc func tapSNS(_ sender: UITapGestureRecognizer) {
-        if sender.view?.tag == 1 {
+    enum ContactType: Int {
+        case instagram = 1
+        case twitter
+        case facebook
+        case line
+        case email
+        case mobile
+    }
+    
+    @objc func tapContact(_ sender: UITapGestureRecognizer) {
+        switch sender.view?.tag {
+        case ContactType.instagram.rawValue:
             let account = instagramLabel.text!
             let url = URL(string: "instagram://user?username=\(account)")!
             if UIApplication.shared.canOpenURL(url) {
@@ -151,7 +164,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
                 let instagramUrl = URL(string: "https://www.instagram.com/\(account)")
                 self.delegate?.snsTappedWebView(url: instagramUrl!)
             }
-        } else if sender.view?.tag == 2 {
+        case ContactType.twitter.rawValue:
             let account = twitterLabel.text!
             let url = URL(string: "twitter://user?id=\(account)")!
             if UIApplication.shared.canOpenURL(url) {
@@ -160,7 +173,8 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
                 let twitterUrl = URL(string: "https://twitter.com/\(account)")
                 self.delegate?.snsTappedWebView(url: twitterUrl!)
             }
-        } else if sender.view?.tag == 3 {
+        case ContactType.facebook.rawValue:
+            print("facebook")
 //            let account = facebookLabel.text!
 //            let url = URL(string: "fb://profile/\(account)")!
 //            if UIApplication.shared.canOpenURL(url) {
@@ -169,7 +183,8 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
 //                let twitterUrl = URL(string: "https://www.facebook.com/\(account)")
 //                self.delegate?.snsTappedWebView(url: twitterUrl!)
 //            }
-        } else if sender.view?.tag == 4 {
+        case ContactType.line.rawValue:
+            print("line")
 //            let account = lineLabel.text!
 //            let url = URL(string: "line://ti/p/\(account)")!
 //            if UIApplication.shared.canOpenURL(url) {
@@ -178,8 +193,22 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
 //                let twitterUrl = URL(string: "https://line.me/R/")
 //                self.delegate?.snsTappedWebView(url: twitterUrl!)
 //            }
-        } else if sender.view?.tag == 5 {
-            // Open mail app
+        case ContactType.email.rawValue:
+            print("email")
+            let address = mailLabel.text!
+            self.delegate?.openEmail(address: address )
+            
+        case ContactType.mobile.rawValue:
+            print("tel")
+            let number = mobileLabel.text!
+            let url = NSURL(string: number)!
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url as URL)
+            } else {
+                UIApplication.shared.openURL(url as URL)
+            }
+        default:
+            print("")
         }
     }
     
@@ -236,8 +265,8 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
-        
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return lb
     }()
     
@@ -253,7 +282,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     }()
     
     let twitterImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "twitter"))
+        let iv = UIImageView(image: #imageLiteral(resourceName: "twitter2"))
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
@@ -267,6 +296,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return lb
     }()
     
@@ -323,6 +353,14 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         return lb
     }()
     
+    let mailImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "mail1"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+    
     let mailTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Mail:"
@@ -330,6 +368,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return lb
     }()
     
@@ -344,6 +383,14 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         return lb
     }()
     
+    let mobileImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "mobile1"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
+    
     let mobileTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Mobile:"
@@ -351,31 +398,44 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return lb
     }()
     
-    let mobileLabel: UILabel = {
-        let lb = UILabel()
+    let mobileLabel: UnderlineUILabel = {
+        let lb = UnderlineUILabel()
         lb.text = "0000000000"
+        lb.tag = 6
+        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.isUserInteractionEnabled = true
         lb.font = UIFont.systemFont(ofSize: 14)
         return lb
     }()
+    
+    let DOBImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "birthday"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
+    }()
 
     let DOBTitleLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "Date of Birth"
+        lb.text = "Date of Birth:"
         lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return lb
     }()
     
     let DOBLabel: UILabel = {
         let lb = UILabel()
         lb.text = "1999/06/22"
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.isUserInteractionEnabled = true
         lb.font = UIFont.systemFont(ofSize: 14)
@@ -393,6 +453,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
 
     let memoTextLabel: UILabel = {
         let lb = UILabel()
+        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.numberOfLines = 0
         lb.sizeToFit()
