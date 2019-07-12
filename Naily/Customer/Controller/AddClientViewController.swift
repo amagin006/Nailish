@@ -23,9 +23,9 @@ class AddClientViewController: UIViewController {
             firstNameTextField.text = client.firstName
             lastNameTextField.text = client.lastName ?? ""
             instagramTextField.text = client.instagram ?? ""
-//            twitterTextField.text = client.twitter ?? ""
+            twitterTextField.text = client.twitter ?? ""
 //            facebookTextField.text = client.facebook ?? ""
-            lineTextField.text = client.line ?? ""
+//            lineTextField.text = client.line ?? ""
             mailTextField.text = client.mailAdress ?? ""
             mobileTextField.text = client.mobileNumber ?? ""
             if let date = client?.dateOfBirth {
@@ -193,9 +193,9 @@ class AddClientViewController: UIViewController {
             newClient.setValue(fullName, forKey: "fullName")
             newClient.setValue(nameInitial, forKey: "nameInitial")
             newClient.setValue(instagramTextField.text ?? "", forKey: "instagram")
-//            newClient.setValue(twitterTextField.text ?? "", forKey: "twitter")
+            newClient.setValue(twitterTextField.text ?? "", forKey: "twitter")
 //            newClient.setValue(facebookTextField.text ?? "", forKey: "facebook")
-            newClient.setValue(lineTextField.text ?? "", forKey: "line")
+//            newClient.setValue(lineTextField.text ?? "", forKey: "line")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
             if DOBTextField.text != "" {
@@ -217,9 +217,9 @@ class AddClientViewController: UIViewController {
             client.fullName = fullName
             client.mailAdress = mailTextField.text ?? ""
             client.instagram = instagramTextField.text ?? ""
-//            client.twitter = twitterTextField.text ?? ""
+            client.twitter = twitterTextField.text ?? ""
 //            client.facebook = facebookTextField.text ?? ""
-            client.line = lineTextField.text ?? ""
+//            client.line = lineTextField.text ?? ""
             client.mobileNumber = mobileTextField.text ?? ""
             if DOBTextField.text != "" {
                 let formatter = DateFormatter()
