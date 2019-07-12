@@ -109,12 +109,12 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
 //        snsSecondRow.distribution = .fillEqually
         
 
-        let memoSV = UIStackView(arrangedSubviews: [memoTitleLabel, memoTextLabel])
-        memoSV.axis = .vertical
+        let memoSV = UIStackView(arrangedSubviews: [memoImageView, memoTitleLabel])
+        memoSV.axis = .horizontal
         memoSV.translatesAutoresizingMaskIntoConstraints = false
-        memoSV.spacing = 6
+        memoSV.spacing = 10
         
-        let headerInfoSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV, mailSV, mobileSV, dobSV])
+        let headerInfoSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV, mailSV, mobileSV, dobSV, memoSV])
         addSubview(headerInfoSV)
         headerInfoSV.translatesAutoresizingMaskIntoConstraints = false
         headerInfoSV.axis = .vertical
@@ -123,13 +123,13 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         headerInfoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         headerInfoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
         
-        addSubview(memoSV)
-        memoSV.topAnchor.constraint(equalTo: headerInfoSV.bottomAnchor, constant: 20).isActive = true
-        memoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
-        memoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        addSubview(memoTextLabel)
+        memoTextLabel.topAnchor.constraint(equalTo: headerInfoSV.bottomAnchor, constant: 10).isActive = true
+        memoTextLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7).isActive = true
+        memoTextLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         addSubview(reportTitleView)
-        reportTitleView.topAnchor.constraint(equalTo: memoSV.bottomAnchor, constant: 10).isActive = true
+        reportTitleView.topAnchor.constraint(equalTo: memoTextLabel.bottomAnchor, constant: 30).isActive = true
         reportTitleView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         reportTitleView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         reportTitleView.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -166,7 +166,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
             }
         case ContactType.twitter.rawValue:
             let account = twitterLabel.text!
-            let url = URL(string: "twitter://user?id=\(account)")!
+            let url = URL(string: "twitter://user?screen_name=\(account)")!
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
@@ -201,12 +201,8 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         case ContactType.mobile.rawValue:
             print("tel")
             let number = mobileLabel.text!
-            let url = NSURL(string: number)!
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url as URL)
-            } else {
-                UIApplication.shared.openURL(url as URL)
-            }
+            let url = NSURL(string: "tel://\(number)")!
+            UIApplication.shared.open(url as URL)
         default:
             print("")
         }
@@ -282,7 +278,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     }()
     
     let twitterImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "twitter2"))
+        let iv = UIImageView(image: #imageLiteral(resourceName: "twitter"))
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
@@ -440,6 +436,14 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.isUserInteractionEnabled = true
         lb.font = UIFont.systemFont(ofSize: 14)
         return lb
+    }()
+    
+    let memoImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "note"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
     }()
 
     let memoTitleLabel: UILabel = {

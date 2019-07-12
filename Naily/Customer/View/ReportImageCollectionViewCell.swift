@@ -32,7 +32,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
             if let snapshot4 = reportItem.snapshot4 {
                 snapshotImages.append(snapshot4)
             }
-            setupUI()
             
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
@@ -44,6 +43,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
             priceText.text = "\(reportItem.price)"
             tipsText.text = "\(reportItem.tips)"
             totalPriceText.text = "\(reportItem.price + reportItem.tips)"
+            setupUI()
         }
     }
     
@@ -53,11 +53,32 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         setPageControl()
         setDescription()
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        print(#function)
+        setShadow()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = UIColor(red: 253/255, green: 193/255, blue: 104/255, alpha: 1)
+        contentView.backgroundColor = UIColor(red: 145/255, green: 209/255, blue: 190/255, alpha: 1)
         contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.layer.cornerRadius = 16
+        contentView.layer.masksToBounds = true
+        print(#function)
+    }
+    
+    func setShadow() {
+        backgroundView = UIView(frame: .zero)
+        backgroundView?.layer.cornerRadius = 10
+        backgroundView?.layer.shadowColor = UIColor.black.cgColor
+        backgroundView?.layer.shadowOffset = CGSize(width: 10, height: 10)
+        backgroundView?.layer.shadowRadius = 4
+        backgroundView?.layer.shadowOpacity = 0.4
+        backgroundView?.layer.masksToBounds = false
+        backgroundView?.layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: contentView.layer.cornerRadius).cgPath
+        backgroundView?.layer.shouldRasterize = true
     }
     
     lazy var width: NSLayoutConstraint = {
@@ -79,12 +100,12 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     func setScrollingImageView() {
         contentView.addSubview(scrollImageView)
         scrollImageView.delegate = self
-        scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 20, left: 10, bottom: 0, right: 10))
-        let height = UIScreen.main.bounds.width - 20
+        scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 20, left: 30, bottom: 0, right: 30))
+        let height = UIScreen.main.bounds.width - 60
         scrollImageView.heightAnchor.constraint(equalToConstant: height).isActive = true
         contentView.layoutIfNeeded() // calculates sizes based on constraints
         
-        scrollImageView.contentSize = CGSize(width: (UIScreen.main.bounds.width - 20) * CGFloat(snapshotImages.count), height: scrollImageView.bounds.height)
+        scrollImageView.contentSize = CGSize(width: (UIScreen.main.bounds.width - 80) * CGFloat(snapshotImages.count), height: scrollImageView.bounds.height)
         scrollImageView.isUserInteractionEnabled = true
         scrollImageView.isPagingEnabled = true
         scrollImageView.showsHorizontalScrollIndicator = false
@@ -93,13 +114,16 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     }
     
     func addImageToScrollView(images: [Data]) {
-        let width = UIScreen.main.bounds.width - 20
+        let width = UIScreen.main.bounds.width - 80
+//        let width = scrollImageView.bounds.width
         let height = scrollImageView.bounds.height
         
         for i in 0..<images.count {
             let iv = UIImageView(frame: CGRect.init(x: 0 + width * CGFloat(i), y: 0, width: width, height: height))
+            iv.backgroundColor = .white
             iv.image = UIImage(data: images[i])
             iv.isUserInteractionEnabled = true
+            iv.contentMode = .scaleAspectFit
             scrollImageView.addSubview(iv)
         }
     }
