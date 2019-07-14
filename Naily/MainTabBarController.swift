@@ -27,6 +27,9 @@ class MainTabBarController: UITabBarController {
         viewController.view.backgroundColor = .white
         viewController.navigationItem.title = title
         let navController = UINavigationController(rootViewController: viewController)
+        navController.navigationBar.barTintColor = UIColor.init(red: 255/255, green: 117/255, blue: 109/255, alpha: 1)
+        navController.navigationBar.barStyle = .black
+        navController.navigationBar.tintColor = .white
         navController.navigationBar.prefersLargeTitles = headerLarge
         navController.tabBarItem.title = title
         navController.tabBarItem.image = UIImage(named: imageName)
