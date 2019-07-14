@@ -29,7 +29,8 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.sectionHeadersPinToVisibleBounds = true
-        collectionView.backgroundColor = .white
+        layout?.minimumLineSpacing = 2
+        collectionView.backgroundColor = UIColor.init(red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -48,13 +49,6 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         searchController = UISearchController(searchResultsController: nil)
         setupSearchBar()
         setRightAddButton()
-//        if selectClient {
-//            let cancelButton: UIBarButtonItem = {
-//                let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
-//                return bt
-//            }()
-//            navigationItem.leftBarButtonItem = cancelButton
-//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -91,7 +85,7 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     private func setRightAddButton() {
         let iconButton = UIButton(type: .custom)
         let image = UIImage(named: "add-contact")?.withRenderingMode(.alwaysTemplate)
-        iconButton.tintColor = #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)
+        iconButton.tintColor = .white
         iconButton.setImage(image, for: .normal)
         iconButton.addTarget(self, action: #selector(navigateAddClient), for: .touchUpInside)
         
@@ -148,7 +142,7 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width * 0.9, height: 30)
+        return CGSize(width: view.frame.width, height: 40)
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -164,11 +158,11 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width * 0.9, height: 80)
+        return CGSize(width: view.frame.width, height: 80)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

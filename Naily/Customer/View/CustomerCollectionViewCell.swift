@@ -64,9 +64,10 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         cellSV.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         cellSV.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
         
-        backgroundColor = #colorLiteral(red: 1, green: 0.8284288049, blue: 0.8181912303, alpha: 1)
-        layer.cornerRadius = 10
-        setShadow()
+        backgroundColor = UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+//        layer.cornerRadius = 10
+//        setShadow()
+
     }
     
     required init?(coder aDecoder: NSCoder) {

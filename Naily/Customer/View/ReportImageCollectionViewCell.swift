@@ -101,10 +101,10 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         contentView.addSubview(scrollImageView)
         scrollImageView.delegate = self
         scrollImageView.anchors(topAnchor: dateLabel.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 20, left: 30, bottom: 0, right: 30))
-        let height = UIScreen.main.bounds.width - 60
+        let height = UIScreen.main.bounds.width - 80
         scrollImageView.heightAnchor.constraint(equalToConstant: height).isActive = true
         contentView.layoutIfNeeded() // calculates sizes based on constraints
-        
+
         scrollImageView.contentSize = CGSize(width: (UIScreen.main.bounds.width - 80) * CGFloat(snapshotImages.count), height: scrollImageView.bounds.height)
         scrollImageView.isUserInteractionEnabled = true
         scrollImageView.isPagingEnabled = true
@@ -115,7 +115,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     
     func addImageToScrollView(images: [Data]) {
         let width = UIScreen.main.bounds.width - 80
-//        let width = scrollImageView.bounds.width
         let height = scrollImageView.bounds.height
         
         for i in 0..<images.count {
