@@ -24,8 +24,6 @@ class AddClientViewController: UIViewController {
             lastNameTextField.text = client.lastName ?? ""
             instagramTextField.text = client.instagram ?? ""
             twitterTextField.text = client.twitter ?? ""
-//            facebookTextField.text = client.facebook ?? ""
-//            lineTextField.text = client.line ?? ""
             mailTextField.text = client.mailAdress ?? ""
             mobileTextField.text = client.mobileNumber ?? ""
             if let date = client?.dateOfBirth {
@@ -71,24 +69,42 @@ class AddClientViewController: UIViewController {
         addClientImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
         addClientImage.trailingAnchor.constraint(equalTo: personImageView.trailingAnchor, constant: -8).isActive = true
         
+        // First Name column
         firstNameTextField.addTarget(self, action: #selector(firstNameChage), for: .editingChanged)
         let firstNameTitleSV = UIStackView(arrangedSubviews: [firstNameLabel, requireLabel])
         firstNameTitleSV.axis = .horizontal
         firstNameTitleSV.spacing = 2
         firstNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        let firstNameStackView = UIStackView(arrangedSubviews: [firstNameTitleSV, firstNameTextField])
-        firstNameStackView.axis = .vertical
-        firstNameStackView.spacing = 6
+        let firstNameSV = UIStackView(arrangedSubviews: [firstNameTitleSV,firstNameTextField])
+        firstNameSV.axis = .horizontal
+        firstNameSV.alignment = .center
+        firstNameSV.distribution = .fillProportionally
+        firstNameSV.spacing = 10
         
+        let firstNameView = UIView()
+        clientFormView.addSubview(firstNameView)
+        firstNameView.addBorders(edges: [.top, .bottom], color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        firstNameView.translatesAutoresizingMaskIntoConstraints = false
+        firstNameView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        firstNameView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        firstNameView.topAnchor.constraint(equalTo: addClientImage.bottomAnchor, constant: 40).isActive = true
+        firstNameView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
+        firstNameView.backgroundColor = .white
+        
+        firstNameView.addSubview(firstNameSV)
+        firstNameSV.translatesAutoresizingMaskIntoConstraints = false
+        firstNameSV.topAnchor.constraint(equalTo: firstNameView.topAnchor).isActive = true
+        firstNameSV.widthAnchor.constraint(equalTo: clientFormView.widthAnchor, multiplier: 0.9).isActive = true
+        firstNameSV.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
+        firstNameSV.bottomAnchor.constraint(equalTo: firstNameView.bottomAnchor).isActive = true
+
+        // Last Name Column
         let lastNameStackView = UIStackView(arrangedSubviews: [lastNameLabel, lastNameTextField])
-        lastNameStackView.axis = .vertical
-        lastNameStackView.spacing = 6
-        
-        let nameStackView = UIStackView(arrangedSubviews: [firstNameStackView, lastNameStackView])
-        nameStackView.axis = .horizontal
-        nameStackView.distribution = .fillEqually
-        nameStackView.spacing = 10
+        lastNameStackView.axis = .horizontal
+        lastNameStackView.alignment = .center
+        lastNameStackView.spacing = 10
+
         
         let instagramSV = UIStackView(arrangedSubviews: [instagramImageView, instagramLabel, instagramTextField])
         instagramSV.axis = .horizontal
@@ -99,16 +115,6 @@ class AddClientViewController: UIViewController {
         twitterSV.axis = .horizontal
         twitterSV.alignment = .center
         twitterSV.spacing = 10
-        
-//        let facebookSV = UIStackView(arrangedSubviews: [facebookImageView, facebookLabel, facebookTextField])
-//        facebookSV.axis = .horizontal
-//        facebookSV.alignment = .center
-//        facebookSV.spacing = 10
-//
-//        let lineSV = UIStackView(arrangedSubviews: [lineImageView, lineLabel, lineTextField])
-//        lineSV.axis = .horizontal
-//        lineSV.alignment = .center
-//        lineSV.spacing = 10
         
         let snsSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV])
         snsSV.axis = .vertical
@@ -126,14 +132,14 @@ class AddClientViewController: UIViewController {
         mailSV.axis = .vertical
         mailSV.spacing = 6
         
-        let hStackView = UIStackView(arrangedSubviews: [nameStackView, snsSV, mailSV, mobileSV, dobSV, memoLabel, memoTextField])
+        let hStackView = UIStackView(arrangedSubviews: [lastNameStackView, snsSV, mailSV, mobileSV, dobSV, memoLabel, memoTextField])
         hStackView.translatesAutoresizingMaskIntoConstraints = false
         clientFormView.addSubview(hStackView)
         hStackView.axis = .vertical
         hStackView.backgroundColor = .white
         hStackView.distribution = .fillEqually
         
-        hStackView.topAnchor.constraint(equalTo: personImageView.bottomAnchor, constant: 20).isActive = true
+        hStackView.topAnchor.constraint(equalTo: firstNameView.bottomAnchor, constant: 20).isActive = true
         hStackView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor, multiplier: 0.8).isActive = true
         hStackView.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
         hStackView.distribution = .equalSpacing
@@ -194,8 +200,6 @@ class AddClientViewController: UIViewController {
             newClient.setValue(nameInitial, forKey: "nameInitial")
             newClient.setValue(instagramTextField.text ?? "", forKey: "instagram")
             newClient.setValue(twitterTextField.text ?? "", forKey: "twitter")
-//            newClient.setValue(facebookTextField.text ?? "", forKey: "facebook")
-//            newClient.setValue(lineTextField.text ?? "", forKey: "line")
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
             if DOBTextField.text != "" {
@@ -218,8 +222,6 @@ class AddClientViewController: UIViewController {
             client.mailAdress = mailTextField.text ?? ""
             client.instagram = instagramTextField.text ?? ""
             client.twitter = twitterTextField.text ?? ""
-//            client.facebook = facebookTextField.text ?? ""
-//            client.line = lineTextField.text ?? ""
             client.mobileNumber = mobileTextField.text ?? ""
             if DOBTextField.text != "" {
                 let formatter = DateFormatter()
@@ -347,7 +349,6 @@ class AddClientViewController: UIViewController {
         return iv
     }()
     
-    
     let firstNameLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
@@ -366,8 +367,8 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let firstNameTextField: MyTextField = {
-        let tf = MyTextField()
+    let firstNameTextField: UITextField = {
+        let tf = UITextField()
         tf.placeholder = "First Name..."
         return tf
     }()
@@ -381,8 +382,8 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let lastNameTextField: MyTextField = {
-        let tf = MyTextField()
+    let lastNameTextField: UITextField = {
+        let tf = UITextField()
         tf.placeholder = "Last Name..."
         return tf
     }()
