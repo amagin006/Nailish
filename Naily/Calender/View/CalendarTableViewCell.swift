@@ -40,27 +40,19 @@ class CalendarTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-//        self.addSubview(backView)
+        self.addSubview(backView)
+        backView.addBorders(edges: .bottom, color: UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1), width: 1)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        
-//        contentView.backgroundColor = .clear
-//        backgroundColor = .clear
-//        backView.layer.cornerRadius = 10
-//        backView.clipsToBounds = true
-    }
-    
-//    lazy var backView: UIView = {
-//        let bv = UIView(frame: CGRect(x: 10, y: 10, width: self.frame.width - 20, height: 100))
-//        bv.backgroundColor = UIColor.blue
-//        return bv
-//    }()
-    
+    lazy var backView: UIView = {
+        let bv = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
+        return bv
+    }()
+
     private func setupUI() {
         
         let timeSV = UIStackView(arrangedSubviews: [startTimeLabel, separatorTimeLabel, endTimeLabel])
@@ -90,6 +82,7 @@ class CalendarTableViewCell: UITableViewCell {
         imageTextSV.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         imageTextSV.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         imageTextSV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
      }
     
     private let clientImage: UIImageView = {
@@ -99,6 +92,7 @@ class CalendarTableViewCell: UITableViewCell {
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.heightAnchor.constraint(equalToConstant: 50).isActive = true
         iv.widthAnchor.constraint(equalToConstant: 50).isActive = true
+
         return iv
     }()
     

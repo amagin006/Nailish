@@ -56,7 +56,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        print(#function)
         setShadow()
     }
 
@@ -66,7 +65,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
-        print(#function)
     }
     
     func setShadow() {

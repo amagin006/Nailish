@@ -10,6 +10,8 @@ import UIKit
 
 class MyTextField: UITextField, UITextFieldDelegate {
     
+    let toolbar = CustomDoneToolbar()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -18,9 +20,11 @@ class MyTextField: UITextField, UITextFieldDelegate {
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 10
         self.layer.borderColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1).cgColor
-        toolbar.setItems([flexSpace, doneBtn], animated: true)
         self.inputAccessoryView = toolbar
         self.delegate = self
+        toolbar.donePress = { () in
+            self.endEditing(true)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,23 +48,6 @@ class MyTextField: UITextField, UITextFieldDelegate {
         return true
     }
     
-    let toolbar: UIToolbar = {
-        let tb = UIToolbar()
-        tb.isTranslucent = true
-        tb.sizeToFit()
-        return tb
-    }()
-
-    let doneBtn: UIBarButtonItem = {
-        let bt = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonAction))
-        return bt
-    }()
-
-    let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-
-    @objc func doneButtonAction() {
-        self.endEditing(true)
-    }
 }
 
 

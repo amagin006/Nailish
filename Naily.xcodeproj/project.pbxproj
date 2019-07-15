@@ -18,6 +18,8 @@
 		435C903822C41CB0009D6D4E /* MainCalenderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903722C41CB0009D6D4E /* MainCalenderViewController.swift */; };
 		435C903B22C50A3B009D6D4E /* CalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903A22C50A3B009D6D4E /* CalendarTableViewCell.swift */; };
 		435C903D22C50CF8009D6D4E /* MyUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903C22C50CF8009D6D4E /* MyUILabel.swift */; };
+		435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */; };
+		435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */; };
 		437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75A4229FABFF0032E371 /* AppDelegate.swift */; };
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
@@ -48,6 +50,8 @@
 		435C903722C41CB0009D6D4E /* MainCalenderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCalenderViewController.swift; sourceTree = "<group>"; };
 		435C903A22C50A3B009D6D4E /* CalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTableViewCell.swift; sourceTree = "<group>"; };
 		435C903C22C50CF8009D6D4E /* MyUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUILabel.swift; sourceTree = "<group>"; };
+		435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDoneToolbar.swift; sourceTree = "<group>"; };
+		435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNormalTextField.swift; sourceTree = "<group>"; };
 		437A75A1229FABFF0032E371 /* Naily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437A75A4229FABFF0032E371 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		437A75A9229FABFF0032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -210,8 +214,10 @@
 			isa = PBXGroup;
 			children = (
 				43A2F49E22A7B315003A07ED /* MyTextField.swift */,
+				435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */,
 				43ED0B0422BD8D9100781893 /* MyTextView.swift */,
 				435C903C22C50CF8009D6D4E /* MyUILabel.swift */,
+				435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */,
 				43ED0B0022BD8D4100781893 /* DatePickerKeyboard.swift */,
 				43ED0B0822BD998900781893 /* CustomDateToolbar.swift */,
 				43ED0B0222BD8D5B00781893 /* Extensions.swift */,
@@ -318,12 +324,14 @@
 				4337059D22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift in Sources */,
 				435C903D22C50CF8009D6D4E /* MyUILabel.swift in Sources */,
 				43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */,
+				435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */,
 				43ED0B0522BD8D9100781893 /* MyTextView.swift in Sources */,
 				43ED0B0122BD8D4100781893 /* DatePickerKeyboard.swift in Sources */,
 				437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */,
 				4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */,
 				43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */,
 				433705AC22AEEFF900EBC58B /* UIView+ConstraintLayout.swift in Sources */,
+				435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */,
 				43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */,
 				4337059222ADE57A00EBC58B /* ReportImageCollectionViewCell.swift in Sources */,
 				433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */,

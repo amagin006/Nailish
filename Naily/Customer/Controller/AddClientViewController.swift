@@ -55,10 +55,18 @@ class AddClientViewController: UIViewController {
         clientFormView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         clientFormView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        view.backgroundColor = .white
-        clientFormView.addSubview(personImageView)
-        personImageView.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
-        personImageView.topAnchor.constraint(equalTo: clientFormView.topAnchor, constant: 20).isActive = true
+        let headerView = UIView()
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        clientFormView.addSubview(headerView)
+        headerView.topAnchor.constraint(equalTo: clientFormView.topAnchor).isActive = true
+        headerView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        headerView.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: 220).isActive = true
+        headerView.backgroundColor = UIColor.init(red: 255/255, green: 235/255, blue: 154/255, alpha: 1)
+        
+        headerView.addSubview(personImageView)
+        personImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+        personImageView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 20).isActive = true
         personImageView.widthAnchor.constraint(equalToConstant: 160).isActive = true
         personImageView.heightAnchor.constraint(equalToConstant: 160).isActive = true
         
@@ -69,17 +77,16 @@ class AddClientViewController: UIViewController {
         addClientImage.heightAnchor.constraint(equalToConstant: 50).isActive = true
         addClientImage.trailingAnchor.constraint(equalTo: personImageView.trailingAnchor, constant: -8).isActive = true
         
-        // First Name column
+        // FirstName column
         firstNameTextField.addTarget(self, action: #selector(firstNameChage), for: .editingChanged)
-        let firstNameTitleSV = UIStackView(arrangedSubviews: [firstNameLabel, requireLabel])
+        let firstNameTitleSV = UIStackView(arrangedSubviews: [firstNameIcon, firstNameLabel, requireLabel])
         firstNameTitleSV.axis = .horizontal
-        firstNameTitleSV.spacing = 2
+        firstNameTitleSV.spacing = 5
         firstNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
-        let firstNameSV = UIStackView(arrangedSubviews: [firstNameTitleSV,firstNameTextField])
+        let firstNameSV = UIStackView(arrangedSubviews: [firstNameTitleSV, firstNameTextField])
         firstNameSV.axis = .horizontal
         firstNameSV.alignment = .center
-        firstNameSV.distribution = .fillProportionally
         firstNameSV.spacing = 10
         
         let firstNameView = UIView()
@@ -88,69 +95,191 @@ class AddClientViewController: UIViewController {
         firstNameView.translatesAutoresizingMaskIntoConstraints = false
         firstNameView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
         firstNameView.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        firstNameView.topAnchor.constraint(equalTo: addClientImage.bottomAnchor, constant: 40).isActive = true
+        firstNameView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
         firstNameView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
         firstNameView.backgroundColor = .white
         
         firstNameView.addSubview(firstNameSV)
         firstNameSV.translatesAutoresizingMaskIntoConstraints = false
         firstNameSV.topAnchor.constraint(equalTo: firstNameView.topAnchor).isActive = true
-        firstNameSV.widthAnchor.constraint(equalTo: clientFormView.widthAnchor, multiplier: 0.9).isActive = true
-        firstNameSV.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
+        firstNameSV.leadingAnchor.constraint(equalTo: firstNameView.leadingAnchor, constant: 10).isActive = true
+        firstNameSV.trailingAnchor.constraint(equalTo: firstNameView.trailingAnchor, constant: -10).isActive = true
         firstNameSV.bottomAnchor.constraint(equalTo: firstNameView.bottomAnchor).isActive = true
 
         // Last Name Column
-        let lastNameStackView = UIStackView(arrangedSubviews: [lastNameLabel, lastNameTextField])
-        lastNameStackView.axis = .horizontal
-        lastNameStackView.alignment = .center
-        lastNameStackView.spacing = 10
-
+        let lastNameSV = UIStackView(arrangedSubviews: [lastNameLabel, lastNameTextField])
+        lastNameSV.axis = .horizontal
+        lastNameSV.alignment = .center
+        lastNameSV.distribution = .fillProportionally
+        lastNameSV.spacing = 10
+        lastNameTextField.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
+        let lastNameView = UIView()
+        clientFormView.addSubview(lastNameView)
+        lastNameView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        lastNameView.translatesAutoresizingMaskIntoConstraints = false
+        lastNameView.topAnchor.constraint(equalTo: firstNameView.bottomAnchor).isActive = true
+        lastNameView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        lastNameView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        lastNameView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
+        lastNameView.backgroundColor = .white
+        
+        lastNameView.addSubview(lastNameSV)
+        lastNameSV.translatesAutoresizingMaskIntoConstraints = false
+        lastNameSV.topAnchor.constraint(equalTo: lastNameView.topAnchor).isActive = true
+        lastNameSV.leadingAnchor.constraint(equalTo: lastNameView.leadingAnchor, constant: 38).isActive = true
+        lastNameSV.trailingAnchor.constraint(equalTo: lastNameView.trailingAnchor, constant: -10).isActive = true
+        lastNameSV.bottomAnchor.constraint(equalTo: lastNameView.bottomAnchor).isActive = true
+        
+        // instagram Column
         let instagramSV = UIStackView(arrangedSubviews: [instagramImageView, instagramLabel, instagramTextField])
         instagramSV.axis = .horizontal
         instagramSV.alignment = .center
         instagramSV.spacing = 10
         
+        let instagramView = UIView()
+        clientFormView.addSubview(instagramView)
+        instagramView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        instagramView.translatesAutoresizingMaskIntoConstraints = false
+        instagramView.topAnchor.constraint(equalTo: lastNameView.bottomAnchor).isActive = true
+        instagramView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        instagramView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        instagramView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
+        instagramView.backgroundColor = .white
+        
+        instagramView.addSubview(instagramSV)
+        instagramSV.translatesAutoresizingMaskIntoConstraints = false
+        instagramSV.topAnchor.constraint(equalTo: instagramView.topAnchor).isActive = true
+        instagramSV.leadingAnchor.constraint(equalTo: instagramView.leadingAnchor, constant: 10).isActive = true
+        instagramSV.trailingAnchor.constraint(equalTo: instagramView.trailingAnchor, constant: -10).isActive = true
+        instagramSV.bottomAnchor.constraint(equalTo: instagramView.bottomAnchor).isActive = true
+        
+        // twitter Column
         let twitterSV = UIStackView(arrangedSubviews: [twitterImageView, twitterLabel, twitterTextField])
         twitterSV.axis = .horizontal
         twitterSV.alignment = .center
         twitterSV.spacing = 10
         
-        let snsSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV])
-        snsSV.axis = .vertical
-        snsSV.spacing = 4
+        let twitterView = UIView()
+        clientFormView.addSubview(twitterView)
+        twitterView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        twitterView.translatesAutoresizingMaskIntoConstraints = false
+        twitterView.topAnchor.constraint(equalTo: instagramView.bottomAnchor).isActive = true
+        twitterView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        twitterView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        twitterView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
+        twitterView.backgroundColor = .white
         
-        let mobileSV = UIStackView(arrangedSubviews: [mobileLabel, mobileTextField])
+        twitterView.addSubview(twitterSV)
+        twitterSV.translatesAutoresizingMaskIntoConstraints = false
+        twitterSV.topAnchor.constraint(equalTo: twitterView.topAnchor).isActive = true
+        twitterSV.leadingAnchor.constraint(equalTo: twitterView.leadingAnchor, constant: 10).isActive = true
+        twitterSV.trailingAnchor.constraint(equalTo: twitterView.trailingAnchor, constant: -10).isActive = true
+        twitterSV.bottomAnchor.constraint(equalTo: twitterView.bottomAnchor).isActive = true
+        
+        // mail Column
+        let mailSV = UIStackView(arrangedSubviews: [mailImageView, mailLabel, mailTextField])
+        mailSV.axis = .horizontal
+        mailSV.alignment = .center
+        mailSV.spacing = 10
+        
+        let mailView = UIView()
+        clientFormView.addSubview(mailView)
+        mailView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        mailView.translatesAutoresizingMaskIntoConstraints = false
+        mailView.topAnchor.constraint(equalTo: twitterView.bottomAnchor).isActive = true
+        mailView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        mailView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        mailView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
+        mailView.backgroundColor = .white
+        
+        mailView.addSubview(mailSV)
+        mailSV.translatesAutoresizingMaskIntoConstraints = false
+        mailSV.topAnchor.constraint(equalTo: mailView.topAnchor).isActive = true
+        mailSV.leadingAnchor.constraint(equalTo: mailView.leadingAnchor, constant: 10).isActive = true
+        mailSV.trailingAnchor.constraint(equalTo: mailView.trailingAnchor, constant: -10).isActive = true
+        mailSV.bottomAnchor.constraint(equalTo: mailView.bottomAnchor).isActive = true
+        
+        // mobile Column
+        let mobileSV = UIStackView(arrangedSubviews: [mobileImageView, mobileLabel, mobileTextField])
         mobileSV.axis = .horizontal
+        mobileSV.alignment = .center
         mobileSV.spacing = 10
         
-        let dobSV = UIStackView(arrangedSubviews: [DOBLabel, DOBTextField])
+        let mobileView = UIView()
+        clientFormView.addSubview(mobileView)
+        mobileView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        mobileView.translatesAutoresizingMaskIntoConstraints = false
+        mobileView.topAnchor.constraint(equalTo: mailView.bottomAnchor).isActive = true
+        mobileView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        mobileView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        mobileView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
+        mobileView.backgroundColor = .white
+        
+        mobileView.addSubview(mobileSV)
+        mobileSV.translatesAutoresizingMaskIntoConstraints = false
+        mobileSV.topAnchor.constraint(equalTo: mobileView.topAnchor).isActive = true
+        mobileSV.leadingAnchor.constraint(equalTo: mobileView.leadingAnchor, constant: 10).isActive = true
+        mobileSV.trailingAnchor.constraint(equalTo: mobileView.trailingAnchor, constant: -10).isActive = true
+        mobileSV.bottomAnchor.constraint(equalTo: mobileView.bottomAnchor).isActive = true
+        
+        //DOB Column
+        let dobSV = UIStackView(arrangedSubviews: [DOBImageView, DOBLabel, DOBTextField])
         dobSV.axis = .horizontal
+        dobSV.alignment = .center
         dobSV.spacing = 10
         
-        let mailSV = UIStackView(arrangedSubviews: [mailLabel, mailTextField])
-        mailSV.axis = .vertical
-        mailSV.spacing = 6
+        let dobView = UIView()
+        clientFormView.addSubview(dobView)
+        dobView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        dobView.translatesAutoresizingMaskIntoConstraints = false
+        dobView.topAnchor.constraint(equalTo: mobileView.bottomAnchor).isActive = true
+        dobView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        dobView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        dobView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
+        dobView.backgroundColor = .white
         
-        let hStackView = UIStackView(arrangedSubviews: [lastNameStackView, snsSV, mailSV, mobileSV, dobSV, memoLabel, memoTextField])
-        hStackView.translatesAutoresizingMaskIntoConstraints = false
-        clientFormView.addSubview(hStackView)
-        hStackView.axis = .vertical
-        hStackView.backgroundColor = .white
-        hStackView.distribution = .fillEqually
+        dobView.addSubview(dobSV)
+        dobSV.translatesAutoresizingMaskIntoConstraints = false
+        dobSV.topAnchor.constraint(equalTo: dobView.topAnchor).isActive = true
+        dobSV.leadingAnchor.constraint(equalTo: dobView.leadingAnchor, constant: 10).isActive = true
+        dobSV.trailingAnchor.constraint(equalTo: dobView.trailingAnchor, constant: -10).isActive = true
+        dobSV.bottomAnchor.constraint(equalTo: dobView.bottomAnchor).isActive = true
         
-        hStackView.topAnchor.constraint(equalTo: firstNameView.bottomAnchor, constant: 20).isActive = true
-        hStackView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor, multiplier: 0.8).isActive = true
-        hStackView.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
-        hStackView.distribution = .equalSpacing
-        hStackView.spacing = 16
+        // memo Column
+        let memoTitleSV = UIStackView(arrangedSubviews: [memoImageView, memoLabel])
+        memoTitleSV.axis = .horizontal
+        memoTitleSV.spacing = 10
+        memoTitleSV.alignment = .center
+        
+        memoTextField.delegate = memoTextField
+        let memoSV = UIStackView(arrangedSubviews: [memoTitleSV, memoTextField])
+        memoSV.axis = .vertical
+        memoSV.spacing = 10
+        
+        let memoView = UIView()
+        clientFormView.addSubview(memoView)
+        memoView.translatesAutoresizingMaskIntoConstraints = false
+        memoView.topAnchor.constraint(equalTo: dobView.bottomAnchor).isActive = true
+        memoView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
+        memoView.leadingAnchor.constraint(equalTo: clientFormView.leadingAnchor).isActive = true
+        memoView.heightAnchor.constraint(equalToConstant: 260).isActive = true
+        memoView.backgroundColor = .white
+        
+        memoView.addSubview(memoSV)
+        memoSV.translatesAutoresizingMaskIntoConstraints = false
+        memoSV.topAnchor.constraint(equalTo: memoView.topAnchor, constant: 20).isActive = true
+        memoSV.leadingAnchor.constraint(equalTo: memoView.leadingAnchor, constant: 10).isActive = true
+        memoSV.trailingAnchor.constraint(equalTo: memoView.trailingAnchor, constant: -10).isActive = true
+        memoSV.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
         if client != nil {
             clientFormView.addSubview(deleteButton)
-            deleteButton.topAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 50).isActive = true
+            deleteButton.topAnchor.constraint(equalTo: memoSV.bottomAnchor, constant: 70).isActive = true
             deleteButton.widthAnchor.constraint(greaterThanOrEqualTo: clientFormView.widthAnchor, multiplier: 0.4).isActive = true
             deleteButton.centerXAnchor.constraint(equalTo: clientFormView.centerXAnchor).isActive = true
-            clientFormView.contentSize.height = 900
+            memoView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+            clientFormView.contentSize.height = 1000
         }
         
         let notificationCenter = NotificationCenter.default
@@ -159,7 +288,9 @@ class AddClientViewController: UIViewController {
     }
 
     private func setupNavigationUI() {
+        navigationController?.navigationBar.barTintColor = UIColor.init(red: 217/255, green: 83/255, blue: 79/255, alpha: 1)
         navigationItem.title = client == nil ? "Add Client": "Edit Client"
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationItem.leftBarButtonItem = cancelButton
         navigationItem.rightBarButtonItem = saveButton
     }
@@ -308,9 +439,9 @@ class AddClientViewController: UIViewController {
     // MARK: - UIParts
     let clientFormView: UIScrollView = {
         let vi = UIScrollView()
-        vi.backgroundColor = UIColor(red: 123/255, green: 204/255, blue: 172/255, alpha: 1)
+        vi.backgroundColor = .white
         vi.translatesAutoresizingMaskIntoConstraints = false
-        vi.contentSize.height = 800
+        vi.contentSize.height = 890
         return vi
     }()
     
@@ -330,11 +461,13 @@ class AddClientViewController: UIViewController {
     lazy var saveButton: UIBarButtonItem = {
         let bt = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(seveButtonPressed))
         bt.isEnabled = false
+        bt.tintColor = .white
         return bt
     }()
     
     lazy var cancelButton: UIBarButtonItem = {
         let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonPressed))
+        bt.tintColor = .white
         return bt
     }()
     
@@ -346,6 +479,14 @@ class AddClientViewController: UIViewController {
         iv.layer.borderWidth = 2
         iv.layer.borderColor = UIColor.white.cgColor
         iv.backgroundColor = .white
+        return iv
+    }()
+    
+    let firstNameIcon: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "person3"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return iv
     }()
     
@@ -367,9 +508,11 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let firstNameTextField: UITextField = {
-        let tf = UITextField()
+    let firstNameTextField: MyNormalTextField = {
+        let tf = MyNormalTextField()
+        tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tf.placeholder = "First Name..."
+        tf.textAlignment = .right
         return tf
     }()
     
@@ -382,14 +525,16 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let lastNameTextField: UITextField = {
-        let tf = UITextField()
+    let lastNameTextField: MyNormalTextField = {
+        let tf = MyNormalTextField()
+        tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tf.placeholder = "Last Name..."
+        tf.textAlignment = .right
         return tf
     }()
     
     let instagramImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "instagram"))
+        let iv = UIImageView(image: #imageLiteral(resourceName: "instagram2"))
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
@@ -405,14 +550,15 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let instagramTextField: MyTextField = {
-        let tf = MyTextField()
+    let instagramTextField: MyNormalTextField = {
+        let tf = MyNormalTextField()
         tf.autocapitalizationType =  UITextAutocapitalizationType.none
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tf.placeholder = "example006"
         tf.keyboardType = UIKeyboardType.emailAddress
+        tf.textAlignment = .right
         return tf
     }()
     
@@ -433,71 +579,24 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let twitterTextField: MyTextField = {
-        let tf = MyTextField()
+    let twitterTextField: MyNormalTextField = {
+        let tf = MyNormalTextField()
         tf.autocapitalizationType =  UITextAutocapitalizationType.none
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tf.placeholder = "@twitter"
         tf.keyboardType = UIKeyboardType.emailAddress
+        tf.textAlignment = .right
         return tf
     }()
     
-    let facebookImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "facebook"))
+    let mailImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "mail1"))
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
         return iv
-    }()
-    
-    let facebookLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "Facebook"
-        lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        return lb
-    }()
-    
-    let facebookTextField: MyTextField = {
-        let tf = MyTextField()
-        tf.autocapitalizationType =  UITextAutocapitalizationType.none
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
-        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        tf.placeholder = "Facebook ID"
-        tf.keyboardType = UIKeyboardType.emailAddress
-        return tf
-    }()
-    
-    let lineImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "line"))
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        return iv
-    }()
-    
-    let lineLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "Line"
-        lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        return lb
-    }()
-    
-    let lineTextField: MyTextField = {
-        let tf = MyTextField()
-        tf.autocapitalizationType =  UITextAutocapitalizationType.none
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
-        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        tf.placeholder = "Line ID"
-        tf.keyboardType = UIKeyboardType.emailAddress
-        return tf
     }()
     
     let mailLabel: UILabel = {
@@ -509,11 +608,23 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let mailTextField: MyTextField = {
-        let tf = MyTextField()
+    let mailTextField: MyNormalTextField = {
+        let tf = MyNormalTextField()
         tf.placeholder = "example@example.com"
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tf.keyboardType = UIKeyboardType.emailAddress
+        tf.textAlignment = .right
         return tf
+    }()
+    
+    let mobileImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "phone1"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
     }()
     
     let mobileLabel: UILabel = {
@@ -525,14 +636,23 @@ class AddClientViewController: UIViewController {
         return lb
     }()
     
-    let mobileTextField: MyTextField = {
-        let tf = MyTextField()
+    let mobileTextField: MyNormalTextField = {
+        let tf = MyNormalTextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tf.placeholder = "000-000-0000"
         tf.keyboardType = UIKeyboardType.phonePad
+        tf.textAlignment = .right
         return tf
+    }()
+    
+    let DOBImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "birthday"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
     }()
     
     let DOBLabel: UILabel = {
@@ -547,11 +667,19 @@ class AddClientViewController: UIViewController {
     let DOBTextField: DatePickerKeyboard = {
         let tf = DatePickerKeyboard()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tf.font = UIFont.systemFont(ofSize: 16)
-        tf.textAlignment = .center
+        tf.textAlignment = .right
         return tf
+    }()
+    
+    let memoImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "editicon2"))
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return iv
     }()
     
     let memoLabel: UILabel = {
@@ -565,7 +693,9 @@ class AddClientViewController: UIViewController {
     
     let memoTextField: MyTextView = {
         let tv = MyTextView()
-        tv.constraintHeight(equalToConstant: 100)
+        tv.textColor = .lightGray
+        tv.text = "Memo here..."
+        tv.contentSize.height = 200
         return tv
     }()
     

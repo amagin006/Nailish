@@ -24,8 +24,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
             lastNameLabel.text = client.lastName ?? ""
             instagramLabel.text = client.instagram ?? ""
             twitterLabel.text = client.twitter ?? ""
-//            facebookLabel.text = client.facebook ?? ""
-//            lineLabel.text =  client.line ?? ""
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             memoTextLabel.text = client.memo ?? ""
@@ -91,24 +89,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         dobSV.axis = .horizontal
         dobSV.spacing = 10
         
-        
-//        facebookLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
-//        let facebookSV = UIStackView(arrangedSubviews: [facebookTitleLabel, facebookLabel])
-//        facebookSV.axis = .horizontal
-//        facebookSV.spacing = 10
-//        facebookSV.translatesAutoresizingMaskIntoConstraints = false
-//
-//        lineLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
-//        let lineSV = UIStackView(arrangedSubviews: [lineTitleLabel, lineLabel])
-//        lineSV.axis = .horizontal
-//        lineSV.spacing = 10
-//        lineSV.translatesAutoresizingMaskIntoConstraints = false
-//
-//        let snsSecondRow = UIStackView(arrangedSubviews: [facebookSV, lineSV])
-//        snsSecondRow.axis = .horizontal
-//        snsSecondRow.distribution = .fillEqually
-        
-
         let memoSV = UIStackView(arrangedSubviews: [memoImageView, memoTitleLabel])
         memoSV.axis = .horizontal
         memoSV.translatesAutoresizingMaskIntoConstraints = false
