@@ -20,6 +20,7 @@
 		435C903D22C50CF8009D6D4E /* MyUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903C22C50CF8009D6D4E /* MyUILabel.swift */; };
 		435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */; };
 		435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */; };
+		435D0EC422DE6D0F00BB7F55 /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */; };
 		437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75A4229FABFF0032E371 /* AppDelegate.swift */; };
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
@@ -52,6 +53,7 @@
 		435C903C22C50CF8009D6D4E /* MyUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUILabel.swift; sourceTree = "<group>"; };
 		435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDoneToolbar.swift; sourceTree = "<group>"; };
 		435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNormalTextField.swift; sourceTree = "<group>"; };
+		435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReportCollectionViewCell.swift; path = Naily/Customer/View/ReportCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		437A75A1229FABFF0032E371 /* Naily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437A75A4229FABFF0032E371 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		437A75A9229FABFF0032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 			children = (
 				43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */,
 				433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */,
+				435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */,
 				4337059122ADE57A00EBC58B /* ReportImageCollectionViewCell.swift */,
 			);
 			path = View;
@@ -336,6 +339,7 @@
 				4337059222ADE57A00EBC58B /* ReportImageCollectionViewCell.swift in Sources */,
 				433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */,
 				43ED0B0322BD8D5B00781893 /* Extensions.swift in Sources */,
+				435D0EC422DE6D0F00BB7F55 /* ReportCollectionViewCell.swift in Sources */,
 				43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */,
 				437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */,
 				435C903B22C50A3B009D6D4E /* CalendarTableViewCell.swift in Sources */,

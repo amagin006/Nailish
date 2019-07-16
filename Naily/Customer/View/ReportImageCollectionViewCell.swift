@@ -32,7 +32,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
             if let snapshot4 = reportItem.snapshot4 {
                 snapshotImages.append(snapshot4)
             }
-            
+
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             if let date = reportItem.visitDate {
@@ -66,7 +66,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
     }
-    
+
     func setShadow() {
         backgroundView = UIView(frame: .zero)
         backgroundView?.layer.cornerRadius = 10
@@ -84,12 +84,12 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         width.isActive = true
         return width
     }()
-    
+
     override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
         width.constant = bounds.size.width
         return contentView.systemLayoutSizeFitting(CGSize(width: targetSize.width, height: 1))
     }
-    
+
     func setDateHeader() {
         contentView.addSubview(dateLabel)
         dateLabel.anchors(topAnchor: contentView.topAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil, padding: .init(top: 10, left: 10, bottom: 0, right: 10))
@@ -110,11 +110,11 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         scrollImageView.setContentHuggingPriority(.defaultLow, for: .vertical)
         addImageToScrollView(images: snapshotImages)
     }
-    
+
     func addImageToScrollView(images: [Data]) {
         let width = UIScreen.main.bounds.width - 80
         let height = scrollImageView.bounds.height
-        
+
         for i in 0..<images.count {
             let iv = UIImageView(frame: CGRect.init(x: 0 + width * CGFloat(i), y: 0, width: width, height: height))
             iv.backgroundColor = .white
@@ -131,7 +131,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         pageControl.numberOfPages = snapshotImages.count
         pageControl.anchors(topAnchor: scrollImageView.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: nil)
     }
-    
+
     func setDescription() {
         let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceText])
         priceSV.axis = .vertical
@@ -142,18 +142,18 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         let priceRowSV = UIStackView(arrangedSubviews: [priceSV, tipsSV, totalPriceSV])
         priceRowSV.axis = .horizontal
         priceRowSV.distribution = .fillEqually
-        
+
         let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuTextLabel, priceRowSV, memoTitleLabel, memoTextLabel, editReportButton])
         contentView.addSubview(menuSV)
         menuSV.axis = .vertical
         menuSV.distribution = .equalSpacing
         menuSV.spacing = 15
         menuSV.anchors(topAnchor: pageControl.bottomAnchor, leadingAnchor: contentView.leadingAnchor, trailingAnchor: contentView.trailingAnchor, bottomAnchor: contentView.bottomAnchor, padding: .init(top: 0, left: 10, bottom: 20, right: 10))
-        
+
         // after 'self' is instantiated
         editReportButton.addTarget(self, action: #selector(editReportButtonPressed), for: .touchUpInside)
     }
-    
+
     @objc func editReportButtonPressed() {
         print("editbuttonPressed")
         self.delegate?.editReportItemButtonPressed(report: reportItem)
@@ -162,22 +162,23 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
     }
-    
+
     func updateCurrentPageDisplay() {
         print(pageControl.currentPage)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // View
+    
     let scrollImageView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
+
     let pageControl: UIPageControl = {
         let pg = UIPageControl()
         pg.translatesAutoresizingMaskIntoConstraints = false
@@ -185,39 +186,39 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         pg.currentPageIndicatorTintColor = .black
         return pg
     }()
-    
+
     let pagenation: UIPageControl = {
         let pc = UIPageControl()
         return pc
     }()
-    
+
     // id date labels
     let dateLabel: UILabel = {
         let lb = UILabel()
         lb.text = "2019/05/10"
         return lb
     }()
-    
+
     let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
-    
+
     let menuTextLabel: UILabel = {
         let lb = UILabel()
         lb.text = "off + Jal Nail + design"
         return lb
     }()
-    
+
     let memoTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Memo"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
-    
+
     let memoTextLabel: UILabel = {
         let lb = UILabel()
         lb.numberOfLines = 0
@@ -233,44 +234,44 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         """
         return lb
     }()
-    
+
     let priceTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Price"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
-    
+
     let priceText: UILabel = {
         let lb = UILabel()
         lb.text = "$ 60.00"
         lb.font = UIFont.boldSystemFont(ofSize: 18)
         return lb
     }()
-    
+
     let tipsTitle: UILabel = {
         let lb = UILabel()
         lb.text = "Tips"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
-        
+
         return lb
     }()
-    
+
     let tipsText: UILabel = {
         let lb = UILabel()
         lb.text = "$ 6.00"
         lb.font = UIFont.boldSystemFont(ofSize: 18)
         return lb
     }()
-    
+
     let totalPriceTitle: UILabel = {
         let lb = UILabel()
         lb.text = "total"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
-        
+
         return lb
     }()
-    
+
     let totalPriceText: UILabel = {
         let lb = UILabel()
         lb.text = "$ 6.00"
@@ -292,5 +293,7 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         bt.setImage(UIImage(named: "editicon1"), for: .normal)
         return bt
     }()
+
+    
 }
 

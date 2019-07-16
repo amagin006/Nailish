@@ -91,7 +91,7 @@ class AddClientViewController: UIViewController {
         
         let firstNameView = UIView()
         clientFormView.addSubview(firstNameView)
-        firstNameView.addBorders(edges: [.top, .bottom], color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        firstNameView.addBorders(edges: [.top, .bottom], color: UIColor.init(red: 240/255, green: 240/255, blue: 240/255, alpha: 1), width: 1)
         firstNameView.translatesAutoresizingMaskIntoConstraints = false
         firstNameView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
         firstNameView.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -116,7 +116,7 @@ class AddClientViewController: UIViewController {
         
         let lastNameView = UIView()
         clientFormView.addSubview(lastNameView)
-        lastNameView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        lastNameView.addBorders(edges: .bottom, color: UIColor.init(red: 240/255, green: 240/255, blue: 240/255, alpha: 1), width: 1)
         lastNameView.translatesAutoresizingMaskIntoConstraints = false
         lastNameView.topAnchor.constraint(equalTo: firstNameView.bottomAnchor).isActive = true
         lastNameView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
@@ -139,7 +139,7 @@ class AddClientViewController: UIViewController {
         
         let instagramView = UIView()
         clientFormView.addSubview(instagramView)
-        instagramView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        instagramView.addBorders(edges: .bottom, color: UIColor.init(red: 240/255, green: 240/255, blue: 240/255, alpha: 1), width: 1)
         instagramView.translatesAutoresizingMaskIntoConstraints = false
         instagramView.topAnchor.constraint(equalTo: lastNameView.bottomAnchor).isActive = true
         instagramView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
@@ -162,7 +162,7 @@ class AddClientViewController: UIViewController {
         
         let twitterView = UIView()
         clientFormView.addSubview(twitterView)
-        twitterView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        twitterView.addBorders(edges: .bottom, color:UIColor.init(red: 240/255, green: 240/255, blue: 240/255, alpha: 1), width: 1)
         twitterView.translatesAutoresizingMaskIntoConstraints = false
         twitterView.topAnchor.constraint(equalTo: instagramView.bottomAnchor).isActive = true
         twitterView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
@@ -185,7 +185,7 @@ class AddClientViewController: UIViewController {
         
         let mailView = UIView()
         clientFormView.addSubview(mailView)
-        mailView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        mailView.addBorders(edges: .bottom, color: UIColor.init(red: 240/255, green: 240/255, blue: 240/255, alpha: 1), width: 1)
         mailView.translatesAutoresizingMaskIntoConstraints = false
         mailView.topAnchor.constraint(equalTo: twitterView.bottomAnchor).isActive = true
         mailView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
@@ -208,7 +208,7 @@ class AddClientViewController: UIViewController {
         
         let mobileView = UIView()
         clientFormView.addSubview(mobileView)
-        mobileView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        mobileView.addBorders(edges: .bottom, color: UIColor.init(red: 240/255, green: 240/255, blue: 240/255, alpha: 1), width: 1)
         mobileView.translatesAutoresizingMaskIntoConstraints = false
         mobileView.topAnchor.constraint(equalTo: mailView.bottomAnchor).isActive = true
         mobileView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
@@ -231,7 +231,7 @@ class AddClientViewController: UIViewController {
         
         let dobView = UIView()
         clientFormView.addSubview(dobView)
-        dobView.addBorders(edges: .bottom, color: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), width: 1)
+        dobView.addBorders(edges: .bottom, color: UIColor.init(red: 240/255, green: 240/255, blue: 240/255, alpha: 1), width: 1)
         dobView.translatesAutoresizingMaskIntoConstraints = false
         dobView.topAnchor.constraint(equalTo: mobileView.bottomAnchor).isActive = true
         dobView.widthAnchor.constraint(equalTo: clientFormView.widthAnchor).isActive = true
@@ -601,7 +601,7 @@ class AddClientViewController: UIViewController {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        tf.placeholder = "@twitter"
+        tf.placeholder = "twitter"
         tf.keyboardType = UIKeyboardType.emailAddress
         tf.textAlignment = .right
         return tf
@@ -627,6 +627,7 @@ class AddClientViewController: UIViewController {
     let mailTextField: MyNormalTextField = {
         let tf = MyNormalTextField()
         tf.placeholder = "example@example.com"
+        tf.autocapitalizationType =  UITextAutocapitalizationType.none
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tf.setContentHuggingPriority(.defaultHigh, for: .horizontal)

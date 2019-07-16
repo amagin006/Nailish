@@ -35,9 +35,9 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         self.collectionView.register(ClientDetailHeaderReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
-        self.collectionView.register(ReportImageCollectionViewCell.self, forCellWithReuseIdentifier: reportIdentifier)
+        self.collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: reportIdentifier)
         
         collectionView?.collectionViewLayout = layout
         self.title = "Client Report"
@@ -64,11 +64,6 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         present(editNVC, animated: true, completion: nil)
     }
     
-    @objc private func deleteButtonPressed() {
-        print("deletePress")
-        
-    }
-    
     // MARK: UICollectionViewDataSource
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let count = fetchedReportItemResultsController.sections?[section].numberOfObjects {
@@ -82,9 +77,9 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let reportCell = collectionView.dequeueReusableCell(withReuseIdentifier: reportIdentifier, for: indexPath) as! ReportImageCollectionViewCell
+        let reportCell = collectionView.dequeueReusableCell(withReuseIdentifier: reportIdentifier, for: indexPath) as! ReportCollectionViewCell
         let reportData = fetchedReportItemResultsController.object(at: indexPath)
-        reportCell.delegate = self
+//        reportCell.delegate = self
         reportCell.reportItem = reportData
 
         return reportCell
@@ -100,6 +95,10 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         return headerView
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("select")
+    }
+    
     // MARK: UICollectionView flow layout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -110,19 +109,20 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         emptyLabel.text = client.memo
         emptyLabel.sizeToFit()
 
-        return .init(width: view.frame.width, height: emptyLabel.frame.height + 485)
+        return .init(width: view.frame.width, height: emptyLabel.frame.height + 400)
     }
     
     var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        let width = UIScreen.main.bounds.size.width - 20
+        let width = UIScreen.main.bounds.size.width
+        layout.minimumLineSpacing = 2
         layout.estimatedItemSize = CGSize(width: width, height: 10)
         return layout
     }()
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
+//    }
 }
 
 extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, ReportImageCollectionViewCellDelegate, AddClientViewControllerDelegate, MFMailComposeViewControllerDelegate {

@@ -74,7 +74,6 @@ class NewReportViewController: UIViewController {
         formScrollView.anchors(topAnchor: view.topAnchor, leadingAnchor: view.leadingAnchor, trailingAnchor: view.trailingAnchor, bottomAnchor: view.bottomAnchor)
         formScrollView.frame = self.view.frame
         formScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 2000)
-//        formScrollView.contentSize.width = UIScreen.main.bounds.width
 
         formScrollView.addSubview(reportMainImageView)
         reportMainImageView.topAnchor.constraint(equalTo: formScrollView.topAnchor).isActive = true
@@ -270,6 +269,7 @@ class NewReportViewController: UIViewController {
     let reportMainImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "person1"))
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFit
         return iv
     }()
     
