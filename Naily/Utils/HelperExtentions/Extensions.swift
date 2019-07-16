@@ -17,6 +17,12 @@ extension StringProtocol {
     }
 }
 
+extension String {
+    func remove(characterSet: CharacterSet) -> String {
+        return components(separatedBy: characterSet).joined()
+    }
+}
+
 extension UIButton {
     func setBackgroundColor(_ color: UIColor, for state: UIControl.State) {
         let image = color.image

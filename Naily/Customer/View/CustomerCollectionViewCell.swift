@@ -55,18 +55,14 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         cellSV.axis = .horizontal
         cellSV.alignment = .center
         cellSV.distribution = .fillProportionally
-        
         cellSV.spacing = 10
         
         addSubview(cellSV)
-        cellSV.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        cellSV.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40).isActive = true
         cellSV.topAnchor.constraint(equalTo: topAnchor).isActive = true
         cellSV.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         cellSV.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
-        
         backgroundColor = UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
-//        layer.cornerRadius = 10
-//        setShadow()
 
     }
     
@@ -82,7 +78,7 @@ class CustomerCollectionViewCell: UICollectionViewCell {
         iv.widthAnchor.constraint(equalToConstant: 60).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 60).isActive = true
         iv.clipsToBounds = true
-        iv.layer.borderWidth = 2
+        iv.layer.borderWidth = 4
         iv.layer.borderColor = UIColor.white.cgColor
         return iv
     }()

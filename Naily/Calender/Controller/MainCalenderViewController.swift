@@ -133,7 +133,7 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
     let appointTitleView: UIView = {
         let tv = UIView()
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = UIColor(cgColor: #colorLiteral(red: 0.7957356597, green: 0.9098039269, blue: 0.5860904475, alpha: 1))
+        tv.backgroundColor = UIColor.init(red: 150/255, green: 206/255, blue: 180/255, alpha: 1)
         return tv
     }()
     
@@ -143,7 +143,7 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.boldSystemFont(ofSize: 20)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.backgroundColor = UIColor(cgColor: #colorLiteral(red: 0.7957356597, green: 0.9098039269, blue: 0.5860904475, alpha: 1))
+        lb.textColor = .white
         return lb
     }()
     

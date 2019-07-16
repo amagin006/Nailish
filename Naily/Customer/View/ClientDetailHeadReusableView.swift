@@ -22,12 +22,23 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         didSet {
             firstNameLabel.text = client.firstName!
             lastNameLabel.text = client.lastName ?? ""
-            instagramLabel.text = client.instagram ?? ""
-            twitterLabel.text = client.twitter ?? ""
-//            facebookLabel.text = client.facebook ?? ""
-//            lineLabel.text =  client.line ?? ""
             let formatter = DateFormatter()
-            formatter.dateStyle = .medium
+            formatter.dateFormat = "YYYY/MM/dd"
+            if client.mobileNumber != "" && client.mobileNumber != nil {
+                phoneButton.isEnabled = true
+            }
+            if client.mailAdress != "" && client.mailAdress != nil {
+                mailButton.isEnabled = true
+            }
+            if client.instagram != "" && client.instagram != nil {
+                instagramButton.isEnabled = true
+            }
+            if client.twitter != "" && client.twitter != nil {
+                twitterButton.isEnabled = true
+            }
+            if let dob = client.dateOfBirth {
+                DOBLabel.text = formatter.string(from: dob)
+            }
             memoTextLabel.text = client.memo ?? ""
             if let image = client.clientImage {
                 clientImage.image = UIImage(data: image)
@@ -37,7 +48,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor(red: 253/255, green: 193/255, blue: 104/255, alpha: 1)
+        backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         setupUI()
     }
     
@@ -50,94 +61,64 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     }
     
     private func setupUI() {
+        addSubview(headerInfoBackView)
+        headerInfoBackView.layer.cornerRadius = 10
+        headerInfoBackView.layer.shadowColor = UIColor.black.cgColor
+        headerInfoBackView.layer.shadowRadius = 8
+        headerInfoBackView.layer.shadowOpacity = 0.1
+        headerInfoBackView.layer.shadowOffset = CGSize.zero
+        
+        headerInfoBackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 80).isActive = true
+        headerInfoBackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
+        headerInfoBackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        headerInfoBackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100).isActive = true
+        
         addSubview(clientImage)
-        clientImage.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        clientImage.topAnchor.constraint(equalTo: headerInfoBackView.topAnchor, constant: -60).isActive = true
         clientImage.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         let fullNameSV = UIStackView(arrangedSubviews: [firstNameLabel, lastNameLabel])
-        fullNameSV.axis = .horizontal
         fullNameSV.translatesAutoresizingMaskIntoConstraints = false
-        fullNameSV.distribution = .equalSpacing
-        fullNameSV.spacing = 2
+        fullNameSV.axis = .horizontal
+        fullNameSV.distribution = .fillEqually
+        fullNameSV.spacing = 10
         
         addSubview(fullNameSV)
         fullNameSV.topAnchor.constraint(equalTo: clientImage.bottomAnchor, constant: 20).isActive = true
-        fullNameSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
+        fullNameSV.widthAnchor.constraint(equalTo: headerInfoBackView.widthAnchor, multiplier: 0.9).isActive = true
         fullNameSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        instagramLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
-        let instagramSV = UIStackView(arrangedSubviews: [instagramImageView, instagramTitleLabel, instagramLabel])
-        instagramSV.axis = .horizontal
-        instagramSV.spacing = 10
-        instagramSV.translatesAutoresizingMaskIntoConstraints = false
 
-        twitterLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
-        let twitterSV = UIStackView(arrangedSubviews: [twitterImageView, twitterTitleLabel, twitterLabel])
-        twitterSV.axis = .horizontal
-        twitterSV.spacing = 10
-        twitterSV.translatesAutoresizingMaskIntoConstraints = false
-        
-        mailLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
-        let mailSV = UIStackView(arrangedSubviews: [mailImageView, mailTitleLabel, mailLabel])
-        mailSV.axis = .horizontal
-        mailSV.spacing = 10
-        
-        mobileLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapContact)))
-        let mobileSV = UIStackView(arrangedSubviews: [mobileImageView, mobileTitleLabel, mobileLabel])
-        mobileSV.axis = .horizontal
-        mobileSV.spacing = 10
-        
-        let dobSV = UIStackView(arrangedSubviews: [DOBImageView, DOBTitleLabel, DOBLabel])
+        let dobSV = UIStackView(arrangedSubviews: [DOBImageView, DOBLabel])
+        dobSV.translatesAutoresizingMaskIntoConstraints = false
         dobSV.axis = .horizontal
-        dobSV.spacing = 10
-        
-        
-//        facebookLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
-//        let facebookSV = UIStackView(arrangedSubviews: [facebookTitleLabel, facebookLabel])
-//        facebookSV.axis = .horizontal
-//        facebookSV.spacing = 10
-//        facebookSV.translatesAutoresizingMaskIntoConstraints = false
-//
-//        lineLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSNS)))
-//        let lineSV = UIStackView(arrangedSubviews: [lineTitleLabel, lineLabel])
-//        lineSV.axis = .horizontal
-//        lineSV.spacing = 10
-//        lineSV.translatesAutoresizingMaskIntoConstraints = false
-//
-//        let snsSecondRow = UIStackView(arrangedSubviews: [facebookSV, lineSV])
-//        snsSecondRow.axis = .horizontal
-//        snsSecondRow.distribution = .fillEqually
-        
+        dobSV.spacing = 20
 
-        let memoSV = UIStackView(arrangedSubviews: [memoImageView, memoTitleLabel])
-        memoSV.axis = .horizontal
-        memoSV.translatesAutoresizingMaskIntoConstraints = false
-        memoSV.spacing = 10
+        addSubview(dobSV)
+        dobSV.topAnchor.constraint(equalTo: fullNameSV.bottomAnchor, constant: 15).isActive = true
+        dobSV.widthAnchor.constraint(equalTo: headerInfoBackView.widthAnchor, multiplier: 0.4).isActive = true
+        dobSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        let headerInfoSV = UIStackView(arrangedSubviews: [instagramSV, twitterSV, mailSV, mobileSV, dobSV, memoSV])
-        addSubview(headerInfoSV)
-        headerInfoSV.translatesAutoresizingMaskIntoConstraints = false
-        headerInfoSV.axis = .vertical
-        headerInfoSV.spacing = 10
-        headerInfoSV.topAnchor.constraint(equalTo: fullNameSV.bottomAnchor, constant: 20).isActive = true
-        headerInfoSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        headerInfoSV.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
-        
+        let contactButtonSV = UIStackView(arrangedSubviews: [phoneButton, mailButton, instagramButton, twitterButton])
+        contactButtonSV.translatesAutoresizingMaskIntoConstraints = false
+        contactButtonSV.axis = .horizontal
+        contactButtonSV.distribution = .equalSpacing
+        contactButtonSV.widthAnchor.constraint(equalToConstant: 180).isActive = true
+
+        addSubview(contactButtonSV)
+        contactButtonSV.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        contactButtonSV.topAnchor.constraint(equalTo: dobSV.bottomAnchor, constant: 16).isActive = true
+        contactButtonSV.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+
         addSubview(memoTextLabel)
-        memoTextLabel.topAnchor.constraint(equalTo: headerInfoSV.bottomAnchor, constant: 10).isActive = true
-        memoTextLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.7).isActive = true
-        memoTextLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        addSubview(reportTitleView)
-        reportTitleView.topAnchor.constraint(equalTo: memoTextLabel.bottomAnchor, constant: 30).isActive = true
-        reportTitleView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        reportTitleView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        reportTitleView.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        
-        reportTitleView.addSubview(addReportButton)
-        addReportButton.centerYAnchor.constraint(equalTo: reportTitleView.centerYAnchor).isActive = true
-        addReportButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        addReportButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        memoTextLabel.topAnchor.constraint(equalTo: contactButtonSV.bottomAnchor, constant: 16).isActive = true
+        memoTextLabel.widthAnchor.constraint(equalTo: headerInfoBackView.widthAnchor, multiplier: 0.6).isActive = true
+        memoTextLabel.centerXAnchor.constraint(equalTo: headerInfoBackView.centerXAnchor).isActive = true
+
+        addSubview(newReportButton)
+        newReportButton.topAnchor.constraint(equalTo: memoTextLabel.bottomAnchor, constant: 20).isActive = true
+        newReportButton.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        newReportButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        newReportButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
     
     @objc func addButtonPressed() {
@@ -153,62 +134,64 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         case mobile
     }
     
-    @objc func tapContact(_ sender: UITapGestureRecognizer) {
-        switch sender.view?.tag {
+    @objc func tapContact(_ sender: UIButton) {
+        switch sender.tag {
         case ContactType.instagram.rawValue:
-            let account = instagramLabel.text!
-            let url = URL(string: "instagram://user?username=\(account)")!
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                let instagramUrl = URL(string: "https://www.instagram.com/\(account)")
-                self.delegate?.snsTappedWebView(url: instagramUrl!)
+            if client.instagram != "" {
+                let account = client.instagram!
+                let url = URL(string: "instagram://user?username=\(account)")!
+                if UIApplication.shared.canOpenURL(url) {
+                    print("good")
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    print("bad")
+                    let instagramUrl = URL(string: "https://www.instagram.com/\(account)")
+                    self.delegate?.snsTappedWebView(url: instagramUrl!)
+                }
+                
             }
         case ContactType.twitter.rawValue:
-            let account = twitterLabel.text!
-            let url = URL(string: "twitter://user?screen_name=\(account)")!
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                let twitterUrl = URL(string: "https://twitter.com/\(account)")
-                self.delegate?.snsTappedWebView(url: twitterUrl!)
+            if client.twitter != "" {
+                let account = client.twitter!
+                let url = URL(string: "twitter://user?screen_name=\(account)")!
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    let twitterUrl = URL(string: "https://twitter.com/\(account)")
+                    self.delegate?.snsTappedWebView(url: twitterUrl!)
+                }
             }
         case ContactType.facebook.rawValue:
             print("facebook")
-//            let account = facebookLabel.text!
-//            let url = URL(string: "fb://profile/\(account)")!
-//            if UIApplication.shared.canOpenURL(url) {
-//                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-//            } else {
-//                let twitterUrl = URL(string: "https://www.facebook.com/\(account)")
-//                self.delegate?.snsTappedWebView(url: twitterUrl!)
-//            }
         case ContactType.line.rawValue:
             print("line")
-//            let account = lineLabel.text!
-//            let url = URL(string: "line://ti/p/\(account)")!
-//            if UIApplication.shared.canOpenURL(url) {
-//                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-//            } else {
-//                let twitterUrl = URL(string: "https://line.me/R/")
-//                self.delegate?.snsTappedWebView(url: twitterUrl!)
-//            }
         case ContactType.email.rawValue:
             print("email")
-            let address = mailLabel.text!
-            self.delegate?.openEmail(address: address )
-            
+            if client.mailAdress != "" {
+                let address = client.mailAdress!
+                self.delegate?.openEmail(address: address)
+            }
+
         case ContactType.mobile.rawValue:
-            print("tel")
-            let number = mobileLabel.text!
-            let url = NSURL(string: "tel://\(number)")!
-            UIApplication.shared.open(url as URL)
+            if client.mobileNumber != "" {
+                let number = client.mobileNumber!
+                let url = NSURL(string: "tel://\(number)")!
+                UIApplication.shared.open(url as URL)
+            }
         default:
             print("")
         }
     }
     
     // UIParts
+    let headerInfoBackView: UIView = {
+        let vi = UIView()
+        vi.translatesAutoresizingMaskIntoConstraints = false
+        vi.backgroundColor = .white
+        return vi
+    }()
+    
+    
     var clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -222,191 +205,92 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         return iv
     }()
     
-    let nameTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Name"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        return lb
-    }()
-    
     let firstNameLabel: UILabel = {
         let lb = UILabel()
         lb.text = "FirstName"
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 20)
+        lb.textAlignment = .right
         return lb
     }()
-    
+
     let lastNameLabel: UILabel = {
         let lb = UILabel()
         lb.text = "LastName"
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 20)
+        lb.textAlignment = .left
         return lb
     }()
     
-    let instagramImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "instagram"))
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        return iv
-    }()
-
-    let instagramTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Instagram:"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        return lb
+    let phoneButton: UIButton = {
+        let bt = UIButton()
+        let btnImage = #imageLiteral(resourceName: "tel2")
+        bt.tag = 6
+        bt.addTarget(self, action: #selector(tapContact(_:)), for: .touchUpInside)
+        bt.setImage(btnImage, for: .normal)
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        bt.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        bt.isEnabled = false
+        return bt
     }()
     
-    let instagramLabel: UnderlineUILabel = {
-        let lb = UnderlineUILabel()
-        lb.text = "instagram001"
-        lb.tag = 1
-        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.isUserInteractionEnabled = true
-        lb.font = UIFont.systemFont(ofSize: 14)
-        return lb
+    let mailButton: UIButton = {
+        let bt = UIButton()
+        let btnImage = #imageLiteral(resourceName: "mail4")
+        bt.tag = 5
+        bt.addTarget(self, action: #selector(tapContact(_:)), for: .touchUpInside)
+        bt.setImage(btnImage, for: .normal)
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        bt.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        bt.isEnabled = false
+        return bt
     }()
     
-    let twitterImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "twitter"))
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        return iv
+    let instagramButton: UIButton = {
+        let bt = UIButton()
+        let btnImage = #imageLiteral(resourceName: "instagram2")
+        bt.tag = 1
+        bt.addTarget(self, action: #selector(tapContact(_:)), for: .touchUpInside)
+        bt.setImage(btnImage, for: .normal)
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        bt.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        bt.isEnabled = false
+        return bt
     }()
     
-    let twitterTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Twitter:"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        return lb
+    let twitterButton: UIButton = {
+        let bt = UIButton()
+        let btnImage = #imageLiteral(resourceName: "twitter")
+        bt.tag = 2
+        bt.addTarget(self, action: #selector(tapContact(_:)), for: .touchUpInside)
+        bt.setImage(btnImage, for: .normal)
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        bt.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        bt.isEnabled = false
+        return bt
     }()
     
-    let twitterLabel: UnderlineUILabel = {
-        let lb = UnderlineUILabel()
-        lb.text = "@twitter"
-        lb.tag = 2
-        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.isUserInteractionEnabled = true
-        lb.font = UIFont.systemFont(ofSize: 14)
-        return lb
-    }()
-    
-    let facebookTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Facebook:"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        return lb
-    }()
-    
-    let facebookLabel: UnderlineUILabel = {
-        let lb = UnderlineUILabel()
-        lb.text = "Facebook ID"
-        lb.tag = 3
-        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.isUserInteractionEnabled = true
-        lb.font = UIFont.systemFont(ofSize: 14)
-        return lb
-    }()
-    
-    let lineTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Line:"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        return lb
-    }()
-    
-    let lineLabel: UnderlineUILabel = {
-        let lb = UnderlineUILabel()
-        lb.text = "Line ID"
-        lb.tag = 4
-        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.isUserInteractionEnabled = true
-        lb.font = UIFont.systemFont(ofSize: 14)
-        return lb
-    }()
-    
-    let mailImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "mail1"))
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        return iv
-    }()
-    
-    let mailTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Mail:"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        return lb
-    }()
-    
-    let mailLabel: UnderlineUILabel = {
-        let lb = UnderlineUILabel()
-        lb.text = "example@gmail.com"
-        lb.tag = 5
-        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.isUserInteractionEnabled = true
-        lb.font = UIFont.systemFont(ofSize: 14)
-        return lb
-    }()
-    
-    let mobileImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "mobile1"))
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        return iv
-    }()
-    
-    let mobileTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Mobile:"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        return lb
-    }()
-    
-    let mobileLabel: UnderlineUILabel = {
-        let lb = UnderlineUILabel()
-        lb.text = "0000000000"
-        lb.tag = 6
-        lb.textColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.isUserInteractionEnabled = true
-        lb.font = UIFont.systemFont(ofSize: 14)
-        return lb
+    let newReportButton: UIButton = {
+        let bt = UIButton()
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.backgroundColor = UIColor.init(red: 58/255, green: 158/255, blue: 85/255, alpha: 1)
+        bt.setTitle("NEW REPORT", for: .normal)
+        bt.setTitleColor(.white, for: .normal)
+        bt.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        bt.setBackgroundColor(UIColor.init(red: 58/255, green: 158/255, blue: 85/255, alpha: 1), for: .normal)
+        bt.setBackgroundColor(UIColor.init(red: 14/255, green: 57/255, blue: 26/255, alpha: 1), for: .selected)
+        bt.layer.cornerRadius = 20
+        bt.clipsToBounds = true
+        let plusImage = #imageLiteral(resourceName: "plus")
+        bt.setImage(plusImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: plusImage.size.width / 2)
+        bt.contentHorizontalAlignment = .center
+        return bt
     }()
     
     let DOBImageView: UIImageView = {
@@ -417,44 +301,15 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         return iv
     }()
 
-    let DOBTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Date of Birth:"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        return lb
-    }()
-    
     let DOBLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "1999/06/22"
+        lb.text = "1900/01/01"
         lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.isUserInteractionEnabled = true
         lb.font = UIFont.systemFont(ofSize: 14)
         return lb
     }()
     
-    let memoImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "note"))
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        return iv
-    }()
-
-    let memoTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "Memo"
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        return lb
-    }()
-
     let memoTextLabel: UILabel = {
         let lb = UILabel()
         lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
@@ -465,13 +320,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.frame.origin.x = 0
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
         return lb
-    }()
-    
-    let reportTitleView: UIView = {
-        let vi = UIView()
-        vi.translatesAutoresizingMaskIntoConstraints = false
-        vi.backgroundColor = UIColor(red: 236/255, green: 123/255, blue: 125/255, alpha: 1)
-        return vi
     }()
     
     let addReportButton: UIButton = {
