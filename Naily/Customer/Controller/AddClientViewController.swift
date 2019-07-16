@@ -329,8 +329,16 @@ class AddClientViewController: UIViewController {
             newClient.setValue(lastNameTextField.text, forKey: "lastName")
             newClient.setValue(fullName, forKey: "fullName")
             newClient.setValue(nameInitial, forKey: "nameInitial")
-            newClient.setValue(instagramTextField.text ?? "", forKey: "instagram")
-            newClient.setValue(twitterTextField.text ?? "", forKey: "twitter")
+            if let instagram = instagramTextField.text {
+                let trimmedString = instagram.trimmingCharacters(in: .whitespacesAndNewlines)
+                let noSpaceString = trimmedString.remove(characterSet: .whitespacesAndNewlines)
+                newClient.setValue(noSpaceString, forKey: "instagram")
+            }
+            if let twitter = twitterTextField.text {
+                let trimmedString = twitter.trimmingCharacters(in: .whitespacesAndNewlines)
+                let noSpaceString = trimmedString.remove(characterSet: .whitespacesAndNewlines)
+                newClient.setValue(noSpaceString, forKey: "twitter")
+            }
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
             if DOBTextField.text != "" {
@@ -351,8 +359,16 @@ class AddClientViewController: UIViewController {
             let fullName = "\(firstNameUpper!) \(lastNameTextField.text ?? "")"
             client.fullName = fullName
             client.mailAdress = mailTextField.text ?? ""
-            client.instagram = instagramTextField.text ?? ""
-            client.twitter = twitterTextField.text ?? ""
+            if let instagram = instagramTextField.text {
+                let trimmedString = instagram.trimmingCharacters(in: .whitespacesAndNewlines)
+                let noSpaceString = trimmedString.remove(characterSet: .whitespaces)
+                client.instagram = noSpaceString
+            }
+            if let twitter = twitterTextField.text {
+                let trimmedString = twitter.trimmingCharacters(in: .whitespacesAndNewlines)
+                let noSpaceString = trimmedString.remove(characterSet: .whitespaces)
+                client.twitter = noSpaceString
+            }
             client.mobileNumber = mobileTextField.text ?? ""
             if DOBTextField.text != "" {
                 let formatter = DateFormatter()

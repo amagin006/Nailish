@@ -86,18 +86,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         let reportData = fetchedReportItemResultsController.object(at: indexPath)
         reportCell.delegate = self
         reportCell.reportItem = reportData
-        // cell design
-//        reportCell.contentView.layer.cornerRadius = 10
-//        reportCell.contentView.layer.borderWidth = 1
-//        reportCell.contentView.layer.borderColor = UIColor.clear.cgColor
-//        reportCell.contentView.layer.masksToBounds = true
-//        //cell shadow
-//        reportCell.layer.shadowColor = UIColor.black.cgColor
-//        reportCell.layer.shadowOffset = CGSize(width: 10, height: 10)
-//        reportCell.layer.shadowRadius = 4
-//        reportCell.layer.shadowOpacity = 0.4
-//        reportCell.layer.masksToBounds = false
-//        reportCell.layer.shadowPath = UIBezierPath(roundedRect: reportCell.bounds, cornerRadius: reportCell.contentView.layer.cornerRadius).cgPath
+
         return reportCell
     }
 
