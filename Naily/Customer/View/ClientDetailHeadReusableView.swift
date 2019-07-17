@@ -69,9 +69,9 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         headerInfoBackView.layer.shadowOffset = CGSize.zero
         
         headerInfoBackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 80).isActive = true
-        headerInfoBackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
+        headerInfoBackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9).isActive = true
         headerInfoBackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        headerInfoBackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30).isActive = true
+        headerInfoBackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
         
         addSubview(clientImage)
         clientImage.topAnchor.constraint(equalTo: headerInfoBackView.topAnchor, constant: -60).isActive = true

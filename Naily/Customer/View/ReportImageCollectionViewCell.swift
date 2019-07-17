@@ -187,11 +187,6 @@ class ReportImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate 
         return pg
     }()
 
-    let pagenation: UIPageControl = {
-        let pc = UIPageControl()
-        return pc
-    }()
-
     // id date labels
     let dateLabel: UILabel = {
         let lb = UILabel()

@@ -96,7 +96,10 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("select")
+        let reportItem = fetchedReportItemResultsController.object(at: indexPath)
+        let reportDetailVC = ReportDetailViewController()
+        reportDetailVC.report = reportItem
+        self.navigationController?.pushViewController(reportDetailVC, animated: true)
     }
     
     // MARK: UICollectionView flow layout
@@ -120,9 +123,6 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         return layout
     }()
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
-//    }
 }
 
 extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, ReportImageCollectionViewCellDelegate, AddClientViewControllerDelegate, MFMailComposeViewControllerDelegate {
@@ -164,7 +164,7 @@ extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDe
         let myRequest = URLRequest(url: url)
         webView.load(myRequest)
     }
-    
+
     func openEmail(address: String) {
         if MFMailComposeViewController.canSendMail() {
             print("open mail")
