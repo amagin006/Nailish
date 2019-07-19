@@ -52,10 +52,6 @@ class NewReportViewController: UIViewController {
             if let end = report?.endTime {
                 endTimeTextField.text = formatter.string(from: end)
             }
-            menuTextField.text = report?.menu
-            if let price = report?.price {
-                priceTextField.text = String(price)
-            }
             if let tips = report?.tips {
                 tipsTextField.text = String(tips)
             }
@@ -131,31 +127,80 @@ class NewReportViewController: UIViewController {
         timeSV.distribution = .fillEqually
         timeSV.spacing = 12
         
-        let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceTextField])
-        priceSV.axis = .vertical
-        priceSV.spacing = 5
+//        let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceTextField])
+//        priceSV.axis = .vertical
+//        priceSV.spacing = 5
+//
+//
+//        let priceBoxSV = UIStackView(arrangedSubviews: [priceSV, tipsSV])
+//        priceBoxSV.axis = .horizontal
+//        priceBoxSV.distribution = .fillEqually
+//        priceBoxSV.spacing = 10
+//
+//        let menuItemSV = UIStackView(arrangedSubviews: [menuTitleLabel])
+//        menuItemSV.axis = .horizontal
+//        menuItemSV.distribution = .fillProportionally
+//        menuItemSV.spacing = 12
+//        menuItemSV.alignment = .top
+        
+        let dateAndTimeSV = UIStackView(arrangedSubviews: [visitDateSV, timeSV])
+        dateAndTimeSV.translatesAutoresizingMaskIntoConstraints = false
+        dateAndTimeSV.axis = .vertical
+        dateAndTimeSV.spacing = 16
+        dateAndTimeSV.alignment = .fill
+        formScrollView.addSubview(dateAndTimeSV)
+        
+        dateAndTimeSV.topAnchor.constraint(equalTo: subImageSV.bottomAnchor, constant: 20).isActive = true
+        dateAndTimeSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        dateAndTimeSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+        
+        let menuView = UIView()
+        formScrollView.addSubview(menuView)
+        menuView.translatesAutoresizingMaskIntoConstraints = false
+        menuView.topAnchor.constraint(equalTo: dateAndTimeSV.bottomAnchor, constant: 30).isActive = true
+        menuView.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        menuView.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+        menuView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        menuView.backgroundColor = .yellow
+        
+        menuView.addSubview(addMenuButton)
+        addMenuButton.topAnchor.constraint(equalTo: menuView.topAnchor).isActive = true
+        addMenuButton.trailingAnchor.constraint(equalTo: menuView.trailingAnchor).isActive = true
+        
+        let menuItemSV = UIStackView(arrangedSubviews: [menuitemTagLabel, priceLabel])
+        menuItemSV.axis = .horizontal
+        menuItemSV.spacing = 20
+        let menuItem2SV = UIStackView(arrangedSubviews: [menuitemTagLabel2, priceLabel2])
+        menuItem2SV.axis = .horizontal
+        menuItem2SV.spacing = 20
+        
+        let menuItemRowsSV = UIStackView(arrangedSubviews: [menuItemSV, menuItem2SV])
+        menuItemRowsSV.axis = .vertical
+        menuItemRowsSV.alignment = .trailing
+        menuItemRowsSV.spacing = 10
+        
+        menuTitleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        let menuboxSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuItemRowsSV])
+        menuboxSV.alignment = .top
+        formScrollView.addSubview(menuboxSV)
+        menuboxSV.translatesAutoresizingMaskIntoConstraints = false
+        menuboxSV.topAnchor.constraint(equalTo: addMenuButton.bottomAnchor, constant: 30).isActive = true
+        menuboxSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        menuboxSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         
         let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsTextField])
-        tipsSV.axis = .vertical
-        tipsSV.spacing = 5
+        tipsSV.axis = .horizontal
         
-        let priceBoxSV = UIStackView(arrangedSubviews: [priceSV, tipsSV])
-        priceBoxSV.axis = .horizontal
-        priceBoxSV.distribution = .fillEqually
-        priceBoxSV.spacing = 10
+        let tipAndMemoSV = UIStackView(arrangedSubviews: [tipsSV, memoLabel, memoTextView])
+        formScrollView.addSubview(tipAndMemoSV)
+        tipAndMemoSV.translatesAutoresizingMaskIntoConstraints = false
+        tipAndMemoSV.spacing = 10
+        tipAndMemoSV.axis = .vertical
         
-        let discriptionSV = UIStackView(arrangedSubviews: [
-            visitDateSV, timeSV, menuTitleLabel, menuTextField, priceBoxSV, memoLabel,
-            memoTextView])
-        discriptionSV.translatesAutoresizingMaskIntoConstraints = false
-        discriptionSV.axis = .vertical
-        discriptionSV.spacing = 12
-        discriptionSV.alignment = .fill
-        formScrollView.addSubview(discriptionSV)
+        tipAndMemoSV.topAnchor.constraint(equalTo: menuView.bottomAnchor, constant: 20).isActive = true
+        tipAndMemoSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        tipAndMemoSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         
-        discriptionSV.topAnchor.constraint(equalTo: subImageSV.bottomAnchor, constant: 20).isActive = true
-        discriptionSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
-        discriptionSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -237,8 +282,6 @@ class NewReportViewController: UIViewController {
             newReport.setValue(visitTextField.toolbar.datePicker.date, forKey: "visitDate")
             newReport.setValue(startTimeTextField.toolbar.datePicker.date, forKey: "startTime")
             newReport.setValue(endTimeTextField.toolbar.datePicker.date, forKey: "endTime")
-            newReport.setValue(menuTextField.text ?? "", forKey: "menu")
-            newReport.setValue(Int(priceTextField.text ?? "0"), forKey: "price")
             newReport.setValue(Int(tipsTextField.text ?? "0"), forKey: "tips")
             newReport.setValue(memoTextView.text ?? "", forKey: "memo")
             newReport.setValue(client, forKey: "client")
@@ -265,8 +308,6 @@ class NewReportViewController: UIViewController {
             if let endTime = endTimeTextField.text {
                 report?.endTime = formatter.date(from: endTime)
             }
-            report?.menu = menuTextField.text ?? ""
-            report?.price = Int32(priceTextField.text ?? "0")!
             report?.tips = Int32(tipsTextField.text ?? "0")!
             report?.memo = memoTextView.text ?? ""
             do {
@@ -278,6 +319,10 @@ class NewReportViewController: UIViewController {
                 self.reload?(self.report!)
             }
         }
+    }
+    
+    @objc func tapMenu() {
+        print("tapmenu")
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
@@ -380,28 +425,66 @@ class NewReportViewController: UIViewController {
     let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"
+        lb.constraintWidth(equalToConstant: 60)
+        lb.backgroundColor = .red
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
     
-    let menuTextField: MyTextField = {
-        let tf = MyTextField()
-        tf.font = UIFont.systemFont(ofSize: 18)
-        return tf
+    let addMenuButton: UIButton = {
+        let bt = UIButton()
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.backgroundColor = UIColor(red: 255/255, green: 162/255, blue: 162/255, alpha: 1)
+        bt.setTitle("SELECT MENU", for: .normal)
+        bt.setTitleColor(.white, for: .normal)
+        bt.constraintWidth(equalToConstant: 200)
+        bt.constraintHeight(equalToConstant: 40)
+        bt.addTarget(self, action: #selector(tapMenu), for: .touchUpInside)
+        bt.setBackgroundColor(UIColor(red: 255/255, green: 162/255, blue: 162/255, alpha: 1), for: .normal)
+        bt.setBackgroundColor(UIColor(red: 178/255, green: 114/255, blue: 114/255, alpha: 1), for: .selected)
+        bt.layer.cornerRadius = 20
+        bt.clipsToBounds = true
+        let plusImage = #imageLiteral(resourceName: "plus")
+        bt.setImage(plusImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: plusImage.size.width / 2)
+        bt.contentHorizontalAlignment = .center
+        return bt
     }()
     
-    let priceTitleLabel: UILabel = {
+    let menuitemTagLabel: menuTagLabel = {
+        let lb = menuTagLabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.backgroundColor = .blue
+        lb.layer.cornerRadius = 12
+        lb.clipsToBounds = true
+        lb.textColor = .white
+        lb.text = "Design"
+        return lb
+    }()
+    
+    let priceLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "price"
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.text = "$ 40.00"
         return lb
     }()
     
-    let priceTextField: MyTextField = {
-        let tf = MyTextField()
-        tf.font = UIFont.systemFont(ofSize: 18)
-        tf.keyboardType = .decimalPad
-        return tf
+    let menuitemTagLabel2: menuTagLabel = {
+        let lb = menuTagLabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.backgroundColor = .red
+        lb.layer.cornerRadius = 12
+        lb.clipsToBounds = true
+        lb.textColor = .white
+        lb.text = "Jel"
+        return lb
+    }()
+    
+    let priceLabel2: UILabel = {
+        let lb = UILabel()
+        lb.text = "$ 40.00"
+        return lb
     }()
     
     let tipsTitleLabel: UILabel = {
@@ -411,9 +494,13 @@ class NewReportViewController: UIViewController {
         return lb
     }()
     
-    let tipsTextField: MyTextField = {
-        let tf = MyTextField()
+    let tipsTextField: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.constraintWidth(equalToConstant: 150)
+        tf.constraintHeight(equalToConstant: 40)
         tf.font = UIFont.systemFont(ofSize: 18)
+        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         tf.keyboardType = .decimalPad
         return tf
     }()
@@ -428,6 +515,7 @@ class NewReportViewController: UIViewController {
     let memoTextView: MyTextView = {
         let tv = MyTextView()
         tv.constraintHeight(equalToConstant: 100)
+        tv.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         tv.font = UIFont.systemFont(ofSize: 18)
         return tv
     }()

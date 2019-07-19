@@ -8,10 +8,19 @@
 
 import UIKit
 
+private let cellId = "AddMenuCell"
+
+class MenuTableCell: UITableViewCell {
+    
+    
+}
+
 class MenuSelectTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
 
     }
 
@@ -22,23 +31,17 @@ class MenuSelectTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return 10
     }
 
     
     
-    
-    
-    
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        
+        cell.textLabel?.text = "Something"
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
