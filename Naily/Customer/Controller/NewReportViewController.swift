@@ -16,14 +16,16 @@ class NewReportViewController: UIViewController {
     var reportImages = [UIImage]()
     var selectImageNum = 0
     var client: ClientInfo?
-    
+    var reload: ((ReportItem) -> ())?
     var report: ReportItem? {
         didSet {
-            if let image1 = report?.snapshot1, let image2 = report?.snapshot2, let image3 = report?.snapshot3 {
+            if let image1 = report?.snapshot1, let image2 = report?.snapshot2,
+                let image3 = report?.snapshot3, let image4 = report?.snapshot4 {
                 reportImages.append(UIImage(data: image1)!)
                 reportImages.append(UIImage(data: image2)!)
                 reportImages.append(UIImage(data: image3)!)
-                for i in 0..<4 {
+                reportImages.append(UIImage(data: image4)!)
+                for i in 0..<reportImages.count {
                     let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
                     iv.layer.borderWidth = 2
                     iv.layer.borderColor = UIColor.lightGray.cgColor
@@ -42,6 +44,13 @@ class NewReportViewController: UIViewController {
             formatter.dateStyle = .medium
             if let date = report?.visitDate {
                 visitTextField.text = formatter.string(from: date)
+            }
+            formatter.dateFormat = "HH:mm"
+            if let start = report?.startTime {
+                startTimeTextField.text = formatter.string(from: start)
+            }
+            if let end = report?.endTime {
+                endTimeTextField.text = formatter.string(from: end)
             }
             menuTextField.text = report?.menu
             if let price = report?.price {
@@ -74,7 +83,6 @@ class NewReportViewController: UIViewController {
         formScrollView.anchors(topAnchor: view.topAnchor, leadingAnchor: view.leadingAnchor, trailingAnchor: view.trailingAnchor, bottomAnchor: view.bottomAnchor)
         formScrollView.frame = self.view.frame
         formScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 2000)
-//        formScrollView.contentSize.width = UIScreen.main.bounds.width
 
         formScrollView.addSubview(reportMainImageView)
         reportMainImageView.topAnchor.constraint(equalTo: formScrollView.topAnchor).isActive = true
@@ -86,7 +94,7 @@ class NewReportViewController: UIViewController {
             if reportImageViews.count < 4 {
                 let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
                 iv.layer.borderWidth = 2
-                iv.layer.borderColor = UIColor.lightGray.cgColor
+                iv.layer.borderColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1).cgColor
                 iv.translatesAutoresizingMaskIntoConstraints = false
                 iv.isUserInteractionEnabled = true
                 iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectImage(_:))))
@@ -106,6 +114,23 @@ class NewReportViewController: UIViewController {
         subImageSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         subImageSV.heightAnchor.constraint(equalTo: reportImageViewHeight).isActive = true
         
+        let visitDateSV = UIStackView(arrangedSubviews: [visitTitleLabel, visitTextField])
+        visitDateSV.axis = .vertical
+        visitDateSV.spacing = 3
+        
+        let startSV = UIStackView(arrangedSubviews: [startTimeTitleLabel, startTimeTextField])
+        startSV.axis = .vertical
+        startSV.spacing = 3
+        
+        let endSV = UIStackView(arrangedSubviews: [endTimeTitleLabel, endTimeTextField])
+        endSV.axis = .vertical
+        endSV.spacing = 3
+        
+        let timeSV = UIStackView(arrangedSubviews: [startSV, endSV])
+        timeSV.axis = .horizontal
+        timeSV.distribution = .fillEqually
+        timeSV.spacing = 12
+        
         let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceTextField])
         priceSV.axis = .vertical
         priceSV.spacing = 5
@@ -120,15 +145,15 @@ class NewReportViewController: UIViewController {
         priceBoxSV.spacing = 10
         
         let discriptionSV = UIStackView(arrangedSubviews: [
-            vistTitleLabel, visitTextField, menuTitleLabel, menuTextField, priceBoxSV, memoLabel,
+            visitDateSV, timeSV, menuTitleLabel, menuTextField, priceBoxSV, memoLabel,
             memoTextView])
         discriptionSV.translatesAutoresizingMaskIntoConstraints = false
         discriptionSV.axis = .vertical
-        discriptionSV.spacing = 3
+        discriptionSV.spacing = 12
         discriptionSV.alignment = .fill
         formScrollView.addSubview(discriptionSV)
         
-        discriptionSV.topAnchor.constraint(equalTo: subImageSV.bottomAnchor, constant: 10).isActive = true
+        discriptionSV.topAnchor.constraint(equalTo: subImageSV.bottomAnchor, constant: 20).isActive = true
         discriptionSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
         discriptionSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         
@@ -210,6 +235,8 @@ class NewReportViewController: UIViewController {
                 newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
             }
             newReport.setValue(visitTextField.toolbar.datePicker.date, forKey: "visitDate")
+            newReport.setValue(startTimeTextField.toolbar.datePicker.date, forKey: "startTime")
+            newReport.setValue(endTimeTextField.toolbar.datePicker.date, forKey: "endTime")
             newReport.setValue(menuTextField.text ?? "", forKey: "menu")
             newReport.setValue(Int(priceTextField.text ?? "0"), forKey: "price")
             newReport.setValue(Int(tipsTextField.text ?? "0"), forKey: "tips")
@@ -231,11 +258,25 @@ class NewReportViewController: UIViewController {
             if let visitDateStr = visitTextField.text {
                 report?.visitDate = formatter.date(from: visitDateStr)
             }
+            formatter.dateFormat = "HH:mm"
+            if let startTime = startTimeTextField.text {
+                report?.startTime = formatter.date(from: startTime)
+            }
+            if let endTime = endTimeTextField.text {
+                report?.endTime = formatter.date(from: endTime)
+            }
             report?.menu = menuTextField.text ?? ""
             report?.price = Int32(priceTextField.text ?? "0")!
             report?.tips = Int32(tipsTextField.text ?? "0")!
             report?.memo = memoTextView.text ?? ""
-            dismiss(animated: true)
+            do {
+                try fetchedReportItemResultsController.managedObjectContext.save()
+            } catch let err {
+                print("failed save Report - \(err)")
+            }
+            dismiss(animated: true) { [unowned self] in
+                self.reload?(self.report!)
+            }
         }
     }
     
@@ -270,6 +311,7 @@ class NewReportViewController: UIViewController {
     let reportMainImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "person1"))
         iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFit
         return iv
     }()
     
@@ -290,7 +332,7 @@ class NewReportViewController: UIViewController {
         return sv
     }()
     
-    let vistTitleLabel: UILabel = {
+    let visitTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Visit Day"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
@@ -299,8 +341,41 @@ class NewReportViewController: UIViewController {
 
     let visitTextField: DatePickerKeyboard = {
         let tf = DatePickerKeyboard()
+        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
+    
+    let startTimeTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Start"
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        return lb
+    }()
+    
+    let startTimeTextField: TimePickerKeyboard = {
+        let lb = TimePickerKeyboard()
+        lb.layer.borderWidth = 0
+        lb.layer.cornerRadius = 0
+        lb.contentInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
+        lb.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+        return lb
+    }()
+    
+    let endTimeTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "End"
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        return lb
+    }()
+    
+    let endTimeTextField: TimePickerKeyboard = {
+        let lb = TimePickerKeyboard()
+        lb.layer.borderWidth = 0
+        lb.layer.cornerRadius = 0
+        lb.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+        return lb
+    }()
+    
     
     let menuTitleLabel: UILabel = {
         let lb = UILabel()

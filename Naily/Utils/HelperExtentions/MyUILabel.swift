@@ -16,11 +16,31 @@ class MyUILabel: UILabel {
     }
     
     override var intrinsicContentSize: CGSize {
-        let size = super.intrinsicContentSize
-        return CGSize(width: size.width + 6 + 6, height: size.height + 6 + 6)
+        var size = super.intrinsicContentSize
+        size.width += padding.left + padding.right
+        size.height += padding.top + padding.bottom
+        return size
     }
 
 }
+
+class menuTagLabel: UILabel {
+    
+    let padding = UIEdgeInsets(top: 2, left: 14, bottom: 2, right: 14)
+    
+    override func drawText(in rect: CGRect) {
+        super.drawText(in: rect.inset(by: padding))
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        var size = super.intrinsicContentSize
+        size.width += padding.left + padding.right
+        size.height += padding.top + padding.bottom
+        return size
+    }
+    
+}
+
 
 class UnderlineUILabel: UILabel {
     override var text: String? {

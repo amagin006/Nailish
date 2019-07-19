@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4313075922E1327A00A2A804 /* MenuSelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */; };
 		4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */; };
-		4337059222ADE57A00EBC58B /* ReportImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337059122ADE57A00EBC58B /* ReportImageCollectionViewCell.swift */; };
 		4337059D22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337059C22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift */; };
 		433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */; };
 		433705AA22AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */; };
@@ -20,6 +20,8 @@
 		435C903D22C50CF8009D6D4E /* MyUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903C22C50CF8009D6D4E /* MyUILabel.swift */; };
 		435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */; };
 		435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */; };
+		435D0EC422DE6D0F00BB7F55 /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */; };
+		435D0EC622DE844200BB7F55 /* ReportDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */; };
 		437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75A4229FABFF0032E371 /* AppDelegate.swift */; };
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
@@ -39,8 +41,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4313075722E12F1A00A2A804 /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSelectTableViewController.swift; sourceTree = "<group>"; };
 		4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomerCollectionViewController.swift; path = ../CustomerCollectionViewController.swift; sourceTree = "<group>"; };
-		4337059122ADE57A00EBC58B /* ReportImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		4337059C22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDetailCollectionViewController.swift; sourceTree = "<group>"; };
 		433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewController.swift; sourceTree = "<group>"; };
 		433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientDetailHeadReusableView.swift; sourceTree = "<group>"; };
@@ -52,6 +55,8 @@
 		435C903C22C50CF8009D6D4E /* MyUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUILabel.swift; sourceTree = "<group>"; };
 		435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDoneToolbar.swift; sourceTree = "<group>"; };
 		435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNormalTextField.swift; sourceTree = "<group>"; };
+		435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReportCollectionViewCell.swift; path = Naily/Customer/View/ReportCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
+		435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailViewController.swift; sourceTree = "<group>"; };
 		437A75A1229FABFF0032E371 /* Naily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437A75A4229FABFF0032E371 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		437A75A9229FABFF0032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -98,7 +103,7 @@
 			children = (
 				43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */,
 				433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */,
-				4337059122ADE57A00EBC58B /* ReportImageCollectionViewCell.swift */,
+				435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -109,7 +114,9 @@
 				4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */,
 				43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */,
 				4337059C22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift */,
+				435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */,
 				43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */,
+				4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -195,6 +202,7 @@
 				435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */,
 				435C903E22C512BA009D6D4E /* Utils */,
 				437A75B6229FAC4F0032E371 /* Supporting Files */,
+				4313075722E12F1A00A2A804 /* Model.h */,
 			);
 			path = Naily;
 			sourceTree = "<group>";
@@ -333,13 +341,15 @@
 				433705AC22AEEFF900EBC58B /* UIView+ConstraintLayout.swift in Sources */,
 				435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */,
 				43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */,
-				4337059222ADE57A00EBC58B /* ReportImageCollectionViewCell.swift in Sources */,
 				433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */,
 				43ED0B0322BD8D5B00781893 /* Extensions.swift in Sources */,
+				435D0EC422DE6D0F00BB7F55 /* ReportCollectionViewCell.swift in Sources */,
 				43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */,
 				437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */,
+				435D0EC622DE844200BB7F55 /* ReportDetailViewController.swift in Sources */,
 				435C903B22C50A3B009D6D4E /* CalendarTableViewCell.swift in Sources */,
 				43DA461822C7E13B00000FB5 /* AddAppointmentViewController.swift in Sources */,
+				4313075922E1327A00A2A804 /* MenuSelectTableViewController.swift in Sources */,
 				43E6915422AB0B8A0097C2B6 /* CoreDataManager.swift in Sources */,
 				43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */,
 				433705AA22AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift in Sources */,

@@ -75,7 +75,6 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
         definesPresentationContext = true
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
-        searchController.delegate = self
         searchController.searchBar.placeholder = "Search"
         searchController.searchBar.autocapitalizationType = .none
         searchController.dimsBackgroundDuringPresentation = false
@@ -228,9 +227,4 @@ extension CustomerCollectionViewController: UISearchBarDelegate {
         
     }
 }
-
-extension CustomerCollectionViewController: UISearchControllerDelegate {
-    
-}
-
 
