@@ -79,7 +79,6 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let reportCell = collectionView.dequeueReusableCell(withReuseIdentifier: reportIdentifier, for: indexPath) as! ReportCollectionViewCell
         let reportData = fetchedReportItemResultsController.object(at: indexPath)
-//        reportCell.delegate = self
         reportCell.reportItem = reportData
 
         return reportCell
@@ -125,7 +124,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     
 }
 
-extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, ReportImageCollectionViewCellDelegate, AddClientViewControllerDelegate, MFMailComposeViewControllerDelegate {
+extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, AddClientViewControllerDelegate, MFMailComposeViewControllerDelegate {
     func editClientDidFinish(client: ClientInfo) {
         self.client = client
     }

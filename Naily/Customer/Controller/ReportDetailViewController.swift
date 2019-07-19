@@ -11,6 +11,7 @@ import UIKit
 class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
     
     var snapshotImages = [Data]()
+    
     var report: ReportItem! {
         didSet {
             fullNameLabel.text = "\(report.client!.firstName!) \(report.client?.lastName ?? "")"
@@ -19,7 +20,16 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
                 formatter.dateFormat = "YYYY/MM/dd"
                 visitDateLabel.text = formatter.string(from: date)
             }
-            timeLabel.text = "\(report.stratTime ?? "") ~ \(report.endTime ?? "")"
+            formatter.dateFormat = "HH:mm"
+            var startStr = ""
+            var endStr = ""
+            if let start = report.startTime {
+                startStr = formatter.string(from: start)
+            }
+            if let end = report.endTime {
+                endStr = formatter.string(from: end)
+            }
+            timeLabel.text = "\(startStr) ~ \(endStr)"
             snapshotImages.removeAll()
             if let snapshot1 = report.snapshot1 {
                 snapshotImages.append(snapshot1)
@@ -34,7 +44,12 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
                 snapshotImages.append(snapshot4)
             }
             memoLabel.text = report.memo ?? ""
+            addImageToScrollView(images: snapshotImages)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
 
     override func viewDidLoad() {
@@ -136,7 +151,7 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         let priceView = UIView()
         scrollView.addSubview(priceView)
         priceView.translatesAutoresizingMaskIntoConstraints = false
-        priceView.addBorders(edges: .bottom, color: UIColor(red: 145/255, green: 145/255, blue: 145/255, alpha: 1), width: 2)
+        priceView.addBorders(edges: .bottom, color: UIColor(red: 185/255, green: 185/255, blue: 185/255, alpha: 1), width: 2)
         priceView.topAnchor.constraint(equalTo: menuSV.bottomAnchor, constant: 30).isActive = true
         priceView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.9).isActive = true
         priceView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
@@ -206,7 +221,15 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         let editAction: UIAlertAction = UIAlertAction(title: "Edit", style: .default, handler:{
             (action: UIAlertAction!) -> Void in
             let editVC = NewReportViewController()
+            editVC.report = self.report
+            // callback closure when dismiss
+            editVC.reload = { [unowned self] (editReport) in
+                // set report -> didSet -> reload
+                self.report = editReport
+            }
             let editNVC = LightStatusNavigationController(rootViewController: editVC)
+//            editVC.modalPresentationStyle = .overCurrentContext
+//            editVC.modalTransitionStyle = .crossDissolve
             self.present(editNVC, animated: true, completion: nil)
         })
         let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
@@ -315,9 +338,9 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         lb.text = "$ 10.00"
         lb.textAlignment = .right
         lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.constraintWidth(equalToConstant: 80)
-        lb.textColor = .black
         return lb
     }()
     
@@ -336,9 +359,9 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         lb.text = "$ 12.00"
         lb.textAlignment = .right
         lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.constraintWidth(equalToConstant: 80)
-        lb.textColor = .black
         return lb
     }()
     
@@ -354,7 +377,7 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         lb.text = "$ 120.00"
         lb.textAlignment = .right
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.textColor = .black
+        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
         return lb
     }()
     
@@ -370,7 +393,7 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         lb.text = "$ 12.00"
         lb.textAlignment = .right
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.textColor = .black
+        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
         return lb
     }()
     
@@ -385,8 +408,8 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         let lb = UILabel()
         lb.text = "$ 12.00"
         lb.textAlignment = .right
+        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.textColor = .black
         return lb
     }()
     
@@ -394,14 +417,15 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         let lb = UILabel()
         lb.text = "$ 140.00"
         lb.textAlignment = .right
+        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.textColor = .black
         return lb
     }()
 
     let memoTitleLable: UILabel = {
         let lb = UILabel()
         lb.text = "MEMO"
+        lb.textColor = UIColor(red: 145/255, green: 145/255, blue: 145/255, alpha: 1)
         return lb
     }()
     

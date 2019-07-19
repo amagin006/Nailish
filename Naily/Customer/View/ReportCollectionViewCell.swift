@@ -16,12 +16,18 @@ class ReportCollectionViewCell: UICollectionViewCell {
                 nailImageView.image = UIImage(data: image)
             }
             let formatter = DateFormatter()
-            formatter.dateFormat = "YYYY/MM/dd"
             if let date = reportItem.visitDate {
+                formatter.dateFormat = "YYYY/MM/dd"
                 lastVisitDate.text = formatter.string(from: date)
             }
-            startTime.text = reportItem.stratTime ?? ""
-            endTime.text = reportItem.endTime ?? ""
+            if let start = reportItem.startTime {
+                formatter.dateFormat = "HH:mm"
+                startTime.text = formatter.string(from: start)
+            }
+            if let end = reportItem.endTime {
+                formatter.dateFormat = "HH:mm"
+                endTime.text = formatter.string(from: end)
+            }
         }
     }
     
@@ -60,12 +66,12 @@ class ReportCollectionViewCell: UICollectionViewCell {
         
         let reportSV = UIStackView(arrangedSubviews: [nailImageView, dateTimeSV])
         reportSV.axis = .horizontal
-        reportSV.spacing = 16
+        reportSV.spacing = 20
         
         contentView.addSubview(reportSV)
         reportSV.translatesAutoresizingMaskIntoConstraints = false
         reportSV.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12).isActive = true
-        reportSV.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40).isActive = true
+        reportSV.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30).isActive = true
         reportSV.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         reportSV.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12).isActive = true
     }
