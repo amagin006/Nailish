@@ -7,85 +7,156 @@
 //
 
 import UIKit
+import CoreData
 
 private let cellId = "AddMenuCell"
 
-class MenuTableCell: UITableViewCell {
-    
-    
-}
-
-class MenuSelectTableViewController: UITableViewController {
+class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
-
+        setupNavigationUI()
+        setupUI()
     }
+    
+    func setupNavigationUI() {
+        navigationItem.title = "Select Menu"
+        let cancelButton: UIBarButtonItem = {
+            let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(selectMenuCancelButtonPressed))
+            return bt
+        }()
+        navigationItem.leftBarButtonItem = cancelButton
+        
+        let saveButton: UIBarButtonItem = {
+            let bt = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(selectMenuSaveButtonPressed))
+            return bt
+        }()
+        
 
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 0
+        navigationItem.rightBarButtonItem = saveButton
     }
+    
+    func setupUI() {
+        let headerView = UIView()
+        headerView.backgroundColor = .white
+        view.addSubview(headerView)
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        headerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        headerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        headerView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        
+        headerView.addSubview(addButton)
+        addButton.layer.cornerRadius = 10
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        addButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20).isActive = true
+        
+        view.addSubview(menuTableView)
+        menuTableView.translatesAutoresizingMaskIntoConstraints = false
+        menuTableView.dataSource = self
+        menuTableView.delegate = self
+        menuTableView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        menuTableView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        menuTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        menuTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: cellId)
+        
+        menuTableView.allowsMultipleSelectionDuringEditing = true
+        menuTableView.setEditing(true, animated: true)
+        
+    }
+    
+    @objc func selectMenuCancelButtonPressed() {
+        print("selectMenuCancelButtonPressed")
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func selectMenuSaveButtonPressed() {
+        print("selectMenuSaveButtonPressed")
+    }
+    
+    @objc func addButtonPressed() {
+        print("addButtonPressed")
+    }
+    
+    lazy var fetchedMenuItemController: NSFetchedResultsController = { () -> NSFetchedResultsController<MenuItem> in
+        let fetchRequest = NSFetchRequest<MenuItem>(entityName: "MenuItem")
+        let nameDescriptors = NSSortDescriptor(key: "", ascending: true)
+        fetchRequest.sortDescriptors = [nameDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        return frc
+    }()
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    let headerLable: UILabel = {
+        let lb = UILabel()
+        lb.text = "Select Menu"
+        return lb
+    }()
+    
+    let addButton: UIButton = {
+        let bt = UIButton()
+        bt.setTitle("Add New Menu", for: .normal)
+        bt.setTitleColor(UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1), for: .normal)
+        bt.constraintWidth(equalToConstant: 200)
+        bt.constraintHeight(equalToConstant: 40)
+        bt.setBackgroundColor(UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1), for: .normal)
+        bt.setBackgroundColor(UIColor(red: 190/255, green: 190/255, blue: 190/255, alpha: 1), for: .highlighted)
+        bt.clipsToBounds = true
+        bt.layer.cornerRadius = 25
+        let plusImage = #imageLiteral(resourceName: "plus2")
+        bt.setImage(plusImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: plusImage.size.width / 2)
+        bt.contentHorizontalAlignment = .center
+        return bt
+    }()
+    
+    let menuTableView: UITableView = {
+        let tv = UITableView()
+        return tv
+    }()
+    
+   
+}
+
+extension MenuSelectTableViewController: UITableViewDelegate {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
-
     
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         
-        cell.textLabel?.text = "Something"
         return cell
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if let cell = tableView.cellForRow(at: indexPath) {
+            print("celltap \(indexPath)")
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) {
+            cell.accessoryType = .none
+        }
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
+    
 }

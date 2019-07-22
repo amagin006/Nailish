@@ -22,6 +22,7 @@
 		435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */; };
 		435D0EC422DE6D0F00BB7F55 /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */; };
 		435D0EC622DE844200BB7F55 /* ReportDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */; };
+		4376D08222E3B0BA00A4671D /* MenuMasterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */; };
 		437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75A4229FABFF0032E371 /* AppDelegate.swift */; };
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
@@ -57,6 +58,7 @@
 		435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNormalTextField.swift; sourceTree = "<group>"; };
 		435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReportCollectionViewCell.swift; path = Naily/Customer/View/ReportCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailViewController.swift; sourceTree = "<group>"; };
+		4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuMasterTableViewCell.swift; sourceTree = "<group>"; };
 		437A75A1229FABFF0032E371 /* Naily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437A75A4229FABFF0032E371 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		437A75A9229FABFF0032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */,
 				433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */,
 				435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */,
+				4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */,
 				435C903822C41CB0009D6D4E /* MainCalenderViewController.swift in Sources */,
 				4337059D22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift in Sources */,
+				4376D08222E3B0BA00A4671D /* MenuMasterTableViewCell.swift in Sources */,
 				435C903D22C50CF8009D6D4E /* MyUILabel.swift in Sources */,
 				43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */,
 				435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */,

@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import Photos
 
-class NewReportViewController: UIViewController {
+class NewReportViewController: UIViewController, UIPopoverPresentationControllerDelegate {
     
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
@@ -126,22 +126,6 @@ class NewReportViewController: UIViewController {
         timeSV.axis = .horizontal
         timeSV.distribution = .fillEqually
         timeSV.spacing = 12
-        
-//        let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceTextField])
-//        priceSV.axis = .vertical
-//        priceSV.spacing = 5
-//
-//
-//        let priceBoxSV = UIStackView(arrangedSubviews: [priceSV, tipsSV])
-//        priceBoxSV.axis = .horizontal
-//        priceBoxSV.distribution = .fillEqually
-//        priceBoxSV.spacing = 10
-//
-//        let menuItemSV = UIStackView(arrangedSubviews: [menuTitleLabel])
-//        menuItemSV.axis = .horizontal
-//        menuItemSV.distribution = .fillProportionally
-//        menuItemSV.spacing = 12
-//        menuItemSV.alignment = .top
         
         let dateAndTimeSV = UIStackView(arrangedSubviews: [visitDateSV, timeSV])
         dateAndTimeSV.translatesAutoresizingMaskIntoConstraints = false
@@ -323,6 +307,21 @@ class NewReportViewController: UIViewController {
     
     @objc func tapMenu() {
         print("tapmenu")
+        let menuSelectTableVC = MenuSelectTableViewController()
+//        menuSelectTableVC.modalPresentationStyle = .popover
+//        menuSelectTableVC.popoverPresentationController?.delegate = self
+//        let width = view.bounds.width
+//        let height = view.bounds.height - 120
+//        menuSelectTableVC.popoverPresentationController?.sourceView = view
+//        menuSelectTableVC.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: 32, width: 0, height: 0)
+//        menuSelectTableVC.preferredContentSize = CGSize(width: width, height: height)
+        
+        let menuSelectTableNVC = LightStatusNavigationController(rootViewController: menuSelectTableVC)
+        self.present(menuSelectTableNVC, animated: true, completion: nil)
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
