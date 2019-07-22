@@ -32,7 +32,6 @@
         <attribute name="menuName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
     </entity>
-    <entity name="MenuMaster" representedClassName="MenuMaster" syncable="YES" codeGenerationType="class"/>
     <entity name="ReportItem" representedClassName="ReportItem" syncable="YES" codeGenerationType="class">
         <attribute name="endTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="memo" optional="YES" attributeType="String" syncable="YES"/>
@@ -52,6 +51,5 @@
         <element name="ClientInfo" positionX="-52.82421875" positionY="-21.88671875" width="128" height="300"/>
         <element name="MenuItem" positionX="-225" positionY="135" width="128" height="90"/>
         <element name="ReportItem" positionX="-391.0234375" positionY="101.546875" width="128" height="225"/>
-        <element name="MenuMaster" positionX="-225" positionY="135" width="128" height="45"/>
     </elements>
 </model>

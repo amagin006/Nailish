@@ -79,11 +79,14 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
     
     @objc func addButtonPressed() {
         print("addButtonPressed")
+        let newSelectVC = NewMenuViewController()
+        let newSelectNVC = LightStatusNavigationController(rootViewController: newSelectVC)
+        self.present(newSelectNVC, animated: true, completion: nil)
     }
     
-    lazy var fetchedMenuItemController: NSFetchedResultsController = { () -> NSFetchedResultsController<MenuItem> in
+    lazy var fetchedMenuItemResultsControllerr: NSFetchedResultsController = { () -> NSFetchedResultsController<MenuItem> in
         let fetchRequest = NSFetchRequest<MenuItem>(entityName: "MenuItem")
-        let nameDescriptors = NSSortDescriptor(key: "", ascending: true)
+        let nameDescriptors = NSSortDescriptor(key: "MenuName", ascending: true)
         fetchRequest.sortDescriptors = [nameDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
@@ -105,7 +108,7 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         bt.setBackgroundColor(UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1), for: .normal)
         bt.setBackgroundColor(UIColor(red: 190/255, green: 190/255, blue: 190/255, alpha: 1), for: .highlighted)
         bt.clipsToBounds = true
-        bt.layer.cornerRadius = 25
+        bt.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
         let plusImage = #imageLiteral(resourceName: "plus2")
         bt.setImage(plusImage.withRenderingMode(.alwaysOriginal), for: .normal)
         bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: plusImage.size.width / 2)
@@ -121,19 +124,22 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
    
 }
 
-extension MenuSelectTableViewController: UITableViewDelegate {
+extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsControllerDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        if let count = fetchedMenuItemResultsControllerr.sections?[section].numberOfObjects {
+            return count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
-        
+        cell.menuItem = fetchedMenuItemResultsControllerr.object(at: indexPath)
         return cell
     }
     
@@ -141,21 +147,17 @@ extension MenuSelectTableViewController: UITableViewDelegate {
         return 50
     }
     
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let cell = tableView.cellForRow(at: indexPath) {
-            print("celltap \(indexPath)")
-        }
+//        if let cell = tableView.cellForRow(at: indexPath) {
+//            print("celltap \(indexPath)")
+//        }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            cell.accessoryType = .none
-        }
+//        if let cell = tableView.cellForRow(at: indexPath) {
+//
+//        }
     }
     
     

@@ -10,6 +10,14 @@ import UIKit
 
 class MenuMasterTableViewCell: UITableViewCell {
     
+    var menuItem: MenuItem? {
+        didSet {
+            menuitemTagLabel.text = menuItem!.menuName ?? ""
+            menuitemTagLabel.backgroundColor = UIColor.hex(string: menuItem!.color ?? "#96CEB4", alpha: 1)
+            priceLabel.text = String(menuItem!.price)
+        }
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: "menuCell")
         setupUI()

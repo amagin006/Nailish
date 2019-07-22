@@ -420,7 +420,6 @@ class NewReportViewController: UIViewController, UIPopoverPresentationController
         return lb
     }()
     
-    
     let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"

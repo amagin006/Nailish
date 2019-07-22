@@ -17,8 +17,6 @@ class MyTextField: UITextField, UITextFieldDelegate {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .white
         self.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        self.layer.borderWidth = 1
-        self.layer.cornerRadius = 10
         self.layer.borderColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1).cgColor
         self.inputAccessoryView = toolbar
         self.delegate = self
