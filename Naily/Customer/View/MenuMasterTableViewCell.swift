@@ -13,8 +13,9 @@ class MenuMasterTableViewCell: UITableViewCell {
     var menuItem: MenuItem? {
         didSet {
             menuitemTagLabel.text = menuItem!.menuName ?? ""
-            menuitemTagLabel.backgroundColor = UIColor.hex(string: menuItem!.color ?? "#96CEB4", alpha: 1)
-            priceLabel.text = String(menuItem!.price)
+            priceLabel.text = menuItem!.price
+            let color = TagColor.stringToSGColor(str: menuItem!.color!)
+            menuitemTagLabel.backgroundColor = color!.rawValue
         }
     }
     
@@ -40,14 +41,19 @@ class MenuMasterTableViewCell: UITableViewCell {
 
     func setupUI() {
         addSubview(menuitemTagLabel)
-        addSubview(priceLabel)
+
         menuitemTagLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         menuitemTagLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         menuitemTagLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 60).isActive = true
         
-        priceLabel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        priceLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        priceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+        let priceSV = UIStackView(arrangedSubviews: [dollar, priceLabel])
+        priceSV.axis = .horizontal
+        priceSV.spacing = 4
+        addSubview(priceSV)
+        priceSV.translatesAutoresizingMaskIntoConstraints = false
+        priceSV.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        priceSV.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        priceSV.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
         
     }
 
@@ -69,10 +75,17 @@ class MenuMasterTableViewCell: UITableViewCell {
         return lb
     }()
     
+    let dollar: UILabel = {
+        let lb = UILabel()
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.text = "$"
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
     let priceLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "$ 70.00"
         return lb
     }()
     

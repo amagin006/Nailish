@@ -32,6 +32,7 @@
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
 		43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */; };
 		43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49E22A7B315003A07ED /* MyTextField.swift */; };
+		43C52F5822E6751600322342 /* TagColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C52F5722E6751600322342 /* TagColor.swift */; };
 		43DA461822C7E13B00000FB5 /* AddAppointmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DA461722C7E13B00000FB5 /* AddAppointmentViewController.swift */; };
 		43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */; };
 		43E6915422AB0B8A0097C2B6 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */; };
@@ -71,6 +72,7 @@
 		43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewCell.swift; sourceTree = "<group>"; };
 		43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClientViewController.swift; sourceTree = "<group>"; };
 		43A2F49E22A7B315003A07ED /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
+		43C52F5722E6751600322342 /* TagColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagColor.swift; sourceTree = "<group>"; };
 		43DA461722C7E13B00000FB5 /* AddAppointmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAppointmentViewController.swift; sourceTree = "<group>"; };
 		43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportViewController.swift; sourceTree = "<group>"; };
 		43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				43ED0B0022BD8D4100781893 /* DatePickerKeyboard.swift */,
 				43ED0B0822BD998900781893 /* CustomDateToolbar.swift */,
 				43ED0B0222BD8D5B00781893 /* Extensions.swift */,
+				43C52F5722E6751600322342 /* TagColor.swift */,
 			);
 			path = HelperExtentions;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */,
 				43ED0B0522BD8D9100781893 /* MyTextView.swift in Sources */,
 				43ED0B0122BD8D4100781893 /* DatePickerKeyboard.swift in Sources */,
+				43C52F5822E6751600322342 /* TagColor.swift in Sources */,
 				437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */,
 				4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */,
 				43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */,

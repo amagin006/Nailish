@@ -12,7 +12,23 @@ import CoreData
 class NewMenuViewController: UIViewController {
     
     var selectButtonArr = [UIButton]()
-    var selectColor = UIColor.init()
+    var selectColor = String()
+    
+    var menuItem: MenuItem! {
+        didSet {
+            menuNameTextField.text = menuItem.menuName
+//            priceLable.text = String(menuItem.price)
+            if let colorStr = menuItem.color {
+                let color = TagColor.stringToSGColor(str: colorStr)
+                for button in selectButtonArr {
+                    if button.backgroundColor == color?.rawValue {
+                        button.setImage(#imageLiteral(resourceName: "check-icon2"), for: .normal)
+                        selectColor = colorStr
+                    }
+                }
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +52,11 @@ class NewMenuViewController: UIViewController {
         menuNameSV.axis = .horizontal
         menuNameSV.distribution = .fillEqually
         menuNameSV.spacing = 10
-        let priceSV = UIStackView(arrangedSubviews: [priceTitleLable, priceLable])
+        
+        let priceAmountSV = UIStackView(arrangedSubviews: [dollar, priceLable, dot, priceDecimalLable])
+        priceAmountSV.axis = .horizontal
+        priceAmountSV.spacing = 3
+        let priceSV = UIStackView(arrangedSubviews: [priceTitleLable, priceAmountSV])
         priceSV.axis = .horizontal
         priceSV.distribution = .fillEqually
         priceSV.spacing = 10
@@ -77,25 +97,45 @@ class NewMenuViewController: UIViewController {
     }
     
     @objc func selectColorTap(_ sender: UIButton) {
-        print("selectColorTap \(sender)")
         for button in selectButtonArr {
             button.setImage(#imageLiteral(resourceName: "clear"), for: .normal)
         }
         sender.setImage(#imageLiteral(resourceName: "check-icon2"), for: .normal)
         sender.imageView?.contentMode = .scaleAspectFit
         sender.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        selectColor = sender.backgroundColor!
+        let color = sender.backgroundColor!
+        let colorStr = TagColor(rawValue: color)?.description
+        selectColor = colorStr!
         print(selectColor)
-        
     }
     
     @objc func saveTapped() {
         print("saveTapped")
+        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+        if menuItem == nil {
+            let newMenuItem = NSEntityDescription.insertNewObject(forEntityName: "MenuItem", into: manageContext)
+            newMenuItem.setValue(menuNameTextField.text!, forKey: "menuName")
+            let priceDec = priceDecimalLable.text ?? "0"
+            let priceDecStr = String(priceDec.prefix(2))
+            
+            let price = "\(priceLable.text ?? "0").\(priceDecStr)"
+            print(price)
+            newMenuItem.setValue(price, forKey: "price")
+            newMenuItem.setValue(selectColor, forKey: "color")
+            do {
+                try fetchedMenuItemResultsControllerr.managedObjectContext.save()
+            } catch let err {
+                print("failed save Report - \(err)")
+            }
+            dismiss(animated: true, completion: {
+                
+            })
+        }
     }
     
     lazy var fetchedMenuItemResultsControllerr: NSFetchedResultsController = { () -> NSFetchedResultsController<MenuItem> in
         let fetchRequest = NSFetchRequest<MenuItem>(entityName: "MenuItem")
-        let nameDescriptors = NSSortDescriptor(key: "MenuName", ascending: true)
+        let nameDescriptors = NSSortDescriptor(key: "color", ascending: true)
         fetchRequest.sortDescriptors = [nameDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
@@ -121,8 +161,36 @@ class NewMenuViewController: UIViewController {
         return lb
     }()
     
+    let dollar: UILabel = {
+        let lb = UILabel()
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.text = "$"
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
     let priceLable: MyTextField = {
         let tf = MyTextField()
+        tf.keyboardType = .numberPad
+        tf.placeholder = "20"
+        tf.constraintWidth(equalToConstant: 60)
+        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+        return tf
+    }()
+    
+    let dot: UILabel = {
+        let lb = UILabel()
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.text = "."
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let priceDecimalLable: MyTextField = {
+        let tf = MyTextField()
+        tf.keyboardType = .numberPad
+        tf.placeholder = "00"
+        tf.constraintWidth(equalToConstant: 50)
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
@@ -146,7 +214,7 @@ class NewMenuViewController: UIViewController {
         bt.layer.cornerRadius = 20
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
-        bt.backgroundColor = UIColor(red: 255/255, green: 92/255, blue: 92/255, alpha: 1)
+        bt.backgroundColor = UIColor(red: 255/255, green: 123/255, blue: 123/255, alpha: 1)
         return bt
     }()
     
@@ -157,7 +225,7 @@ class NewMenuViewController: UIViewController {
         bt.layer.cornerRadius = 20
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
-        bt.backgroundColor = UIColor(red: 123/255, green: 92/255, blue: 255/255, alpha: 1)
+        bt.backgroundColor = UIColor(red: 123/255, green: 138/255, blue: 255/255, alpha: 1)
         return bt
     }()
     
@@ -168,7 +236,7 @@ class NewMenuViewController: UIViewController {
         bt.layer.cornerRadius = 20
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
-        bt.backgroundColor = UIColor(red: 103/255, green: 180/255, blue: 129/255, alpha: 1)
+        bt.backgroundColor = UIColor(red: 121/255, green: 175/255, blue: 82/255, alpha: 1)
         return bt
     }()
     
@@ -179,7 +247,7 @@ class NewMenuViewController: UIViewController {
         bt.layer.cornerRadius = 20
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
-        bt.backgroundColor = UIColor(red: 245/255, green: 222/255, blue: 143/255, alpha: 1)
+        bt.backgroundColor = UIColor(red: 225/255, green: 123/255, blue: 255/255, alpha: 1)
         return bt
     }()
     
@@ -190,7 +258,7 @@ class NewMenuViewController: UIViewController {
         bt.layer.cornerRadius = 20
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
-        bt.backgroundColor = UIColor(red: 177/255, green: 177/255, blue: 177/255, alpha: 1)
+        bt.backgroundColor = UIColor(red: 165/255, green: 165/255, blue: 165/255, alpha: 1)
         return bt
     }()
     
@@ -198,3 +266,4 @@ class NewMenuViewController: UIViewController {
     
 
 }
+

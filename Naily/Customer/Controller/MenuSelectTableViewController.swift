@@ -18,6 +18,7 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         
         setupNavigationUI()
         setupUI()
+        fetchMenuItem()
     }
     
     func setupNavigationUI() {
@@ -32,8 +33,6 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
             let bt = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(selectMenuSaveButtonPressed))
             return bt
         }()
-        
-
         navigationItem.rightBarButtonItem = saveButton
     }
     
@@ -68,6 +67,14 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         
     }
     
+    func fetchMenuItem() {
+        do {
+            try fetchedMenuItemResultsControllerr.performFetch()
+        } catch let err {
+            print("failed fetch Menu Item  \(err)")
+        }
+    }
+    
     @objc func selectMenuCancelButtonPressed() {
         print("selectMenuCancelButtonPressed")
         dismiss(animated: true, completion: nil)
@@ -86,7 +93,7 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
     
     lazy var fetchedMenuItemResultsControllerr: NSFetchedResultsController = { () -> NSFetchedResultsController<MenuItem> in
         let fetchRequest = NSFetchRequest<MenuItem>(entityName: "MenuItem")
-        let nameDescriptors = NSSortDescriptor(key: "MenuName", ascending: true)
+        let nameDescriptors = NSSortDescriptor(key: "color", ascending: false)
         fetchRequest.sortDescriptors = [nameDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
