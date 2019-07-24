@@ -10,13 +10,19 @@ import UIKit
 import CoreData
 import Photos
 
-class NewReportViewController: UIViewController {
+private let menuCellId = "menuCell"
+
+class NewReportViewController: UIViewController, UITableViewDataSource {
     
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
     var selectImageNum = 0
     var client: ClientInfo?
     var reload: ((ReportItem) -> ())?
+    var selectedMenuItemArray = [MenuItem]()
+    let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+    
+    var menuSVRow = [UIView]()
     var report: ReportItem? {
         didSet {
             if let image1 = report?.snapshot1, let image2 = report?.snapshot2,
@@ -52,12 +58,12 @@ class NewReportViewController: UIViewController {
             if let end = report?.endTime {
                 endTimeTextField.text = formatter.string(from: end)
             }
-            menuTextField.text = report?.menu
-            if let price = report?.price {
-                priceTextField.text = String(price)
-            }
-            if let tips = report?.tips {
-                tipsTextField.text = String(tips)
+            if let menuItems = report?.selectedMenuItems {
+                
+                print("report========= 27 \(menuItems)")
+                selectedMenuItemArray = Array(menuItems) as! [MenuItem]
+                print("selectedMenuItemArray ====== \(selectedMenuItemArray)")
+                menuTableView.reloadData()
             }
             memoTextView.text = report?.memo
         }
@@ -78,11 +84,20 @@ class NewReportViewController: UIViewController {
         return frc
     }()
     
+    lazy var fetchedSelectedMenuItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<SelectedMenuItem> in
+        let fetchRequest = NSFetchRequest<SelectedMenuItem>(entityName: "SelectedMenuItem")
+        let menuItemDescriptors = NSSortDescriptor(key: "color", ascending: false)
+        fetchRequest.sortDescriptors = [menuItemDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        return frc
+    }()
+    
     private func setupUI() {
         view.addSubview(formScrollView)
         formScrollView.anchors(topAnchor: view.topAnchor, leadingAnchor: view.leadingAnchor, trailingAnchor: view.trailingAnchor, bottomAnchor: view.bottomAnchor)
         formScrollView.frame = self.view.frame
-        formScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 2000)
+        formScrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: 1400)
 
         formScrollView.addSubview(reportMainImageView)
         reportMainImageView.topAnchor.constraint(equalTo: formScrollView.topAnchor).isActive = true
@@ -131,31 +146,47 @@ class NewReportViewController: UIViewController {
         timeSV.distribution = .fillEqually
         timeSV.spacing = 12
         
-        let priceSV = UIStackView(arrangedSubviews: [priceTitleLabel, priceTextField])
-        priceSV.axis = .vertical
-        priceSV.spacing = 5
+        let dateAndTimeSV = UIStackView(arrangedSubviews: [visitDateSV, timeSV])
+        dateAndTimeSV.translatesAutoresizingMaskIntoConstraints = false
+        dateAndTimeSV.axis = .vertical
+        dateAndTimeSV.spacing = 16
+        dateAndTimeSV.alignment = .fill
+        formScrollView.addSubview(dateAndTimeSV)
+        dateAndTimeSV.topAnchor.constraint(equalTo: subImageSV.bottomAnchor, constant: 20).isActive = true
+        dateAndTimeSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        dateAndTimeSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         
-        let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsTextField])
-        tipsSV.axis = .vertical
-        tipsSV.spacing = 5
+        formScrollView.addSubview(addMenuButton)
+        addMenuButton.topAnchor.constraint(equalTo: dateAndTimeSV.bottomAnchor, constant: 20).isActive = true
+        addMenuButton.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+
+        formScrollView.addSubview(menuTableView)
+        menuTableView.translatesAutoresizingMaskIntoConstraints = false
+        menuTableView.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+        menuTableView.delegate = self
+        menuTableView.dataSource = self
+        menuTableView.heightAnchor.constraint(equalToConstant: 240).isActive = true
+        menuTableView.topAnchor.constraint(equalTo: addMenuButton.bottomAnchor, constant: 20).isActive = true
+        menuTableView.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        menuTableView.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+        menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: menuCellId)
         
-        let priceBoxSV = UIStackView(arrangedSubviews: [priceSV, tipsSV])
-        priceBoxSV.axis = .horizontal
-        priceBoxSV.distribution = .fillEqually
-        priceBoxSV.spacing = 10
+        let tipsPriceSV = UIStackView(arrangedSubviews: [dollar, tipsLable, dot, tipsDecimalLable])
+        tipsPriceSV.axis = .horizontal
+        tipsPriceSV.spacing = 4
+        let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsPriceSV])
+        tipsSV.axis = .horizontal
         
-        let discriptionSV = UIStackView(arrangedSubviews: [
-            visitDateSV, timeSV, menuTitleLabel, menuTextField, priceBoxSV, memoLabel,
-            memoTextView])
-        discriptionSV.translatesAutoresizingMaskIntoConstraints = false
-        discriptionSV.axis = .vertical
-        discriptionSV.spacing = 12
-        discriptionSV.alignment = .fill
-        formScrollView.addSubview(discriptionSV)
+        let tipAndMemoSV = UIStackView(arrangedSubviews: [tipsSV, memoLabel, memoTextView])
+        formScrollView.addSubview(tipAndMemoSV)
+        tipAndMemoSV.translatesAutoresizingMaskIntoConstraints = false
+        tipAndMemoSV.spacing = 10
+        tipAndMemoSV.axis = .vertical
         
-        discriptionSV.topAnchor.constraint(equalTo: subImageSV.bottomAnchor, constant: 20).isActive = true
-        discriptionSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
-        discriptionSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+        tipAndMemoSV.topAnchor.constraint(equalTo: menuTableView.bottomAnchor, constant: 20).isActive = true
+        tipAndMemoSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        tipAndMemoSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+        
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -177,6 +208,7 @@ class NewReportViewController: UIViewController {
         }()
         navigationItem.rightBarButtonItem = saveButton
     }
+    
     
     @objc func selectImage(_ sender: UITapGestureRecognizer) {
         selectImageNum = sender.view!.tag
@@ -226,10 +258,9 @@ class NewReportViewController: UIViewController {
     
     @objc func reportSeveButtonPressed() {
         print("reportSeveButtonPressed")
-        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
         if report == nil {
             let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
-            
+
             for i in 0..<reportImageViews.count {
                 let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
                 newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
@@ -237,11 +268,10 @@ class NewReportViewController: UIViewController {
             newReport.setValue(visitTextField.toolbar.datePicker.date, forKey: "visitDate")
             newReport.setValue(startTimeTextField.toolbar.datePicker.date, forKey: "startTime")
             newReport.setValue(endTimeTextField.toolbar.datePicker.date, forKey: "endTime")
-            newReport.setValue(menuTextField.text ?? "", forKey: "menu")
-            newReport.setValue(Int(priceTextField.text ?? "0"), forKey: "price")
-            newReport.setValue(Int(tipsTextField.text ?? "0"), forKey: "tips")
+            newReport.setValue(tipsTotalStr(), forKey: "tips")
             newReport.setValue(memoTextView.text ?? "", forKey: "memo")
             newReport.setValue(client, forKey: "client")
+
             do {
                 try fetchedReportItemResultsController.managedObjectContext.save()
             } catch let err {
@@ -249,6 +279,7 @@ class NewReportViewController: UIViewController {
             }
             dismiss(animated: true)
         } else {
+            print("report != nil")
             report?.snapshot1 = reportImageViews[0].image?.jpegData(compressionQuality: 0.1)
             report?.snapshot2 = reportImageViews[1].image?.jpegData(compressionQuality: 0.1)
             report?.snapshot3 = reportImageViews[2].image?.jpegData(compressionQuality: 0.1)
@@ -265,10 +296,9 @@ class NewReportViewController: UIViewController {
             if let endTime = endTimeTextField.text {
                 report?.endTime = formatter.date(from: endTime)
             }
-            report?.menu = menuTextField.text ?? ""
-            report?.price = Int32(priceTextField.text ?? "0")!
-            report?.tips = Int32(tipsTextField.text ?? "0")!
+            report?.tips = tipsTotalStr()
             report?.memo = memoTextView.text ?? ""
+            report?.client = client
             do {
                 try fetchedReportItemResultsController.managedObjectContext.save()
             } catch let err {
@@ -278,6 +308,40 @@ class NewReportViewController: UIViewController {
                 self.reload?(self.report!)
             }
         }
+    }
+    
+    func tipsTotalStr() -> String {
+        var tips = String()
+        var tipsDec = String()
+        if tipsLable.text != nil && tipsLable.text != "" {
+            tips = tipsLable.text!
+        } else {
+            tips = "0"
+        }
+        if tipsDecimalLable.text != nil && tipsDecimalLable.text != "" {
+            tipsDec = tipsDecimalLable.text!
+        } else {
+            tipsDec = "00"
+        }
+        let tipsDecStr = String(tipsDec.prefix(2))
+        return "\(tips).\(tipsDecStr)"
+    }
+    
+    @objc func tapMenu() {
+        print("tapmenu")
+        let menuSelectTableVC = MenuSelectTableViewController()
+        menuSelectTableVC.delegate = self
+        if let report = report {
+            // report object
+            menuSelectTableVC.reportItem = report
+        } else {
+            // create a report object
+            let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
+            menuSelectTableVC.reportItem = newReport as? ReportItem
+        }
+        
+        let menuSelectTableNVC = LightStatusNavigationController(rootViewController: menuSelectTableVC)
+        self.present(menuSelectTableNVC, animated: true, completion: nil)
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
@@ -302,6 +366,7 @@ class NewReportViewController: UIViewController {
     }
     
     // UIParts
+    
     let formScrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.backgroundColor = .white
@@ -317,7 +382,6 @@ class NewReportViewController: UIViewController {
     
     let subImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
-
         iv.layer.borderWidth = 2
         iv.layer.borderColor = UIColor.lightGray.cgColor
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -341,13 +405,15 @@ class NewReportViewController: UIViewController {
 
     let visitTextField: DatePickerKeyboard = {
         let tf = DatePickerKeyboard()
+        tf.contentInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
+        tf.sizeToFit()
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
     
     let startTimeTitleLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "Start"
+        lb.text = "Start Time"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
@@ -357,13 +423,14 @@ class NewReportViewController: UIViewController {
         lb.layer.borderWidth = 0
         lb.layer.cornerRadius = 0
         lb.contentInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
+        lb.sizeToFit()
         lb.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return lb
     }()
     
     let endTimeTitleLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "End"
+        lb.text = "End Time"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
@@ -376,32 +443,39 @@ class NewReportViewController: UIViewController {
         return lb
     }()
     
-    
     let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"
+        lb.constraintWidth(equalToConstant: 60)
+        lb.backgroundColor = .red
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
     
-    let menuTextField: MyTextField = {
-        let tf = MyTextField()
-        tf.font = UIFont.systemFont(ofSize: 18)
-        return tf
+    let addMenuButton: UIButton = {
+        let bt = UIButton()
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.backgroundColor = UIColor(red: 255/255, green: 162/255, blue: 162/255, alpha: 1)
+        bt.setTitle("SELECT MENU", for: .normal)
+        bt.setTitleColor(.white, for: .normal)
+        bt.constraintWidth(equalToConstant: 200)
+        bt.constraintHeight(equalToConstant: 40)
+        bt.addTarget(self, action: #selector(tapMenu), for: .touchUpInside)
+        bt.setBackgroundColor(UIColor(red: 255/255, green: 162/255, blue: 162/255, alpha: 1), for: .normal)
+        bt.setBackgroundColor(UIColor(red: 178/255, green: 114/255, blue: 114/255, alpha: 1), for: .selected)
+        bt.layer.cornerRadius = 20
+        bt.clipsToBounds = true
+        let plusImage = #imageLiteral(resourceName: "plus")
+        bt.setImage(plusImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: plusImage.size.width / 2)
+        bt.contentHorizontalAlignment = .center
+        return bt
     }()
     
-    let priceTitleLabel: UILabel = {
-        let lb = UILabel()
-        lb.text = "price"
-        lb.font = UIFont.boldSystemFont(ofSize: 12)
-        return lb
-    }()
-    
-    let priceTextField: MyTextField = {
-        let tf = MyTextField()
-        tf.font = UIFont.systemFont(ofSize: 18)
-        tf.keyboardType = .decimalPad
-        return tf
+    let menuTableView: UITableView = {
+        let tv = UITableView()
+        tv.isScrollEnabled = true
+        return tv
     }()
     
     let tipsTitleLabel: UILabel = {
@@ -411,10 +485,37 @@ class NewReportViewController: UIViewController {
         return lb
     }()
     
-    let tipsTextField: MyTextField = {
+    let dollar: UILabel = {
+        let lb = UILabel()
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.text = "$"
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let tipsLable: MyTextField = {
         let tf = MyTextField()
-        tf.font = UIFont.systemFont(ofSize: 18)
-        tf.keyboardType = .decimalPad
+        tf.keyboardType = .numberPad
+        tf.placeholder = "5"
+        tf.constraintWidth(equalToConstant: 65)
+        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+        return tf
+    }()
+    
+    let dot: UILabel = {
+        let lb = UILabel()
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.text = "."
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let tipsDecimalLable: MyTextField = {
+        let tf = MyTextField()
+        tf.keyboardType = .numberPad
+        tf.placeholder = "00"
+        tf.constraintWidth(equalToConstant: 50)
+        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
     
@@ -427,13 +528,50 @@ class NewReportViewController: UIViewController {
 
     let memoTextView: MyTextView = {
         let tv = MyTextView()
-        tv.constraintHeight(equalToConstant: 100)
+        tv.constraintHeight(equalToConstant: 300)
+        tv.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         tv.font = UIFont.systemFont(ofSize: 18)
         return tv
     }()
 }
 
+extension NewReportViewController: UITableViewDelegate, MenuSelectTableViewControllerDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !selectedMenuItemArray.isEmpty {
+            return selectedMenuItemArray.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
+        cell.selectionStyle = .none
+        if !selectedMenuItemArray.isEmpty {
+            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
+            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
+            cell.menuitemTagLabel.backgroundColor = color?.rawValue
+            cell.priceLabel.text = selectedMenuItemArray[indexPath.row].price
+        }
+        cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
+    
+    func newReportSaveTapped(selectMenu: Set<MenuItem>) {
+        selectedMenuItemArray.removeAll()
+        selectedMenuItemArray = Array(selectMenu)
+        menuTableView.reloadData()
+    }
+    
+}
+
+
 extension NewReportViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)

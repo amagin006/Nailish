@@ -122,7 +122,10 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         pageControl.numberOfPages = snapshotImages.count
         pageControl.pageIndicatorTintColor = UIColor.init(red: 226/255, green: 226/255, blue: 226/255, alpha: 1)
         pageControl.currentPageIndicatorTintColor = UIColor.init(red: 107/255, green: 163/255, blue: 239/255, alpha: 1)
-        pageControl.anchors(topAnchor: nailScrollImageView.bottomAnchor, leadingAnchor: nailScrollImageView.leadingAnchor, trailingAnchor: nailScrollImageView.trailingAnchor, bottomAnchor: nil)
+        pageControl.anchors(topAnchor: nailScrollImageView.bottomAnchor,
+                            leadingAnchor: nailScrollImageView.leadingAnchor,
+                            trailingAnchor: nailScrollImageView.trailingAnchor,
+                            bottomAnchor: nil)
     }
     
     func setupDiscription() {
@@ -228,8 +231,6 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
                 self.report = editReport
             }
             let editNVC = LightStatusNavigationController(rootViewController: editVC)
-//            editVC.modalPresentationStyle = .overCurrentContext
-//            editVC.modalTransitionStyle = .crossDissolve
             self.present(editNVC, animated: true, completion: nil)
         })
         let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{

@@ -42,11 +42,4 @@ class MyTextView: UITextView, UITextViewDelegate {
         }
         textView.resignFirstResponder()
     }
-    
-//    func textViewDidChange(_ textView: UITextView) {
-//        var frame = textView.frame
-//        frame.size.height = textView.contentSize.height
-//        textView.frame = frame
-//    }
-//
 }

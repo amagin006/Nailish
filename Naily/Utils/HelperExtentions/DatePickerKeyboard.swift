@@ -34,9 +34,11 @@ class DatePickerKeyboard: UITextView, UITextViewDelegate {
         self.heightAnchor.constraint(equalToConstant: 40).isActive = true
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .white
-        self.font = UIFont.systemFont(ofSize: 14)
+        self.font = UIFont.systemFont(ofSize: 18)
         self.inputView = toolbar.datePicker
         self.inputAccessoryView = toolbar
+        self.isScrollEnabled = false
+        self.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         self.delegate = self
     }
 
@@ -56,7 +58,7 @@ class DatePickerKeyboard: UITextView, UITextViewDelegate {
 
 class MyPaddingLabel: UILabel {
     override func drawText(in rect: CGRect) {
-        let insets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        let insets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 0)
         super.drawText(in: rect.inset(by: insets))
     }
 }
@@ -86,12 +88,14 @@ class TimePickerKeyboard: UITextView, UITextViewDelegate {
         self.heightAnchor.constraint(equalToConstant: 40).isActive = true
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .white
-        self.font = UIFont.systemFont(ofSize: 14)
+        self.font = UIFont.systemFont(ofSize: 18)
         self.layer.borderWidth = 1
         self.layer.cornerRadius = 10
         self.layer.borderColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1).cgColor
         self.inputView = toolbar.datePicker
         self.inputAccessoryView = toolbar
+        self.isScrollEnabled = false
+        self.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         self.delegate = self
     }
     
