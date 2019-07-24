@@ -59,8 +59,10 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
                 endTimeTextField.text = formatter.string(from: end)
             }
             if let menuItems = report?.selectedMenuItems {
-                print(menuItems)
+                
+                print("report========= 27 \(menuItems)")
                 selectedMenuItemArray = Array(menuItems) as! [MenuItem]
+                print("selectedMenuItemArray ====== \(selectedMenuItemArray)")
                 menuTableView.reloadData()
             }
             memoTextView.text = report?.memo
@@ -334,30 +336,13 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
             menuSelectTableVC.reportItem = report
         } else {
             // create a report object
-//            let manageContext = CoreDataManager.shared.persistentContainer.viewContext
             let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
-            
-//            for i in 0..<reportImageViews.count {
-//                let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
-//                newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
-//            }
-//            newReport.setValue(visitTextField.toolbar.datePicker.date, forKey: "visitDate")
-//            newReport.setValue(startTimeTextField.toolbar.datePicker.date, forKey: "startTime")
-//            newReport.setValue(endTimeTextField.toolbar.datePicker.date, forKey: "endTime")
-//            newReport.setValue(tipsTotalStr(), forKey: "tips")
-//            newReport.setValue(memoTextView.text ?? "", forKey: "memo")
-//            newReport.setValue(client, forKey: "client")
-            report = newReport as? ReportItem
             menuSelectTableVC.reportItem = newReport as? ReportItem
         }
         
         let menuSelectTableNVC = LightStatusNavigationController(rootViewController: menuSelectTableVC)
         self.present(menuSelectTableNVC, animated: true, completion: nil)
     }
-    
-//    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-//        return .none
-//    }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
         
