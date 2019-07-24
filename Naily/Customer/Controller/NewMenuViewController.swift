@@ -126,7 +126,6 @@ class NewMenuViewController: UIViewController {
             }
             let priceDecStr = String(priceDec.prefix(2))
             let price = "\(priceLable.text ?? "0").\(priceDecStr)"
-            print(price)
             newMenuItem.setValue(price, forKey: "price")
             newMenuItem.setValue(selectColor, forKey: "color")
             do {

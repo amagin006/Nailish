@@ -11,14 +11,11 @@
     <entity name="ClientInfo" representedClassName="ClientInfo" syncable="YES" codeGenerationType="class">
         <attribute name="clientImage" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="dateOfBirth" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="facebook" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="instagram" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastVistDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="line" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mailAdress" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="memo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="mobileNumber" optional="YES" attributeType="String" syncable="YES"/>
@@ -40,7 +37,7 @@
         <attribute name="snapshot3" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="snapshot4" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="tips" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="tips" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="visitDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ClientInfo" inverseName="items" inverseEntity="ClientInfo" syncable="YES"/>
         <relationship name="selectedMenuItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SelectedMenuItem" inverseName="reportItem" inverseEntity="SelectedMenuItem" syncable="YES"/>
@@ -53,9 +50,9 @@
     </entity>
     <elements>
         <element name="Appointment" positionX="-39.01171875" positionY="-45.4609375" width="128" height="135"/>
-        <element name="ClientInfo" positionX="191.875" positionY="-20.02734375" width="128" height="300"/>
+        <element name="ClientInfo" positionX="191.875" positionY="-20.02734375" width="128" height="253"/>
         <element name="MenuItem" positionX="-332.0078125" positionY="-38.05078125" width="128" height="88"/>
         <element name="ReportItem" positionX="-746.67578125" positionY="52.3203125" width="128" height="208"/>
-        <element name="SelectedMenuItem" positionX="-559.57421875" positionY="63.5" width="128" height="103"/>
+        <element name="SelectedMenuItem" positionX="-565.8046875" positionY="30.484375" width="128" height="103"/>
     </elements>
 </model>

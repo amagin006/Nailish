@@ -18,11 +18,13 @@ private let cellId = "AddMenuCell"
 class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
+    var reportItem: ReportItem!
     var selectCell = Set<MenuItem>()
     
     override func viewWillAppear(_ animated: Bool) {
         fetchMenuItem()
         menuTableView.reloadData()
+        
     }
     
     override func viewDidLoad() {
@@ -94,6 +96,51 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
     @objc func selectMenuSaveButtonPressed() {
         print("selectMenuSaveButtonPressed")
         dismiss(animated: true) {
+            let predicate = NSPredicate(format: "reportItem == %@", self.reportItem)
+            self.fetchedSelectedMenuItemResultsController.fetchRequest.predicate = predicate
+            
+            do {
+                try self.fetchedSelectedMenuItemResultsController.performFetch()
+            } catch let err {
+                print("Failed fetch SelectedMenuItem \(err)")
+            }
+            
+            let oldSelectMenuItem = self.fetchedSelectedMenuItemResultsController.fetchedObjects
+            let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+            if oldSelectMenuItem == [] {
+                print("oldSelectMenuItem == nil")
+                for item in self.selectCell {
+                    let newSelectedItem = NSEntityDescription.insertNewObject(forEntityName: "SelectedMenuItem", into: manageContext)
+                    newSelectedItem.setValue(item.menuName, forKey: "menuName")
+                    newSelectedItem.setValue(item.color, forKey: "color")
+                    newSelectedItem.setValue(item.price, forKey: "price")
+                    newSelectedItem.setValue(self.reportItem, forKey: "reportItem")
+                    do {
+                        try self.fetchedSelectedMenuItemResultsController.managedObjectContext.save()
+                    } catch let err {
+                        print("failed save Report - \(err)")
+                    }
+                }
+            } else {
+                print("oldSelectMenuItem != nil")
+                // delete selectedMenuItem and create new selectedMenuItem
+                _ = self.fetchedSelectedMenuItemResultsController.managedObjectContext.deletedObjects
+                for item in self.selectCell {
+                    print("selectCell")
+                    let newSelectedItem = NSEntityDescription.insertNewObject(forEntityName: "SelectedMenuItem", into: manageContext)
+                    newSelectedItem.setValue(item.menuName, forKey: "menuName")
+                    newSelectedItem.setValue(item.color, forKey: "color")
+                    newSelectedItem.setValue(item.price, forKey: "price")
+                    newSelectedItem.setValue(self.reportItem, forKey: "reportItem")
+                    do {
+                        try self.fetchedSelectedMenuItemResultsController.managedObjectContext.save()
+                    } catch let err {
+                        print("failed save Report - \(err)")
+                    }
+                }
+            }
+            
+//            self.reportItem.selectedMenuItems = NSSet(set: self.selectCell)
             self.delegate?.newReportSaveTapped(selectMenu: self.selectCell)
             self.selectCell.removeAll()
         }
@@ -114,7 +161,16 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         return frc
     }()
-
+    
+    lazy var fetchedSelectedMenuItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<SelectedMenuItem> in
+        let fetchRequest = NSFetchRequest<SelectedMenuItem>(entityName: "SelectedMenuItem")
+        let menuItemDescriptors = NSSortDescriptor(key: "color", ascending: false)
+        fetchRequest.sortDescriptors = [menuItemDescriptors]
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        return frc
+    }()
+    
     let headerLable: UILabel = {
         let lb = UILabel()
         lb.text = "Select Menu"
