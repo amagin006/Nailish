@@ -57,13 +57,6 @@ class MenuMasterTableViewCell: UITableViewCell {
         
     }
 
-    let checkicon: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.image = #imageLiteral(resourceName: "check-icon2")
-        return iv
-    }()
-
     let menuitemTagLabel: menuTagLabel = {
         let lb = menuTagLabel()
         lb.translatesAutoresizingMaskIntoConstraints = false

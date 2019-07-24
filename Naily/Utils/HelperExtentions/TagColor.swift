@@ -16,7 +16,7 @@ enum TagColor {
     case gray
 }
 
-//TagColor(rawValue: UIColor.red) // SGColor.red
+//TagColor(rawValue: UIColor.red) // TagColor.red
 //TagColor.red.description // "red"
 //TagColor.stringToSGColor(str: "red")
 

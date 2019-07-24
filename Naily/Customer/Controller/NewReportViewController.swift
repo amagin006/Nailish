@@ -10,13 +10,18 @@ import UIKit
 import CoreData
 import Photos
 
-class NewReportViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+private let menuCellId = "menuCell"
+
+class NewReportViewController: UIViewController, UITableViewDataSource {
     
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
     var selectImageNum = 0
     var client: ClientInfo?
     var reload: ((ReportItem) -> ())?
+    var selectedMenuItem = [MenuItem]()
+    
+    var menuSVRow = [UIView]()
     var report: ReportItem? {
         didSet {
             if let image1 = report?.snapshot1, let image2 = report?.snapshot2,
@@ -133,44 +138,25 @@ class NewReportViewController: UIViewController, UIPopoverPresentationController
         dateAndTimeSV.spacing = 16
         dateAndTimeSV.alignment = .fill
         formScrollView.addSubview(dateAndTimeSV)
-        
         dateAndTimeSV.topAnchor.constraint(equalTo: subImageSV.bottomAnchor, constant: 20).isActive = true
         dateAndTimeSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
         dateAndTimeSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         
-        let menuView = UIView()
-        formScrollView.addSubview(menuView)
-        menuView.translatesAutoresizingMaskIntoConstraints = false
-        menuView.topAnchor.constraint(equalTo: dateAndTimeSV.bottomAnchor, constant: 30).isActive = true
-        menuView.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
-        menuView.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
-        menuView.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        menuView.backgroundColor = .yellow
+        formScrollView.addSubview(addMenuButton)
+        addMenuButton.topAnchor.constraint(equalTo: dateAndTimeSV.bottomAnchor, constant: 20).isActive = true
+        addMenuButton.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+
+        formScrollView.addSubview(menuTableView)
+        menuTableView.translatesAutoresizingMaskIntoConstraints = false
+        menuTableView.backgroundColor = .white
+        menuTableView.delegate = self
+        menuTableView.dataSource = self
+        menuTableView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        menuTableView.topAnchor.constraint(equalTo: addMenuButton.bottomAnchor, constant: 20).isActive = true
+        menuTableView.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
+        menuTableView.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
+        menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: menuCellId)
         
-        menuView.addSubview(addMenuButton)
-        addMenuButton.topAnchor.constraint(equalTo: menuView.topAnchor).isActive = true
-        addMenuButton.trailingAnchor.constraint(equalTo: menuView.trailingAnchor).isActive = true
-        
-        let menuItemSV = UIStackView(arrangedSubviews: [menuitemTagLabel, priceLabel])
-        menuItemSV.axis = .horizontal
-        menuItemSV.spacing = 20
-        let menuItem2SV = UIStackView(arrangedSubviews: [menuitemTagLabel2, priceLabel2])
-        menuItem2SV.axis = .horizontal
-        menuItem2SV.spacing = 20
-        
-        let menuItemRowsSV = UIStackView(arrangedSubviews: [menuItemSV, menuItem2SV])
-        menuItemRowsSV.axis = .vertical
-        menuItemRowsSV.alignment = .trailing
-        menuItemRowsSV.spacing = 10
-        
-        menuTitleLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        let menuboxSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuItemRowsSV])
-        menuboxSV.alignment = .top
-        formScrollView.addSubview(menuboxSV)
-        menuboxSV.translatesAutoresizingMaskIntoConstraints = false
-        menuboxSV.topAnchor.constraint(equalTo: addMenuButton.bottomAnchor, constant: 30).isActive = true
-        menuboxSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
-        menuboxSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         
         let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsTextField])
         tipsSV.axis = .horizontal
@@ -181,7 +167,7 @@ class NewReportViewController: UIViewController, UIPopoverPresentationController
         tipAndMemoSV.spacing = 10
         tipAndMemoSV.axis = .vertical
         
-        tipAndMemoSV.topAnchor.constraint(equalTo: menuView.bottomAnchor, constant: 20).isActive = true
+        tipAndMemoSV.topAnchor.constraint(equalTo: menuTableView.bottomAnchor, constant: 20).isActive = true
         tipAndMemoSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
         tipAndMemoSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         
@@ -308,14 +294,7 @@ class NewReportViewController: UIViewController, UIPopoverPresentationController
     @objc func tapMenu() {
         print("tapmenu")
         let menuSelectTableVC = MenuSelectTableViewController()
-//        menuSelectTableVC.modalPresentationStyle = .popover
-//        menuSelectTableVC.popoverPresentationController?.delegate = self
-//        let width = view.bounds.width
-//        let height = view.bounds.height - 120
-//        menuSelectTableVC.popoverPresentationController?.sourceView = view
-//        menuSelectTableVC.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.midX, y: 32, width: 0, height: 0)
-//        menuSelectTableVC.preferredContentSize = CGSize(width: width, height: height)
-        
+        menuSelectTableVC.delegate = self
         let menuSelectTableNVC = LightStatusNavigationController(rootViewController: menuSelectTableVC)
         self.present(menuSelectTableNVC, animated: true, completion: nil)
     }
@@ -346,6 +325,7 @@ class NewReportViewController: UIViewController, UIPopoverPresentationController
     }
     
     // UIParts
+    
     let formScrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.backgroundColor = .white
@@ -361,7 +341,6 @@ class NewReportViewController: UIViewController, UIPopoverPresentationController
     
     let subImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
-
         iv.layer.borderWidth = 2
         iv.layer.borderColor = UIColor.lightGray.cgColor
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -449,6 +428,12 @@ class NewReportViewController: UIViewController, UIPopoverPresentationController
         return bt
     }()
     
+    let menuTableView: UITableView = {
+        let tv = UITableView()
+        tv.isScrollEnabled = true
+        return tv
+    }()
+    
     let menuitemTagLabel: menuTagLabel = {
         let lb = menuTagLabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
@@ -519,7 +504,49 @@ class NewReportViewController: UIViewController, UIPopoverPresentationController
     }()
 }
 
+extension NewReportViewController: UITableViewDelegate, MenuSelectTableViewControllerDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !selectedMenuItem.isEmpty {
+            return selectedMenuItem.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
+        if !selectedMenuItem.isEmpty {
+            cell.menuitemTagLabel.text = selectedMenuItem[indexPath.row].menuName
+            let color = TagColor.stringToSGColor(str: selectedMenuItem[indexPath.row].color!)
+            cell.menuitemTagLabel.backgroundColor = color?.rawValue
+            cell.priceLabel.text = selectedMenuItem[indexPath.row].price
+//            for selectedItem in selectedMenuItem {
+//                print(selectedItem)
+//                cell.menuitemTagLabel.text = selectedItem.menuName
+//                let color = TagColor.stringToSGColor(str: selectedItem.color!)
+//                cell.menuitemTagLabel.backgroundColor = color?.rawValue
+//                cell.priceLabel.text = selectedItem.price
+//            }
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
+    
+    func newReportSaveTapped(selectMenu: Set<MenuItem>) {
+        print("newReportSaveTapped")
+        selectedMenuItem.removeAll()
+        selectedMenuItem = Array(selectMenu)
+        menuTableView.reloadData()
+    }
+    
+}
+
+
 extension NewReportViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)

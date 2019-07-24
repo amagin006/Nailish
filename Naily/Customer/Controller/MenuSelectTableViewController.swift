@@ -9,13 +9,24 @@
 import UIKit
 import CoreData
 
+protocol MenuSelectTableViewControllerDelegate: class {
+    func newReportSaveTapped(selectMenu: Set<MenuItem>)
+}
+
 private let cellId = "AddMenuCell"
 
 class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
-
+    
+    weak var delegate: MenuSelectTableViewControllerDelegate?
+    var selectCell = Set<MenuItem>()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchMenuItem()
+        menuTableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupNavigationUI()
         setupUI()
         fetchMenuItem()
@@ -82,6 +93,10 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
     
     @objc func selectMenuSaveButtonPressed() {
         print("selectMenuSaveButtonPressed")
+        dismiss(animated: true) {
+            self.delegate?.newReportSaveTapped(selectMenu: self.selectCell)
+            self.selectCell.removeAll()
+        }
     }
     
     @objc func addButtonPressed() {
@@ -154,18 +169,18 @@ extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsCo
         return 50
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-//        if let cell = tableView.cellForRow(at: indexPath) {
-//            print("celltap \(indexPath)")
-//        }
+        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
+            guard let menuItem = cell.menuItem else { return }
+            selectCell.insert(menuItem)
+        }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-//        if let cell = tableView.cellForRow(at: indexPath) {
-//
-//        }
+        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
+            guard let menuItem = cell.menuItem else { return }
+            selectCell.remove(menuItem)
+        }
     }
-    
-    
 }

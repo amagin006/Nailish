@@ -8,11 +8,11 @@
 
 import UIKit
 import CoreData
-
 class NewMenuViewController: UIViewController {
     
     var selectButtonArr = [UIButton]()
     var selectColor = String()
+    var colorSelected = false
     
     var menuItem: MenuItem! {
         didSet {
@@ -48,11 +48,13 @@ class NewMenuViewController: UIViewController {
     }
     
     func setupUI() {
+        menuNameTextField.addTarget(self, action: #selector(saveButtonValidation), for: .editingChanged)
         let menuNameSV = UIStackView(arrangedSubviews: [menuNameTitleLabel, menuNameTextField])
         menuNameSV.axis = .horizontal
         menuNameSV.distribution = .fillEqually
         menuNameSV.spacing = 10
         
+        priceLable.addTarget(self, action: #selector(saveButtonValidation), for: .editingChanged)
         let priceAmountSV = UIStackView(arrangedSubviews: [dollar, priceLable, dot, priceDecimalLable])
         priceAmountSV.axis = .horizontal
         priceAmountSV.spacing = 3
@@ -105,8 +107,9 @@ class NewMenuViewController: UIViewController {
         sender.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         let color = sender.backgroundColor!
         let colorStr = TagColor(rawValue: color)?.description
+        colorSelected = true
+        saveButtonValidation()
         selectColor = colorStr!
-        print(selectColor)
     }
     
     @objc func saveTapped() {
@@ -115,9 +118,13 @@ class NewMenuViewController: UIViewController {
         if menuItem == nil {
             let newMenuItem = NSEntityDescription.insertNewObject(forEntityName: "MenuItem", into: manageContext)
             newMenuItem.setValue(menuNameTextField.text!, forKey: "menuName")
-            let priceDec = priceDecimalLable.text ?? "0"
+            var priceDec = String()
+            if priceDecimalLable.text != nil && priceDecimalLable.text != "" {
+                priceDec = priceDecimalLable.text!
+            } else {
+                priceDec = "00"
+            }
             let priceDecStr = String(priceDec.prefix(2))
-            
             let price = "\(priceLable.text ?? "0").\(priceDecStr)"
             print(price)
             newMenuItem.setValue(price, forKey: "price")
@@ -127,9 +134,8 @@ class NewMenuViewController: UIViewController {
             } catch let err {
                 print("failed save Report - \(err)")
             }
-            dismiss(animated: true, completion: {
-                
-            })
+            
+            dismiss(animated: true)
         }
     }
     
@@ -141,6 +147,15 @@ class NewMenuViewController: UIViewController {
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         return frc
     }()
+    
+    @objc func saveButtonValidation() {
+        guard menuNameTextField.text != nil, priceLable.text != nil else { return }
+        if menuNameTextField.text != "" && priceLable.text != "" && colorSelected{
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
+    }
     
     // UI Parts
     let menuNameTitleLabel: UILabel = {
@@ -200,6 +215,7 @@ class NewMenuViewController: UIViewController {
         bt.setTitle("Save", for: .normal)
         bt.layer.cornerRadius = 20
         bt.clipsToBounds = true
+        bt.isEnabled = false
         bt.constraintWidth(equalToConstant: 100)
         bt.constraintHeight(equalToConstant: 40)
         bt.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
