@@ -14,7 +14,6 @@
 		433705AA22AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */; };
 		433705AC22AEEFF900EBC58B /* UIView+ConstraintLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433705AB22AEEFF900EBC58B /* UIView+ConstraintLayout.swift */; };
 		435C902E22C3557C009D6D4E /* ClientModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */; };
-		435C903122C419D1009D6D4E /* FSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435C903022C419D1009D6D4E /* FSCalendar.framework */; };
 		435C903822C41CB0009D6D4E /* MainCalenderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903722C41CB0009D6D4E /* MainCalenderViewController.swift */; };
 		435C903B22C50A3B009D6D4E /* CalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903A22C50A3B009D6D4E /* CalendarTableViewCell.swift */; };
 		435C903D22C50CF8009D6D4E /* MyUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903C22C50CF8009D6D4E /* MyUILabel.swift */; };
@@ -42,7 +41,23 @@
 		43ED0B0522BD8D9100781893 /* MyTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0422BD8D9100781893 /* MyTextView.swift */; };
 		43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0822BD998900781893 /* CustomDateToolbar.swift */; };
 		43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */; };
+		4E990D4A22E971F600C7244A /* FSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435C903022C419D1009D6D4E /* FSCalendar.framework */; };
+		4E990D4B22E971F600C7244A /* FSCalendar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 435C903022C419D1009D6D4E /* FSCalendar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4E990D4C22E971F700C7244A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4E990D4B22E971F600C7244A /* FSCalendar.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4313075722E12F1A00A2A804 /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
@@ -90,7 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				435C903122C419D1009D6D4E /* FSCalendar.framework in Frameworks */,
+				4E990D4A22E971F600C7244A /* FSCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +271,7 @@
 				437A759E229FABFF0032E371 /* Frameworks */,
 				437A759F229FABFF0032E371 /* Resources */,
 				435C903222C41A00009D6D4E /* ShellScript */,
+				4E990D4C22E971F700C7244A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -515,7 +531,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8NSL5N58W5;
+				DEVELOPMENT_TEAM = 25222AKG24;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -525,7 +541,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "work.shota-iwamoto.Naily";
+				PRODUCT_BUNDLE_IDENTIFIER = "work.shota-iwamoto.NailyCopy";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -537,7 +553,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8NSL5N58W5;
+				DEVELOPMENT_TEAM = 25222AKG24;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -547,7 +563,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "work.shota-iwamoto.Naily";
+				PRODUCT_BUNDLE_IDENTIFIER = "work.shota-iwamoto.NailyCopy";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
