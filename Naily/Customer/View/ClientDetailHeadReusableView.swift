@@ -121,7 +121,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         newReportButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
     
-    @objc func addButtonPressed() {
+    @objc func newReportButtonPressed() {
         self.delegate?.newReportButtonPressed()
     }
     
@@ -187,7 +187,6 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         vi.backgroundColor = .white
         return vi
     }()
-    
     
     var clientImage: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
@@ -278,7 +277,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         bt.backgroundColor = UIColor.init(red: 58/255, green: 158/255, blue: 85/255, alpha: 1)
         bt.setTitle("NEW REPORT", for: .normal)
         bt.setTitleColor(.white, for: .normal)
-        bt.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        bt.addTarget(self, action: #selector(newReportButtonPressed), for: .touchUpInside)
         bt.setBackgroundColor(UIColor.init(red: 58/255, green: 158/255, blue: 85/255, alpha: 1), for: .normal)
         bt.setBackgroundColor(UIColor.init(red: 14/255, green: 57/255, blue: 26/255, alpha: 1), for: .selected)
         bt.layer.cornerRadius = 20
@@ -318,20 +317,5 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
         return lb
     }()
-    
-    let addReportButton: UIButton = {
-        let bt = UIButton()
-        bt.setTitle("New Report", for: .normal)
-        bt.translatesAutoresizingMaskIntoConstraints = false
-        bt.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
-        bt.setTitleColor(.black, for: .normal)
-        bt.layer.borderWidth = 2
-        bt.layer.cornerRadius = 10
-        bt.backgroundColor = .white
-        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
-        bt.contentEdgeInsets = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
-        bt.layer.borderColor = UIColor(cgColor: #colorLiteral(red: 0, green: 0.5433532596, blue: 0.7865155935, alpha: 1)).cgColor
-        bt.setImage(UIImage(named: "addicon1"), for: .normal)
-        return bt
-    }()
+
 }
