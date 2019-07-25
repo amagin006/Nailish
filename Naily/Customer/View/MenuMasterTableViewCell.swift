@@ -10,7 +10,7 @@ import UIKit
 
 class MenuMasterTableViewCell: UITableViewCell {
     
-    var menuItem: MenuItem? {
+    var menuItem: SelectedMenuItem? {
         didSet {
             menuitemTagLabel.text = menuItem!.menuName ?? ""
             priceLabel.text = menuItem!.price
@@ -81,5 +81,4 @@ class MenuMasterTableViewCell: UITableViewCell {
         lb.translatesAutoresizingMaskIntoConstraints = false
         return lb
     }()
-    
 }
