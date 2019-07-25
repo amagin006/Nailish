@@ -25,6 +25,10 @@ struct CoreDataManager {
         return container
     }()
     
+    var viewContext: NSManagedObjectContext {
+        return self.persistentContainer.viewContext
+    }
+    
     func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {

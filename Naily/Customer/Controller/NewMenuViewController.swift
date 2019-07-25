@@ -14,29 +14,12 @@ class NewMenuViewController: UIViewController {
     var selectColor = String()
     var colorSelected = false
     
-    var menuItem: MenuItem! {
-        didSet {
-            menuNameTextField.text = menuItem.menuName
-//            priceLable.text = String(menuItem.price)
-            if let colorStr = menuItem.color {
-                let color = TagColor.stringToSGColor(str: colorStr)
-                for button in selectButtonArr {
-                    if button.backgroundColor == color?.rawValue {
-                        button.setImage(#imageLiteral(resourceName: "check-icon2"), for: .normal)
-                        selectColor = colorStr
-                    }
-                }
-            }
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavigationUI()
         setupUI()
     }
-    
     
     func setupNavigationUI() {
         navigationItem.title = "Select Menu"
@@ -113,39 +96,29 @@ class NewMenuViewController: UIViewController {
     }
     
     @objc func saveTapped() {
-        print("saveTapped")
         let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-        if menuItem == nil {
-            let newMenuItem = NSEntityDescription.insertNewObject(forEntityName: "MenuItem", into: manageContext)
-            newMenuItem.setValue(menuNameTextField.text!, forKey: "menuName")
-            var priceDec = String()
-            if priceDecimalLable.text != nil && priceDecimalLable.text != "" {
-                priceDec = priceDecimalLable.text!
-            } else {
-                priceDec = "00"
-            }
-            let priceDecStr = String(priceDec.prefix(2))
-            let price = "\(priceLable.text ?? "0").\(priceDecStr)"
-            newMenuItem.setValue(price, forKey: "price")
-            newMenuItem.setValue(selectColor, forKey: "color")
-            do {
-                try fetchedMenuItemResultsControllerr.managedObjectContext.save()
-            } catch let err {
-                print("failed save Report - \(err)")
-            }
-            
-            dismiss(animated: true)
+        
+        let newSelectedItem = SelectedMenuItem(context: manageContext)
+        newSelectedItem.menuName = menuNameTextField.text!
+        
+        // TODO: Refactor price
+        var priceDec = String()
+        if priceDecimalLable.text != nil && priceDecimalLable.text != "" {
+            priceDec = priceDecimalLable.text!
+        } else {
+            priceDec = "00"
         }
+        let priceDecStr = String(priceDec.prefix(2))
+        let price = "\(priceLable.text ?? "0").\(priceDecStr)"
+        newSelectedItem.price = price
+        newSelectedItem.color = selectColor
+        do {
+            try manageContext.save()
+        } catch let err {
+            print("failed save Report - \(err)")
+        }
+        dismiss(animated: true)
     }
-    
-    lazy var fetchedMenuItemResultsControllerr: NSFetchedResultsController = { () -> NSFetchedResultsController<MenuItem> in
-        let fetchRequest = NSFetchRequest<MenuItem>(entityName: "MenuItem")
-        let nameDescriptors = NSSortDescriptor(key: "color", ascending: true)
-        fetchRequest.sortDescriptors = [nameDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        return frc
-    }()
     
     @objc func saveButtonValidation() {
         guard menuNameTextField.text != nil, priceLable.text != nil else { return }
@@ -276,9 +249,5 @@ class NewMenuViewController: UIViewController {
         bt.backgroundColor = UIColor(red: 165/255, green: 165/255, blue: 165/255, alpha: 1)
         return bt
     }()
-    
-    
-    
-
 }
 

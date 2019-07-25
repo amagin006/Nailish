@@ -8,12 +8,13 @@
 
 import UIKit
 
+
 class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource {
     
     private let menuCellId = "menuCellId"
     
     var snapshotImages = [Data]()
-    var reportDetailselectedMenu = [SelectedMenuItem]()
+    var selectedMenuItemArray = [SelectedMenuItem]()
     var report: ReportItem! {
         didSet {
             fullNameLabel.text = "\(report.client!.firstName!) \(report.client?.lastName ?? "")"
@@ -45,7 +46,9 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
             if let snapshot4 = report.snapshot4 {
                 snapshotImages.append(snapshot4)
             }
-            reportDetailselectedMenu = Array(report.selectedMenuItems!) as! [SelectedMenuItem]
+            if let reportDetailselectedMenus = report.selectedMenuItems {
+                selectedMenuItemArray = Array(reportDetailselectedMenus) as! [SelectedMenuItem]
+            }
             memoLabel.text = report.memo ?? ""
             addImageToScrollView(images: snapshotImages)
         }
@@ -144,29 +147,6 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         menuSV.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 20).isActive = true
         menuSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.9).isActive = true
         menuSV.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-
-        
-//        let menuContentSV = UIStackView(arrangedSubviews: [menuContentLabel, menuContentPrice])
-//        menuContentSV.axis = .horizontal
-//
-//        let menuContentSV2 = UIStackView(arrangedSubviews: [menuContentLabel2, menuContentPrice2])
-//        menuContentSV.axis = .horizontal
-//
-//        let allMenuContentSV = UIStackView(arrangedSubviews: [menuContentSV, menuContentSV2])
-//        allMenuContentSV.axis = .vertical
-//        allMenuContentSV.spacing = 8
-//        allMenuContentSV.alignment = .trailing
-//
-//        let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, allMenuContentSV])
-//        menuSV.axis = .horizontal
-//        menuSV.alignment = .top
-//        menuSV.spacing = 10
-//
-//        scrollView.addSubview(menuSV)
-//        menuSV.translatesAutoresizingMaskIntoConstraints = false
-//        menuSV.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 20).isActive = true
-//        menuSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.9).isActive = true
-//        menuSV.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
         let priceView = UIView()
         scrollView.addSubview(priceView)
@@ -464,8 +444,9 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
                   """
         return lb
     }()
-    
+
 }
+
 
 extension ReportDetailViewController: UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -473,26 +454,22 @@ extension ReportDetailViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if !reportDetailselectedMenu.isEmpty {
-//            return reportDetailselectedMenu.count
-//        }
-        return 5
+        if !selectedMenuItemArray.isEmpty {
+            return selectedMenuItemArray.count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
         cell.selectionStyle = .none
-        print("======= cell =====")
-        cell.menuitemTagLabel.text = "hello"
-        cell.menuitemTagLabel.backgroundColor = .blue
-        cell.priceLabel.text = "10.00"
-//        if !selectedMenuItemArray.isEmpty {
-//            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
-//            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
-//            cell.menuitemTagLabel.backgroundColor = color?.rawValue
-//            cell.priceLabel.text = selectedMenuItemArray[indexPath.row].price
-//        }
-//        cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+        if !selectedMenuItemArray.isEmpty {
+            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
+            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
+            cell.menuitemTagLabel.backgroundColor = color?.rawValue
+            cell.priceLabel.text = selectedMenuItemArray[indexPath.row].price
+        }
+        cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         return cell
     }
     

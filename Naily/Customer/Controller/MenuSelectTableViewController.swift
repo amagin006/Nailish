@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 protocol MenuSelectTableViewControllerDelegate: class {
-    func newReportSaveTapped(selectMenu: Set<MenuItem>)
+    func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>)
 }
 
 private let cellId = "AddMenuCell"
@@ -18,20 +18,18 @@ private let cellId = "AddMenuCell"
 class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
-    var reportItem: ReportItem!
-    var selectCell = Set<MenuItem>()
+    var selectedCell = Set<SelectedMenuItem>()
     
     override func viewWillAppear(_ animated: Bool) {
         fetchMenuItem()
         menuTableView.reloadData()
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchMenuItem()
         setupNavigationUI()
         setupUI()
+        fetchMenuItem()
     }
     
     func setupNavigationUI() {
@@ -74,78 +72,33 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         menuTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         menuTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: cellId)
-        
         menuTableView.allowsMultipleSelectionDuringEditing = true
         menuTableView.setEditing(true, animated: true)
-        
     }
     
     func fetchMenuItem() {
         do {
-            try fetchedMenuItemResultsControllerr.performFetch()
+            try fetchedSelectedMenuItemResultsController.performFetch()
         } catch let err {
             print("failed fetch Menu Item  \(err)")
         }
     }
     
     @objc func selectMenuCancelButtonPressed() {
-        print("selectMenuCancelButtonPressed")
         dismiss(animated: true, completion: nil)
     }
     
     @objc func selectMenuSaveButtonPressed() {
-        print("selectMenuSaveButtonPressed")
         dismiss(animated: true) {
-            let predicate = NSPredicate(format: "reportItem == %@", self.reportItem)
-            self.fetchedSelectedMenuItemResultsController.fetchRequest.predicate = predicate
-            
-            do {
-                try self.fetchedSelectedMenuItemResultsController.performFetch()
-            } catch let err {
-                print("Failed fetch SelectedMenuItem \(err)")
-            }
-            
-            let oldSelectMenuItems = self.fetchedSelectedMenuItemResultsController.fetchedObjects
-            
-            if oldSelectMenuItems != [] {
-                // delete selectedMenuItem and create new selectedMenuItem
-                _ = self.fetchedSelectedMenuItemResultsController.managedObjectContext.deletedObjects
-            }
-            
-            let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-            let selectedMenuItemsSet = NSSet()
-            for item in self.selectCell {
-                let selectedMenuItem = NSEntityDescription.insertNewObject(forEntityName: "SelectedMenuItem", into: manageContext)
-                selectedMenuItem.setValue(item.menuName, forKey: "menuName")
-                selectedMenuItem.setValue(item.color, forKey: "color")
-                selectedMenuItem.setValue(item.price, forKey: "price")
-                selectedMenuItem.setValue(self.reportItem, forKey: "reportItem")
-                selectedMenuItemsSet.adding(selectedMenuItem)
-            }
-            print("self.reportItem.selectedMenuItems? \(self.reportItem.selectedMenuItems!)")
-            
-            
-            self.reportItem.selectedMenuItems = NSSet(set: selectedMenuItemsSet)
-            self.delegate?.newReportSaveTapped(selectMenu: self.selectCell)
-            self.selectCell.removeAll()
+            self.delegate?.newReportSaveTapped(selectMenu: self.selectedCell)
         }
     }
     
     @objc func addButtonPressed() {
-        print("addButtonPressed")
         let newSelectVC = NewMenuViewController()
         let newSelectNVC = LightStatusNavigationController(rootViewController: newSelectVC)
         self.present(newSelectNVC, animated: true, completion: nil)
     }
-    
-    lazy var fetchedMenuItemResultsControllerr: NSFetchedResultsController = { () -> NSFetchedResultsController<MenuItem> in
-        let fetchRequest = NSFetchRequest<MenuItem>(entityName: "MenuItem")
-        let nameDescriptors = NSSortDescriptor(key: "color", ascending: false)
-        fetchRequest.sortDescriptors = [nameDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        return frc
-    }()
     
     lazy var fetchedSelectedMenuItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<SelectedMenuItem> in
         let fetchRequest = NSFetchRequest<SelectedMenuItem>(entityName: "SelectedMenuItem")
@@ -183,8 +136,6 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         let tv = UITableView()
         return tv
     }()
-    
-   
 }
 
 extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsControllerDelegate {
@@ -194,7 +145,7 @@ extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsCo
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = fetchedMenuItemResultsControllerr.sections?[section].numberOfObjects {
+        if let count = fetchedSelectedMenuItemResultsController.sections?[section].numberOfObjects {
             return count
         }
         return 0
@@ -202,7 +153,7 @@ extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsCo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
-        cell.menuItem = fetchedMenuItemResultsControllerr.object(at: indexPath)
+        cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
         return cell
     }
     
@@ -214,14 +165,14 @@ extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsCo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
             guard let menuItem = cell.menuItem else { return }
-            selectCell.insert(menuItem)
+            selectedCell.insert(menuItem)
         }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
             guard let menuItem = cell.menuItem else { return }
-            selectCell.remove(menuItem)
+            selectedCell.remove(menuItem)
         }
     }
 }
