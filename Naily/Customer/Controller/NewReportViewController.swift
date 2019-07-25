@@ -19,12 +19,14 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
     var selectImageNum = 0
     var client: ClientInfo?
     var reload: ((ReportItem) -> ())?
-    var selectedMenuItemArray = [MenuItem]()
+    var menuItemArray = [MenuItem]()
+    var selectedMenuItemSet = NSSet()
     let manageContext = CoreDataManager.shared.persistentContainer.viewContext
     
     var menuSVRow = [UIView]()
     var report: ReportItem? {
         didSet {
+            client = report?.client
             if let image1 = report?.snapshot1, let image2 = report?.snapshot2,
                 let image3 = report?.snapshot3, let image4 = report?.snapshot4 {
                 reportImages.append(UIImage(data: image1)!)
@@ -61,8 +63,8 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
             if let menuItems = report?.selectedMenuItems {
                 
                 print("report========= 27 \(menuItems)")
-                selectedMenuItemArray = Array(menuItems) as! [MenuItem]
-                print("selectedMenuItemArray ====== \(selectedMenuItemArray)")
+                menuItemArray = Array(menuItems) as! [MenuItem]
+                print("selectedMenuItemArray ====== \(menuItemArray)")
                 menuTableView.reloadData()
             }
             memoTextView.text = report?.memo
@@ -271,7 +273,6 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
             newReport.setValue(tipsTotalStr(), forKey: "tips")
             newReport.setValue(memoTextView.text ?? "", forKey: "memo")
             newReport.setValue(client, forKey: "client")
-
             do {
                 try fetchedReportItemResultsController.managedObjectContext.save()
             } catch let err {
@@ -299,6 +300,7 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
             report?.tips = tipsTotalStr()
             report?.memo = memoTextView.text ?? ""
             report?.client = client
+            print("report//////====== ==== ==\(report)")
             do {
                 try fetchedReportItemResultsController.managedObjectContext.save()
             } catch let err {
@@ -538,8 +540,8 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
 extension NewReportViewController: UITableViewDelegate, MenuSelectTableViewControllerDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !selectedMenuItemArray.isEmpty {
-            return selectedMenuItemArray.count
+        if !menuItemArray.isEmpty {
+            return menuItemArray.count
         }
         return 0
     }
@@ -547,11 +549,11 @@ extension NewReportViewController: UITableViewDelegate, MenuSelectTableViewContr
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
         cell.selectionStyle = .none
-        if !selectedMenuItemArray.isEmpty {
-            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
-            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
+        if !menuItemArray.isEmpty {
+            cell.menuitemTagLabel.text = menuItemArray[indexPath.row].menuName
+            let color = TagColor.stringToSGColor(str: menuItemArray[indexPath.row].color!)
             cell.menuitemTagLabel.backgroundColor = color?.rawValue
-            cell.priceLabel.text = selectedMenuItemArray[indexPath.row].price
+            cell.priceLabel.text = menuItemArray[indexPath.row].price
         }
         cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         return cell
@@ -562,8 +564,10 @@ extension NewReportViewController: UITableViewDelegate, MenuSelectTableViewContr
     }
     
     func newReportSaveTapped(selectMenu: Set<MenuItem>) {
-        selectedMenuItemArray.removeAll()
-        selectedMenuItemArray = Array(selectMenu)
+        menuItemArray.removeAll()
+        selectedMenuItemSet = selectMenu as NSSet
+        menuItemArray = Array(selectMenu)
+        print("selectedMenuItemArray \(menuItemArray)")
         menuTableView.reloadData()
     }
     

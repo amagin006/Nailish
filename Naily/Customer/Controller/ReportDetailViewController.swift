@@ -8,10 +8,12 @@
 
 import UIKit
 
-class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
+class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource {
+    
+    private let menuCellId = "menuCellId"
     
     var snapshotImages = [Data]()
-    
+    var reportDetailselectedMenu = [SelectedMenuItem]()
     var report: ReportItem! {
         didSet {
             fullNameLabel.text = "\(report.client!.firstName!) \(report.client?.lastName ?? "")"
@@ -43,6 +45,7 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
             if let snapshot4 = report.snapshot4 {
                 snapshotImages.append(snapshot4)
             }
+            reportDetailselectedMenu = Array(report.selectedMenuItems!) as! [SelectedMenuItem]
             memoLabel.text = report.memo ?? ""
             addImageToScrollView(images: snapshotImages)
         }
@@ -129,27 +132,41 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupDiscription() {
-        let menuContentSV = UIStackView(arrangedSubviews: [menuContentLabel, menuContentPrice])
-        menuContentSV.axis = .horizontal
-        
-        let menuContentSV2 = UIStackView(arrangedSubviews: [menuContentLabel2, menuContentPrice2])
-        menuContentSV.axis = .horizontal
-        
-        let allMenuContentSV = UIStackView(arrangedSubviews: [menuContentSV, menuContentSV2])
-        allMenuContentSV.axis = .vertical
-        allMenuContentSV.spacing = 8
-        allMenuContentSV.alignment = .trailing
-        
-        let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, allMenuContentSV])
-        menuSV.axis = .horizontal
-        menuSV.alignment = .top
-        menuSV.spacing = 10
-        
-        scrollView.addSubview(menuSV)
+        menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: menuCellId)
+        menuTableView.delegate = self
+        menuTableView.dataSource = self
+        let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuTableView])
+        menuSV.axis = .vertical
+        menuSV.spacing = 6
         menuSV.translatesAutoresizingMaskIntoConstraints = false
+        menuTableView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        scrollView.addSubview(menuSV)
         menuSV.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 20).isActive = true
         menuSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.9).isActive = true
         menuSV.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+
+        
+//        let menuContentSV = UIStackView(arrangedSubviews: [menuContentLabel, menuContentPrice])
+//        menuContentSV.axis = .horizontal
+//
+//        let menuContentSV2 = UIStackView(arrangedSubviews: [menuContentLabel2, menuContentPrice2])
+//        menuContentSV.axis = .horizontal
+//
+//        let allMenuContentSV = UIStackView(arrangedSubviews: [menuContentSV, menuContentSV2])
+//        allMenuContentSV.axis = .vertical
+//        allMenuContentSV.spacing = 8
+//        allMenuContentSV.alignment = .trailing
+//
+//        let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, allMenuContentSV])
+//        menuSV.axis = .horizontal
+//        menuSV.alignment = .top
+//        menuSV.spacing = 10
+//
+//        scrollView.addSubview(menuSV)
+//        menuSV.translatesAutoresizingMaskIntoConstraints = false
+//        menuSV.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 20).isActive = true
+//        menuSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.9).isActive = true
+//        menuSV.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
         let priceView = UIView()
         scrollView.addSubview(priceView)
@@ -199,11 +216,10 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         memoSV.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
         // natural contentSize
-        let height = memoLabel.intrinsicContentSize.height + 780
+        let height = memoLabel.intrinsicContentSize.height + 980
         scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: height)
         
     }
-    
     
     func addImageToScrollView(images: [Data]) {
         let width = nailScrollImageView.bounds.width
@@ -236,7 +252,6 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
             (action: UIAlertAction!) -> Void in
             print("delete")
-            
         })
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
             (action: UIAlertAction!) -> Void in
@@ -315,6 +330,11 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         pg.pageIndicatorTintColor = .white
         pg.currentPageIndicatorTintColor = .black
         return pg
+    }()
+    
+    let menuTableView: UITableView = {
+        let tv = UITableView()
+        return tv
     }()
     
     let menuTitleLabel: UILabel = {
@@ -445,5 +465,39 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate {
         return lb
     }()
     
+}
+
+extension ReportDetailViewController: UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        if !reportDetailselectedMenu.isEmpty {
+//            return reportDetailselectedMenu.count
+//        }
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
+        cell.selectionStyle = .none
+        print("======= cell =====")
+        cell.menuitemTagLabel.text = "hello"
+        cell.menuitemTagLabel.backgroundColor = .blue
+        cell.priceLabel.text = "10.00"
+//        if !selectedMenuItemArray.isEmpty {
+//            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
+//            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
+//            cell.menuitemTagLabel.backgroundColor = color?.rawValue
+//            cell.priceLabel.text = selectedMenuItemArray[indexPath.row].price
+//        }
+//        cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
 }
 

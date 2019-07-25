@@ -29,9 +29,9 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchMenuItem()
         setupNavigationUI()
         setupUI()
-        fetchMenuItem()
     }
     
     func setupNavigationUI() {
@@ -105,42 +105,27 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
                 print("Failed fetch SelectedMenuItem \(err)")
             }
             
-            let oldSelectMenuItem = self.fetchedSelectedMenuItemResultsController.fetchedObjects
-            let manageContext = CoreDataManager.shared.persistentContainer.viewContext
-            if oldSelectMenuItem == [] {
-                print("oldSelectMenuItem == nil")
-                for item in self.selectCell {
-                    let newSelectedItem = NSEntityDescription.insertNewObject(forEntityName: "SelectedMenuItem", into: manageContext)
-                    newSelectedItem.setValue(item.menuName, forKey: "menuName")
-                    newSelectedItem.setValue(item.color, forKey: "color")
-                    newSelectedItem.setValue(item.price, forKey: "price")
-                    newSelectedItem.setValue(self.reportItem, forKey: "reportItem")
-                    do {
-                        try self.fetchedSelectedMenuItemResultsController.managedObjectContext.save()
-                    } catch let err {
-                        print("failed save Report - \(err)")
-                    }
-                }
-            } else {
-                print("oldSelectMenuItem != nil")
+            let oldSelectMenuItems = self.fetchedSelectedMenuItemResultsController.fetchedObjects
+            
+            if oldSelectMenuItems != [] {
                 // delete selectedMenuItem and create new selectedMenuItem
                 _ = self.fetchedSelectedMenuItemResultsController.managedObjectContext.deletedObjects
-                for item in self.selectCell {
-                    print("selectCell")
-                    let newSelectedItem = NSEntityDescription.insertNewObject(forEntityName: "SelectedMenuItem", into: manageContext)
-                    newSelectedItem.setValue(item.menuName, forKey: "menuName")
-                    newSelectedItem.setValue(item.color, forKey: "color")
-                    newSelectedItem.setValue(item.price, forKey: "price")
-                    newSelectedItem.setValue(self.reportItem, forKey: "reportItem")
-                    do {
-                        try self.fetchedSelectedMenuItemResultsController.managedObjectContext.save()
-                    } catch let err {
-                        print("failed save Report - \(err)")
-                    }
-                }
             }
             
-//            self.reportItem.selectedMenuItems = NSSet(set: self.selectCell)
+            let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+            let selectedMenuItemsSet = NSSet()
+            for item in self.selectCell {
+                let selectedMenuItem = NSEntityDescription.insertNewObject(forEntityName: "SelectedMenuItem", into: manageContext)
+                selectedMenuItem.setValue(item.menuName, forKey: "menuName")
+                selectedMenuItem.setValue(item.color, forKey: "color")
+                selectedMenuItem.setValue(item.price, forKey: "price")
+                selectedMenuItem.setValue(self.reportItem, forKey: "reportItem")
+                selectedMenuItemsSet.adding(selectedMenuItem)
+            }
+            print("self.reportItem.selectedMenuItems? \(self.reportItem.selectedMenuItems!)")
+            
+            
+            self.reportItem.selectedMenuItems = NSSet(set: selectedMenuItemsSet)
             self.delegate?.newReportSaveTapped(selectMenu: self.selectCell)
             self.selectCell.removeAll()
         }
