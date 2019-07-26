@@ -66,6 +66,9 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
             if let memo = report.memo {
                 memoTextView.text = memo
             }
+            if let client = report.client {
+                self.client = client
+            }
         }
     }
     
@@ -164,7 +167,7 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
         menuTableView.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: menuCellId)
         
-        let tipsPriceSV = UIStackView(arrangedSubviews: [dollar, tipsLable, dot, tipsDecimalLable])
+        let tipsPriceSV = UIStackView(arrangedSubviews: [dollar, tipsLable])
         tipsPriceSV.axis = .horizontal
         tipsPriceSV.spacing = 4
         let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsPriceSV])
@@ -188,7 +191,7 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
     }
     
     private func setupNavigationUI() {
-        navigationItem.title = report == nil ? "New Report" : "Edit Report"
+        navigationItem.title = "Report"
         let cancelButton: UIBarButtonItem = {
             let bt = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(reportCancelButtonPressed))
             return bt
@@ -258,12 +261,10 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
         report?.visitDate = visitTextField.toolbar.datePicker.date
         report?.startTime = startTimeTextField.toolbar.datePicker.date
         report?.endTime = endTimeTextField.toolbar.datePicker.date
-        report?.tips = tipsTotalStr()
+        report?.tips = tipsLable.amountDecimalNumber
         report?.memo = memoTextView.text
         report?.client = client
         report?.selectedMenuItems = NSSet(set: selectedMenuItems)
-        
-        // TODO: fix adding duplicate selectedMenus
         do {
             try fetchedReportItemResultsController.managedObjectContext.save()
         } catch let err {
@@ -273,23 +274,6 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
         dismiss(animated: true) { [unowned self] in
             self.reload?(self.report!)
         }
-    }
-    
-    func tipsTotalStr() -> String {
-        var tips = String()
-        var tipsDec = String()
-        if tipsLable.text != nil && tipsLable.text != "" {
-            tips = tipsLable.text!
-        } else {
-            tips = "0"
-        }
-        if tipsDecimalLable.text != nil && tipsDecimalLable.text != "" {
-            tipsDec = tipsDecimalLable.text!
-        } else {
-            tipsDec = "00"
-        }
-        let tipsDecStr = String(tipsDec.prefix(2))
-        return "\(tips).\(tipsDecStr)"
     }
     
     @objc func tapMenu() {
@@ -450,28 +434,11 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
         return lb
     }()
     
-    let tipsLable: MyTextField = {
-        let tf = MyTextField()
-        tf.keyboardType = .numberPad
-        tf.placeholder = "5"
-        tf.constraintWidth(equalToConstant: 65)
-        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
-        return tf
-    }()
-    
-    let dot: UILabel = {
-        let lb = UILabel()
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.text = "."
-        lb.font = UIFont.systemFont(ofSize: 16)
-        return lb
-    }()
-    
-    let tipsDecimalLable: MyTextField = {
-        let tf = MyTextField()
-        tf.keyboardType = .numberPad
-        tf.placeholder = "00"
-        tf.constraintWidth(equalToConstant: 50)
+    let tipsLable: CurrencyTextField = {
+        let tf = CurrencyTextField()
+        tf.placeholder = "10.00"
+        tf.textAlignment = .right
+        tf.constraintWidth(equalToConstant: 120)
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
@@ -515,7 +482,13 @@ extension NewReportViewController: UITableViewDelegate, MenuSelectTableViewContr
             cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
             let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
             cell.menuitemTagLabel.backgroundColor = color?.rawValue
-            cell.priceLabel.text = selectedMenuItemArray[indexPath.row].price
+            // TODO: set price Label
+            let fm = NumberFormatter()
+            fm.numberStyle = .decimal
+            //        fm.currencySymbol = "$"
+            fm.maximumFractionDigits = 2
+            fm.minimumFractionDigits = 2
+            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
         }
         cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         return cell

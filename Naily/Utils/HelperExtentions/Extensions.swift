@@ -21,6 +21,46 @@ extension String {
     func remove(characterSet: CharacterSet) -> String {
         return components(separatedBy: characterSet).joined()
     }
+    
+    func currencyInputFormatting() -> NSNumber {
+        var number: NSNumber!
+        var amountWithPrefix = self
+        
+        // remove from String: "$", ".", ","
+        let regex = try! NSRegularExpression(pattern: "[^0-9]", options: .caseInsensitive)
+        amountWithPrefix = regex.stringByReplacingMatches(in: amountWithPrefix, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.count), withTemplate: "")
+        
+        let double = (amountWithPrefix as NSString).doubleValue
+        number = NSNumber(value: (double / 100))
+        
+        return number
+    }
+
+    
+    // formatting text for currency textField
+    func getCurrencyStringFormatting() -> String {
+        let number = currencyInputFormatting()
+        let fm = NumberFormatter()
+        fm.numberStyle = .decimal
+        //        fm.currencySymbol = "$"
+        fm.maximumFractionDigits = 2
+        fm.minimumFractionDigits = 2
+        // if first number is 0 or all numbers were deleted
+        guard number != 0 as NSNumber else {
+            return ""
+        }
+        return fm.string(from: number)!
+    }
+    
+    func getCurrencyDecimalFormatting() -> NSDecimalNumber {
+        let number = currencyInputFormatting()
+        guard number != 0 as NSNumber else {
+            return 0
+        }
+        return NSDecimalNumber(decimal: number.decimalValue)
+    }
+
+    
 }
 
 extension UIButton {
@@ -58,12 +98,5 @@ extension UIColor {
         }
     }
     
-//    class func color(withData data:Data) -> UIColor {
-//        return NSKeyedUnarchiver.unarchiveObject(with: data) as! UIColor
-//    }
-//
-//    func encode() -> Data {
-//        return NSKeyedArchiver.archivedData(withRootObject: self)
-//    }
 }
 

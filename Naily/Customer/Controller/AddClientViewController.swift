@@ -711,7 +711,6 @@ class AddClientViewController: UIViewController {
     let memoTextField: MyTextView = {
         let tv = MyTextView()
         tv.textColor = .lightGray
-        tv.text = "Memo here..."
         tv.contentSize.height = 200
         return tv
     }()

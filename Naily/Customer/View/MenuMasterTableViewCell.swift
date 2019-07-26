@@ -13,7 +13,13 @@ class MenuMasterTableViewCell: UITableViewCell {
     var menuItem: SelectedMenuItem? {
         didSet {
             menuitemTagLabel.text = menuItem!.menuName ?? ""
-            priceLabel.text = menuItem!.price
+            if let price = menuItem?.price {
+                let fm = NumberFormatter()
+                fm.numberStyle = .decimal
+                fm.maximumFractionDigits = 2
+                fm.minimumFractionDigits = 2
+                priceLabel.text = fm.string(from: price)
+            }
             let color = TagColor.stringToSGColor(str: menuItem!.color!)
             menuitemTagLabel.backgroundColor = color!.rawValue
         }
