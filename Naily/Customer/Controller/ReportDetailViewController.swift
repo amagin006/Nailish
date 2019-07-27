@@ -17,6 +17,7 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
     var selectedMenuItemArray = [SelectedMenuItem]()
     var report: ReportItem! {
         didSet {
+            clientImageView.image = UIImage(data: report.client!.clientImage!)
             if let firstName = report.client!.firstName {
                 fullNameLabel.text = "\(firstName) \(report.client?.lastName ?? "")"
             }
@@ -266,10 +267,15 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
             let editNVC = LightStatusNavigationController(rootViewController: editVC)
             self.present(editNVC, animated: true, completion: nil)
         })
+        
         let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
             (action: UIAlertAction!) -> Void in
             print("delete")
+            CoreDataManager.shared.viewContext.delete(self.report)
+            CoreDataManager.shared.saveContext()
+            self.navigationController?.popViewController(animated: true)
         })
+        
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
             (action: UIAlertAction!) -> Void in
             

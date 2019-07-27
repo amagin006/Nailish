@@ -184,6 +184,7 @@ class AddAppointmentViewController: UIViewController {
             newAppointment.setValue(startTextView.toolbar.datePicker.date, forKey: "start")
             newAppointment.setValue(endTextView.toolbar.datePicker.date, forKey: "end")
             newAppointment.setValue(selectClient, forKey: "client")
+            
             let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
             newReport.setValue(dateTextView.toolbar.datePicker.date, forKey: "visitDate")
             if let menu = memoTextView.text {
