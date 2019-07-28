@@ -81,21 +81,24 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
         appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
-    lazy var fetchedAppointmentItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<Appointment> in
-        let fetchRequest = NSFetchRequest<Appointment>(entityName: "Appointment")
-        let appointmentDateDescriptors = NSSortDescriptor(key: "start", ascending: true)
-        fetchRequest.sortDescriptors = [appointmentDateDescriptors]
+    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
+        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
+        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: false)
+        fetchRequest.sortDescriptors = [visitDateDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                             managedObjectContext: context,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
         frc.delegate = self
         return frc
     }()
     
     private func getAppointmentdata(date: Date) {
-        let predicate = NSPredicate(format: "%@ =< appointmentDate AND appointmentDate < %@", getBeginingAndEndOfDay(date).begining as CVarArg, getBeginingAndEndOfDay(date).end as CVarArg)
-        fetchedAppointmentItemResultsController.fetchRequest.predicate = predicate
+        let predicate = NSPredicate(format: "%@ =< visitDate AND visitDate < %@", getBeginingAndEndOfDay(date).begining as CVarArg, getBeginingAndEndOfDay(date).end as CVarArg)
+        fetchedReportItemResultsController.fetchRequest.predicate = predicate
         do {
-            try fetchedAppointmentItemResultsController.performFetch()
+            try fetchedReportItemResultsController.performFetch()
         } catch let err {
             print(err)
         }
@@ -103,6 +106,7 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
 
     @objc func addAppointmentPressed() {
         let addAppointmentVC = AddAppointmentViewController()
+        addAppointmentVC.selectedDate = selectDate
         self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
 
@@ -162,12 +166,12 @@ extension MainCalenderViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
         getAppointmentdata(date: selectDate)
-        cell.appointment = fetchedAppointmentItemResultsController.object(at: indexPath)
+        cell.appointment = fetchedReportItemResultsController.object(at: indexPath)
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = fetchedAppointmentItemResultsController.sections?[section].numberOfObjects {
+        if let count = fetchedReportItemResultsController.sections?[section].numberOfObjects {
             return count
         }
         return 0
@@ -184,9 +188,9 @@ extension MainCalenderViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let addAppointmentVC = AddAppointmentViewController()
         getAppointmentdata(date: selectDate)
-        let appointment = fetchedAppointmentItemResultsController.object(at: indexPath)
+        let appointment = fetchedReportItemResultsController.object(at: indexPath)
         addAppointmentVC.selectClient = appointment.client
-        addAppointmentVC.selectAppointment = appointment
+        addAppointmentVC.reportItem = appointment
         self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
     
@@ -259,7 +263,7 @@ extension MainCalenderViewController: FSCalendarDelegate, FSCalendarDataSource, 
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         getAppointmentdata(date: date)
-        return fetchedAppointmentItemResultsController.fetchedObjects?.count ?? 0
+        return fetchedReportItemResultsController.fetchedObjects?.count ?? 0
     }
     
     private func getBeginingAndEndOfDay(_ date:Date) -> (begining: Date , end: Date) {

@@ -469,7 +469,6 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         var labelframe = lb.frame
         lb.frame.origin.x = 0
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
-        lb.textColor = UIColor(red: 145/255, green: 145/255, blue: 145/255, alpha: 1)
         return lb
     }()
 

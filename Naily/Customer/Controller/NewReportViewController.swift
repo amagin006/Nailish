@@ -253,7 +253,7 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
     
     @objc func reportSeveButtonPressed() {
         print("reportSeveButtonPressed")
-        if report == nil { return } // enter required fields
+//        if report == nil { return } // enter required fields
         for i in 0..<reportImageViews.count {
             let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
             report?.setValue(imageData, forKey: "snapshot\(i + 1)")
@@ -280,7 +280,6 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
         print("tapmenu")
         let menuSelectTableVC = MenuSelectTableViewController()
         menuSelectTableVC.delegate = self
-        //    report = ReportItem(context: manageContext)
         let menuSelectTableNVC = LightStatusNavigationController(rootViewController: menuSelectTableVC)
         self.present(menuSelectTableNVC, animated: true, completion: nil)
     }
@@ -361,8 +360,6 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
     
     let startTimeTextField: TimePickerKeyboard = {
         let lb = TimePickerKeyboard()
-        lb.layer.borderWidth = 0
-        lb.layer.cornerRadius = 0
         lb.contentInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
         lb.sizeToFit()
         lb.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
@@ -378,8 +375,6 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
     
     let endTimeTextField: TimePickerKeyboard = {
         let lb = TimePickerKeyboard()
-        lb.layer.borderWidth = 0
-        lb.layer.cornerRadius = 0
         lb.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return lb
     }()
