@@ -78,7 +78,7 @@ class AddClientViewController: UIViewController {
         addClientImage.trailingAnchor.constraint(equalTo: personImageView.trailingAnchor, constant: -8).isActive = true
         
         // FirstName column
-        firstNameTextField.addTarget(self, action: #selector(firstNameChage), for: .editingChanged)
+        firstNameTextField.addTarget(self, action: #selector(firstNameValidation), for: .editingChanged)
         let firstNameTitleSV = UIStackView(arrangedSubviews: [firstNameIcon, firstNameLabel, requireLabel])
         firstNameTitleSV.axis = .horizontal
         firstNameTitleSV.spacing = 5
@@ -295,7 +295,7 @@ class AddClientViewController: UIViewController {
         navigationItem.rightBarButtonItem = saveButton
     }
     
-    @objc func firstNameChage() {
+    @objc func firstNameValidation() {
         if firstNameTextField.text != "" {
             saveButton.isEnabled = true
         } else {
@@ -711,7 +711,6 @@ class AddClientViewController: UIViewController {
     let memoTextField: MyTextView = {
         let tv = MyTextView()
         tv.textColor = .lightGray
-        tv.text = "Memo here..."
         tv.contentSize.height = 200
         return tv
     }()

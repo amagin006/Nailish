@@ -45,7 +45,7 @@ class CustomDateToolbar: UIToolbar {
     
     private func getDateStr() -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
+        formatter.dateFormat = "YYYY/MM/dd"
         return formatter.string(from: datePicker.date)
     }
     

@@ -10,7 +10,7 @@ import UIKit
 
 class CalendarTableViewCell: UITableViewCell {
     
-    var appointment: Appointment! {
+    var appointment: ReportItem! {
         didSet {
             if let image = appointment.client!.clientImage {
                 clientImage.image = UIImage(data: image)
@@ -19,12 +19,12 @@ class CalendarTableViewCell: UITableViewCell {
             lastNameLabel.text = appointment.client!.lastName ?? ""
             let formatter = DateFormatter()
             formatter.dateFormat = "HH:mm"
-            if let startTime = appointment.start {
-                startTimeLabel.text = formatter.string(from: startTime)
-            }
-            if let endTime = appointment.end {
-                endTimeLabel.text = formatter.string(from: endTime)
-            }
+//            if let startTime = appointment.start {
+//                startTimeLabel.text = formatter.string(from: startTime)
+//            }
+//            if let endTime = appointment.end {
+//                endTimeLabel.text = formatter.string(from: endTime)
+//            }
         }
     }
     

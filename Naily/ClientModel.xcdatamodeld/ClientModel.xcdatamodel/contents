@@ -32,7 +32,7 @@
         <attribute name="snapshot3" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="snapshot4" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="tips" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tips" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="visitDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ClientInfo" inverseName="items" inverseEntity="ClientInfo" syncable="YES"/>
         <relationship name="selectedMenuItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SelectedMenuItem" inverseName="reportItem" inverseEntity="SelectedMenuItem" syncable="YES"/>
@@ -40,13 +40,13 @@
     <entity name="SelectedMenuItem" representedClassName="SelectedMenuItem" syncable="YES" codeGenerationType="class">
         <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="menuName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <relationship name="reportItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReportItem" inverseName="selectedMenuItems" inverseEntity="ReportItem" syncable="YES"/>
     </entity>
     <elements>
         <element name="Appointment" positionX="-39.01171875" positionY="-45.4609375" width="128" height="135"/>
         <element name="ClientInfo" positionX="191.875" positionY="-20.02734375" width="128" height="253"/>
-        <element name="ReportItem" positionX="-746.67578125" positionY="52.3203125" width="128" height="208"/>
+        <element name="ReportItem" positionX="-746.67578125" positionY="52.3203125" width="128" height="210"/>
         <element name="SelectedMenuItem" positionX="-565.8046875" positionY="30.484375" width="128" height="105"/>
     </elements>
 </model>

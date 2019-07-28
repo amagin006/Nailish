@@ -17,7 +17,10 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
     var selectedMenuItemArray = [SelectedMenuItem]()
     var report: ReportItem! {
         didSet {
-            fullNameLabel.text = "\(report.client!.firstName!) \(report.client?.lastName ?? "")"
+            clientImageView.image = UIImage(data: report.client!.clientImage!)
+            if let firstName = report.client!.firstName {
+                fullNameLabel.text = "\(firstName) \(report.client?.lastName ?? "")"
+            }
             let formatter = DateFormatter()
             if let date = report.visitDate {
                 formatter.dateFormat = "YYYY/MM/dd"
@@ -46,8 +49,27 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
             if let snapshot4 = report.snapshot4 {
                 snapshotImages.append(snapshot4)
             }
+            let fm = NumberFormatter()
+            fm.numberStyle = .decimal
+            //        fm.currencySymbol = "$"
+            fm.maximumFractionDigits = 2
+            fm.minimumFractionDigits = 2
+            if let tip = report.tips {
+                tipsPrice.text = fm.string(from: tip)
+            }
             if let reportDetailselectedMenus = report.selectedMenuItems {
                 selectedMenuItemArray = Array(reportDetailselectedMenus) as! [SelectedMenuItem]
+                var subTotal:NSDecimalNumber = 0.00
+                let taxRate:NSDecimalNumber = 0.12
+                for item in selectedMenuItemArray {
+                    subTotal = subTotal.adding(item.price!)
+                }
+                let tax:NSDecimalNumber = subTotal.multiplying(by: taxRate)
+                subtotalPrice.text = fm.string(from: subTotal)
+                taxPrice.text = fm.string(from: tax)
+                let taxTipsTotal = subTotal.adding(tax)
+                totalPrice.text = fm.string(from: taxTipsTotal.adding(report.tips ?? 0))
+
             }
             memoLabel.text = report.memo ?? ""
             addImageToScrollView(images: snapshotImages)
@@ -157,17 +179,29 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         priceView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         priceView.heightAnchor.constraint(equalToConstant: 80).isActive = true
 
-        let subtotalSV = UIStackView(arrangedSubviews: [subtotalTitleLabel, subtotalPrice])
+        let subtotalPriceSV = UIStackView(arrangedSubviews: [dollar1, subtotalPrice])
+        subtotalPriceSV.axis = .horizontal
+        subtotalPriceSV.spacing = 2
+        
+        let subtotalSV = UIStackView(arrangedSubviews: [subtotalTitleLabel, subtotalPriceSV])
         subtotalSV.axis = .horizontal
-        subtotalSV.distribution = .fillEqually
-
-        let taxSV = UIStackView(arrangedSubviews: [taxTitleLabel, taxPrice])
+        subtotalSV.distribution = .fillProportionally
+        
+        let taxPriceSV = UIStackView(arrangedSubviews: [dollar2, taxPrice])
+        taxPriceSV.axis = .horizontal
+        taxPriceSV.spacing = 2
+        
+        let taxSV = UIStackView(arrangedSubviews: [taxTitleLabel, taxPriceSV])
         taxSV.axis = .horizontal
-        taxSV.distribution = .fillEqually
+        taxSV.distribution = .fillProportionally
+        
+        let tipsPriceSV = UIStackView(arrangedSubviews: [dollar3, tipsPrice])
+        tipsPriceSV.axis = .horizontal
+        tipsPriceSV.spacing = 2
 
-        let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsPrice])
+        let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsPriceSV])
         tipsSV.axis = .horizontal
-        tipsSV.distribution = .fillEqually
+        tipsSV.distribution = .fillProportionally
 
         let priceSV = UIStackView(arrangedSubviews: [subtotalSV, taxSV, tipsSV])
         priceSV.axis = .vertical
@@ -179,11 +213,14 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         priceSV.widthAnchor.constraint(equalTo: priceView.widthAnchor).isActive = true
         priceSV.centerXAnchor.constraint(equalTo: priceView.centerXAnchor).isActive = true
         
-        scrollView.addSubview(totalPrice)
-        totalPrice.translatesAutoresizingMaskIntoConstraints = false
-        totalPrice.topAnchor.constraint(equalTo: priceView.bottomAnchor, constant: 10).isActive = true
-        totalPrice.widthAnchor.constraint(equalTo: priceView.widthAnchor).isActive = true
-        totalPrice.centerXAnchor.constraint(equalTo: priceView.centerXAnchor).isActive = true
+        let totalPriceSV = UIStackView(arrangedSubviews: [dollar4, totalPrice])
+        totalPriceSV.axis = .horizontal
+        totalPriceSV.spacing = 2
+        scrollView.addSubview(totalPriceSV)
+        totalPriceSV.translatesAutoresizingMaskIntoConstraints = false
+        totalPriceSV.topAnchor.constraint(equalTo: priceView.bottomAnchor, constant: 10).isActive = true
+        totalPriceSV.widthAnchor.constraint(equalTo: priceView.widthAnchor).isActive = true
+        totalPriceSV.centerXAnchor.constraint(equalTo: priceView.centerXAnchor).isActive = true
         
         let memoSV = UIStackView(arrangedSubviews: [memoTitleLable, memoLabel])
         memoSV.axis = .vertical
@@ -225,14 +262,20 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
             editVC.reload = { [unowned self] (editReport) in
                 // set report -> didSet -> reload
                 self.report = editReport
+                self.menuTableView.reloadData()
             }
             let editNVC = LightStatusNavigationController(rootViewController: editVC)
             self.present(editNVC, animated: true, completion: nil)
         })
+        
         let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
             (action: UIAlertAction!) -> Void in
             print("delete")
+            CoreDataManager.shared.viewContext.delete(self.report)
+            CoreDataManager.shared.saveContext()
+            self.navigationController?.popViewController(animated: true)
         })
+        
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
             (action: UIAlertAction!) -> Void in
             
@@ -314,6 +357,7 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
     
     let menuTableView: UITableView = {
         let tv = UITableView()
+        tv.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         return tv
     }()
     
@@ -324,48 +368,6 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         return lb
     }()
     
-    let menuContentLabel: menuTagLabel = {
-        let lb = menuTagLabel()
-        lb.text = "Design"
-        lb.textColor = .white
-        lb.backgroundColor = #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)
-        lb.layer.cornerRadius = 12
-        lb.layer.masksToBounds = true
-        return lb
-    }()
-    
-    let menuContentPrice: UILabel = {
-        let lb = UILabel()
-        lb.text = "$ 10.00"
-        lb.textAlignment = .right
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.constraintWidth(equalToConstant: 80)
-        return lb
-    }()
-    
-    let menuContentLabel2: menuTagLabel = {
-        let lb = menuTagLabel()
-        lb.text = "Jel"
-        lb.textColor = .white
-        lb.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
-        lb.layer.cornerRadius = 12
-        lb.layer.masksToBounds = true
-        return lb
-    }()
-    
-    let menuContentPrice2: UILabel = {
-        let lb = UILabel()
-        lb.text = "$ 12.00"
-        lb.textAlignment = .right
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.constraintWidth(equalToConstant: 80)
-        return lb
-    }()
-    
     let subtotalTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Subtotal"
@@ -373,12 +375,28 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         return lb
     }()
     
+    let dollar1: UILabel = {
+        let lb = UILabel()
+        lb.text = "$"
+        lb.textAlignment = .right
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
     let subtotalPrice: UILabel = {
         let lb = UILabel()
-        lb.text = "$ 120.00"
+        lb.text = "120.00"
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
-        lb.translatesAutoresizingMaskIntoConstraints = false
         lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
+        return lb
+    }()
+    
+    let dollar2: UILabel = {
+        let lb = UILabel()
+        lb.text = "$"
+        lb.textAlignment = .right
+        lb.font = UIFont.systemFont(ofSize: 16)
         return lb
     }()
     
@@ -391,10 +409,18 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
     
     let tipsPrice: UILabel = {
         let lb = UILabel()
-        lb.text = "$ 12.00"
+        lb.text = "12.00"
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
-        lb.translatesAutoresizingMaskIntoConstraints = false
         lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
+        return lb
+    }()
+    
+    let dollar3: UILabel = {
+        let lb = UILabel()
+        lb.text = "$"
+        lb.textAlignment = .right
+        lb.font = UIFont.systemFont(ofSize: 16)
         return lb
     }()
     
@@ -407,19 +433,26 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
     
     let taxPrice: UILabel = {
         let lb = UILabel()
-        lb.text = "$ 12.00"
+        lb.text = "12.00"
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
         lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        return lb
+    }()
+    
+    let dollar4: UILabel = {
+        let lb = UILabel()
+        lb.text = "$"
+        lb.textAlignment = .right
+        lb.font = UIFont.systemFont(ofSize: 16)
         return lb
     }()
     
     let totalPrice: UILabel = {
         let lb = UILabel()
-        lb.text = "$ 140.00"
         lb.textAlignment = .right
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
-        lb.translatesAutoresizingMaskIntoConstraints = false
         return lb
     }()
 
@@ -436,12 +469,6 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         var labelframe = lb.frame
         lb.frame.origin.x = 0
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
-        lb.textColor = UIColor(red: 145/255, green: 145/255, blue: 145/255, alpha: 1)
-        lb.text = """
-                    discription
-                    discription
-                    discription
-                  """
         return lb
     }()
 
@@ -467,7 +494,12 @@ extension ReportDetailViewController: UITableViewDelegate {
             cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
             let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
             cell.menuitemTagLabel.backgroundColor = color?.rawValue
-            cell.priceLabel.text = selectedMenuItemArray[indexPath.row].price
+            let fm = NumberFormatter()
+            fm.numberStyle = .decimal
+            //        fm.currencySymbol = "$"
+            fm.maximumFractionDigits = 2
+            fm.minimumFractionDigits = 2
+            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
         }
         cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         return cell

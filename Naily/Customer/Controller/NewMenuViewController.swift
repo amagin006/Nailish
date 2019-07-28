@@ -37,8 +37,8 @@ class NewMenuViewController: UIViewController {
         menuNameSV.distribution = .fillEqually
         menuNameSV.spacing = 10
         
-        priceLable.addTarget(self, action: #selector(saveButtonValidation), for: .editingChanged)
-        let priceAmountSV = UIStackView(arrangedSubviews: [dollar, priceLable, dot, priceDecimalLable])
+        priceLabel.addTarget(self, action: #selector(saveButtonValidation), for: .editingChanged)
+        let priceAmountSV = UIStackView(arrangedSubviews: [dollar, priceLabel])
         priceAmountSV.axis = .horizontal
         priceAmountSV.spacing = 3
         let priceSV = UIStackView(arrangedSubviews: [priceTitleLable, priceAmountSV])
@@ -100,17 +100,7 @@ class NewMenuViewController: UIViewController {
         
         let newSelectedItem = SelectedMenuItem(context: manageContext)
         newSelectedItem.menuName = menuNameTextField.text!
-        
-        // TODO: Refactor price
-        var priceDec = String()
-        if priceDecimalLable.text != nil && priceDecimalLable.text != "" {
-            priceDec = priceDecimalLable.text!
-        } else {
-            priceDec = "00"
-        }
-        let priceDecStr = String(priceDec.prefix(2))
-        let price = "\(priceLable.text ?? "0").\(priceDecStr)"
-        newSelectedItem.price = price
+        newSelectedItem.price = priceLabel.amountDecimalNumber
         newSelectedItem.color = selectColor
         do {
             try manageContext.save()
@@ -121,8 +111,8 @@ class NewMenuViewController: UIViewController {
     }
     
     @objc func saveButtonValidation() {
-        guard menuNameTextField.text != nil, priceLable.text != nil else { return }
-        if menuNameTextField.text != "" && priceLable.text != "" && colorSelected{
+        guard menuNameTextField.text != nil, priceLabel.text != nil else { return }
+        if menuNameTextField.text != "" && priceLabel.text != "" && colorSelected{
             saveButton.isEnabled = true
         } else {
             saveButton.isEnabled = false
@@ -156,32 +146,15 @@ class NewMenuViewController: UIViewController {
         return lb
     }()
     
-    let priceLable: MyTextField = {
-        let tf = MyTextField()
-        tf.keyboardType = .numberPad
-        tf.placeholder = "20"
-        tf.constraintWidth(equalToConstant: 60)
+    let priceLabel: CurrencyTextField = {
+        let tf = CurrencyTextField()
+        tf.placeholder = "20.00"
+        tf.textAlignment = .right
+        tf.constraintWidth(equalToConstant: 120)
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
-    
-    let dot: UILabel = {
-        let lb = UILabel()
-        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.text = "."
-        lb.font = UIFont.systemFont(ofSize: 16)
-        return lb
-    }()
-    
-    let priceDecimalLable: MyTextField = {
-        let tf = MyTextField()
-        tf.keyboardType = .numberPad
-        tf.placeholder = "00"
-        tf.constraintWidth(equalToConstant: 50)
-        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
-        return tf
-    }()
-    
+
     let saveButton: UIButton = {
         let bt = UIButton()
         bt.setTitle("Save", for: .normal)

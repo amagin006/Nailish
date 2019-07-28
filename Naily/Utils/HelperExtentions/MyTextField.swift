@@ -48,4 +48,29 @@ class MyTextField: UITextField, UITextFieldDelegate {
     
 }
 
+class CurrencyTextField: MyTextField {
+    var amountDecimalNumber: NSDecimalNumber = 0.00
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addTarget(self, action: #selector(currencyFieldDidChange), for: .editingChanged)
+        self.keyboardType = .decimalPad
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func currencyFieldDidChange() {
+        if let amountString = self.text?.getCurrencyStringFormatting() {
+            self.text = amountString
+        }
+        if let amountDecimal = self.text?.getCurrencyDecimalFormatting() {
+            self.amountDecimalNumber = amountDecimal
+        }
+    }
+    
+    
+    
+}
 
