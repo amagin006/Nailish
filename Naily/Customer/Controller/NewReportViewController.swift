@@ -12,7 +12,7 @@ import Photos
 
 private let menuCellId = "menuCell"
 
-class NewReportViewController: UIViewController, UITableViewDataSource {
+class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     
     var reportImageViews = [UIImageView]()
     var reportImages = [UIImage]()
@@ -72,22 +72,12 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
         }
     }
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView = menuTableView
         setupNavigationUI()
         setupUI()
     }
-    
-    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
-        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
-        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: true)
-        fetchRequest.sortDescriptors = [visitDateDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        return frc
-    }()
     
     private func setupUI() {
         view.addSubview(formScrollView)
@@ -454,7 +444,7 @@ class NewReportViewController: UIViewController, UITableViewDataSource {
     }()
 }
 
-extension NewReportViewController: UITableViewDelegate, MenuSelectTableViewControllerDelegate {
+extension NewReportViewController: MenuSelectTableViewControllerDelegate {
     func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>) {
         selectedMenuItems = selectMenu
         selectedMenuItemArray.removeAll()

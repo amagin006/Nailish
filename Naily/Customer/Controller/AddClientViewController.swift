@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Photos
 
 protocol AddClientViewControllerDelegate:class {
     func editClientDidFinish(client: ClientInfo)
@@ -304,7 +305,38 @@ class AddClientViewController: UIViewController {
     }
     
     @objc func selectImage() {
-        print("press selectImage")
+        let status = PHPhotoLibrary.authorizationStatus()
+        switch status {
+        case .authorized:
+            // handle authorized status
+            self.editClientImage()
+        default:
+            // ask for permissions
+            PHPhotoLibrary.requestAuthorization { status in
+                switch status {
+                case .authorized:
+                    self.editClientImage()
+                default:
+                    // won't happen but still
+                    let cameraUnavailableAlertController = UIAlertController (title: "Photo Library Unavailable", message: "Please check to see if device settings doesn't allow photo library access", preferredStyle: .alert)
+                    
+                    let settingsAction = UIAlertAction(title: "Settings", style: .destructive) { (_) -> Void in
+                        let settingsUrl = NSURL(string:UIApplication.openSettingsURLString)
+                        if let url = settingsUrl {
+                            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+                        }
+                    }
+                    let cancelAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
+                    cameraUnavailableAlertController.addAction(settingsAction)
+                    cameraUnavailableAlertController.addAction(cancelAction)
+                    self.present(cameraUnavailableAlertController , animated: true, completion: nil)
+                    break
+                }
+            }
+        }
+    }
+    
+    func editClientImage() {
         let imagePickController = UIImagePickerController()
         imagePickController.delegate = self
         imagePickController.allowsEditing = true

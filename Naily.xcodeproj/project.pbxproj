@@ -33,6 +33,7 @@
 		43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49E22A7B315003A07ED /* MyTextField.swift */; };
 		43C52F5822E6751600322342 /* TagColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C52F5722E6751600322342 /* TagColor.swift */; };
 		43C52F5C22E7CF5400322342 /* SampleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C52F5B22E7CF5400322342 /* SampleItem.swift */; };
+		43C52F6122ED6ED600322342 /* FetchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C52F6022ED6ED600322342 /* FetchTableViewController.swift */; };
 		43DA461822C7E13B00000FB5 /* AddAppointmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DA461722C7E13B00000FB5 /* AddAppointmentViewController.swift */; };
 		43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */; };
 		43E6915422AB0B8A0097C2B6 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */; };
@@ -90,6 +91,7 @@
 		43A2F49E22A7B315003A07ED /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
 		43C52F5722E6751600322342 /* TagColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagColor.swift; sourceTree = "<group>"; };
 		43C52F5B22E7CF5400322342 /* SampleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SampleItem.swift; path = ../../Customer/Controller/SampleItem.swift; sourceTree = "<group>"; };
+		43C52F6022ED6ED600322342 /* FetchTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchTableViewController.swift; sourceTree = "<group>"; };
 		43DA461722C7E13B00000FB5 /* AddAppointmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAppointmentViewController.swift; sourceTree = "<group>"; };
 		43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportViewController.swift; sourceTree = "<group>"; };
 		43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */,
 				433705AB22AEEFF900EBC58B /* UIView+ConstraintLayout.swift */,
 				43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */,
+				43C52F6022ED6ED600322342 /* FetchTableViewController.swift */,
 			);
 			path = Subclasses;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */,
 				43ED0B0522BD8D9100781893 /* MyTextView.swift in Sources */,
 				43ED0B0122BD8D4100781893 /* DatePickerKeyboard.swift in Sources */,
+				43C52F6122ED6ED600322342 /* FetchTableViewController.swift in Sources */,
 				43C52F5822E6751600322342 /* TagColor.swift in Sources */,
 				437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */,
 				4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */,

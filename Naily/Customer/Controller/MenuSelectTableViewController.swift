@@ -15,18 +15,14 @@ protocol MenuSelectTableViewControllerDelegate: class {
 
 private let cellId = "AddMenuCell"
 
-class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
+class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSource {
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
     var selectedCell = Set<SelectedMenuItem>()
     
-    override func viewWillAppear(_ animated: Bool) {
-        fetchMenuItem()
-        menuTableView.reloadData()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView = menuTableView
         setupNavigationUI()
         setupUI()
         fetchMenuItem()
@@ -94,52 +90,6 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         }
     }
     
-    @objc func addButtonPressed() {
-        let newSelectVC = NewMenuViewController()
-        let newSelectNVC = LightStatusNavigationController(rootViewController: newSelectVC)
-        self.present(newSelectNVC, animated: true, completion: nil)
-    }
-    
-    lazy var fetchedSelectedMenuItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<SelectedMenuItem> in
-        let fetchRequest = NSFetchRequest<SelectedMenuItem>(entityName: "SelectedMenuItem")
-        let menuItemDescriptors = NSSortDescriptor(key: "color", ascending: false)
-        fetchRequest.sortDescriptors = [menuItemDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        return frc
-    }()
-    
-    let headerLable: UILabel = {
-        let lb = UILabel()
-        lb.text = "Select Menu"
-        return lb
-    }()
-    
-    let addButton: UIButton = {
-        let bt = UIButton()
-        bt.setTitle("Add New Menu", for: .normal)
-        bt.setTitleColor(UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1), for: .normal)
-        bt.constraintWidth(equalToConstant: 200)
-        bt.constraintHeight(equalToConstant: 40)
-        bt.setBackgroundColor(UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1), for: .normal)
-        bt.setBackgroundColor(UIColor(red: 190/255, green: 190/255, blue: 190/255, alpha: 1), for: .highlighted)
-        bt.clipsToBounds = true
-        bt.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
-        let plusImage = #imageLiteral(resourceName: "plus2")
-        bt.setImage(plusImage.withRenderingMode(.alwaysOriginal), for: .normal)
-        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: plusImage.size.width / 2)
-        bt.contentHorizontalAlignment = .center
-        return bt
-    }()
-    
-    let menuTableView: UITableView = {
-        let tv = UITableView()
-        return tv
-    }()
-}
-
-extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsControllerDelegate {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -175,4 +125,41 @@ extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsCo
             selectedCell.remove(menuItem)
         }
     }
+    
+    @objc func addButtonPressed() {
+        let newSelectVC = NewMenuViewController()
+        let newSelectNVC = LightStatusNavigationController(rootViewController: newSelectVC)
+        self.present(newSelectNVC, animated: true, completion: nil)
+    }
+        
+    let headerLable: UILabel = {
+        let lb = UILabel()
+        lb.text = "Select Menu"
+        return lb
+    }()
+    
+    let addButton: UIButton = {
+        let bt = UIButton()
+        bt.setTitle("Add New Menu", for: .normal)
+        bt.setTitleColor(UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1), for: .normal)
+        bt.constraintWidth(equalToConstant: 200)
+        bt.constraintHeight(equalToConstant: 40)
+        bt.setBackgroundColor(UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1), for: .normal)
+        bt.setBackgroundColor(UIColor(red: 190/255, green: 190/255, blue: 190/255, alpha: 1), for: .highlighted)
+        bt.clipsToBounds = true
+        bt.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
+        let plusImage = #imageLiteral(resourceName: "plus2")
+        bt.setImage(plusImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        bt.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: plusImage.size.width / 2)
+        bt.contentHorizontalAlignment = .center
+        return bt
+    }()
+    
+    let menuTableView: UITableView = {
+        let tv = UITableView()
+        return tv
+    }()
+    
+    
+   
 }

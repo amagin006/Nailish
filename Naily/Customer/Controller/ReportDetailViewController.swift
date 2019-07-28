@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource {
+class ReportDetailViewController: FetchTableViewController, UITableViewDataSource {
     
     private let menuCellId = "menuCellId"
     
@@ -76,12 +76,9 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView = menuTableView
         setupNavigationUI()
         setupUI()
     }
@@ -295,6 +292,40 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         print(pageControl.currentPage)
     }
     
+    // menuTableView
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !selectedMenuItemArray.isEmpty {
+            return selectedMenuItemArray.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
+        cell.selectionStyle = .none
+        if !selectedMenuItemArray.isEmpty {
+            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
+            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
+            cell.menuitemTagLabel.backgroundColor = color?.rawValue
+            let fm = NumberFormatter()
+            fm.numberStyle = .decimal
+            //        fm.currencySymbol = "$"
+            fm.maximumFractionDigits = 2
+            fm.minimumFractionDigits = 2
+            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
+        }
+        cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
+    
     // UI Parts
     
     lazy var submenuButton: UIBarButtonItem = {
@@ -472,41 +503,5 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         return lb
     }()
 
-}
-
-
-extension ReportDetailViewController: UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !selectedMenuItemArray.isEmpty {
-            return selectedMenuItemArray.count
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
-        cell.selectionStyle = .none
-        if !selectedMenuItemArray.isEmpty {
-            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
-            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
-            cell.menuitemTagLabel.backgroundColor = color?.rawValue
-            let fm = NumberFormatter()
-            fm.numberStyle = .decimal
-            //        fm.currencySymbol = "$"
-            fm.maximumFractionDigits = 2
-            fm.minimumFractionDigits = 2
-            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
-        }
-        cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
-    }
 }
 
