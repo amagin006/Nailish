@@ -32,11 +32,12 @@
         <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="menuName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tag" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="reportItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReportItem" inverseName="selectedMenuItems" inverseEntity="ReportItem" syncable="YES"/>
     </entity>
     <elements>
         <element name="ClientInfo" positionX="-238.94921875" positionY="-8.26953125" width="128" height="238"/>
         <element name="ReportItem" positionX="-746.67578125" positionY="52.3203125" width="128" height="210"/>
-        <element name="SelectedMenuItem" positionX="-545.6015625" positionY="318.01171875" width="128" height="105"/>
+        <element name="SelectedMenuItem" positionX="-545.6015625" positionY="318.01171875" width="128" height="118"/>
     </elements>
 </model>

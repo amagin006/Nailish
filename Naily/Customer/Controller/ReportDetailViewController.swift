@@ -58,7 +58,8 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
                 tipsPrice.text = fm.string(from: tip)
             }
             if let reportDetailselectedMenus = report.selectedMenuItems {
-                selectedMenuItemArray = Array(reportDetailselectedMenus) as! [SelectedMenuItem]
+                let newArray = Array(reportDetailselectedMenus) as! [SelectedMenuItem]
+                selectedMenuItemArray = Array(newArray).sorted { $0.tag < $1.tag }
                 var subTotal:NSDecimalNumber = 0.00
                 let taxRate:NSDecimalNumber = 0.12
                 for item in selectedMenuItemArray {
@@ -256,9 +257,10 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
             let editVC = NewReportViewController()
             editVC.report = self.report
             // callback closure when dismiss
-            editVC.reload = { [unowned self] (editReport) in
+            editVC.reload = { [unowned self] (editReport, selectedMenuItems) in
                 // set report -> didSet -> reload
                 self.report = editReport
+                self.selectedMenuItemArray = Array(selectedMenuItems).sorted { $0.tag < $1.tag }
                 self.menuTableView.reloadData()
             }
             let editNVC = LightStatusNavigationController(rootViewController: editVC)

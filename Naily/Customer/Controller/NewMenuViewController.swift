@@ -12,6 +12,7 @@ class NewMenuViewController: UIViewController {
     
     var selectButtonArr = [UIButton]()
     var selectColor = String()
+    var selectedColorTag = Int()
     var colorSelected = false
     
     override func viewDidLoad() {
@@ -93,6 +94,7 @@ class NewMenuViewController: UIViewController {
         colorSelected = true
         saveButtonValidation()
         selectColor = colorStr!
+        selectedColorTag = sender.tag
     }
     
     @objc func saveTapped() {
@@ -102,6 +104,7 @@ class NewMenuViewController: UIViewController {
         newSelectedItem.menuName = menuNameTextField.text!
         newSelectedItem.price = priceLabel.amountDecimalNumber
         newSelectedItem.color = selectColor
+        newSelectedItem.tag = Int16(selectedColorTag)
         do {
             try manageContext.save()
         } catch let err {
@@ -176,6 +179,7 @@ class NewMenuViewController: UIViewController {
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
         bt.backgroundColor = UIColor(red: 255/255, green: 123/255, blue: 123/255, alpha: 1)
+        bt.tag = 1
         return bt
     }()
     
@@ -187,6 +191,7 @@ class NewMenuViewController: UIViewController {
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
         bt.backgroundColor = UIColor(red: 123/255, green: 138/255, blue: 255/255, alpha: 1)
+        bt.tag = 2
         return bt
     }()
     
@@ -198,6 +203,7 @@ class NewMenuViewController: UIViewController {
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
         bt.backgroundColor = UIColor(red: 121/255, green: 175/255, blue: 82/255, alpha: 1)
+        bt.tag = 3
         return bt
     }()
     
@@ -209,6 +215,7 @@ class NewMenuViewController: UIViewController {
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
         bt.backgroundColor = UIColor(red: 225/255, green: 123/255, blue: 255/255, alpha: 1)
+        bt.tag = 4
         return bt
     }()
     
@@ -220,6 +227,7 @@ class NewMenuViewController: UIViewController {
         bt.clipsToBounds = true
         bt.addTarget(self, action: #selector(selectColorTap(_:)), for: .touchUpInside)
         bt.backgroundColor = UIColor(red: 165/255, green: 165/255, blue: 165/255, alpha: 1)
+        bt.tag = 5
         return bt
     }()
 }

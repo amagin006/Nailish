@@ -51,6 +51,7 @@ class AddClientViewController: UIViewController {
     private func setupUI() {
         
         view.addSubview(clientFormView)
+        clientFormView.backgroundColor = UIColor.init(red: 255/255, green: 235/255, blue: 154/255, alpha: 1)
         clientFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         clientFormView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         clientFormView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -452,25 +453,20 @@ class AddClientViewController: UIViewController {
     }
 
     @objc func keyboardWillBeShown(notification: NSNotification) {
-        if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
-            guard let userInfo = notification.userInfo else { return }
-            guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-            let keyboardFrameHeight = keyboardSize.cgRectValue.height
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardFrameHeight
-            }
+        guard let userInfo = notification.userInfo else { return }
+        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        
+        let keyboardFrameHeight = keyboardSize.cgRectValue.height
+        
+        if !(firstNameTextField.isFirstResponder || lastNameTextField.isFirstResponder) {
+            self.view.frame.origin.y = -keyboardFrameHeight
         }
+        
     }
     
     @objc func keyboardWillBeHidden(notification: NSNotification) {
-        if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
-            guard let userInfo = notification.userInfo else { return }
-            print(userInfo)
-            guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-            let keyboardFrame = keyboardSize.cgRectValue
-            if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y += keyboardFrame.height
-            }
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
         }
     }
     
@@ -489,7 +485,7 @@ class AddClientViewController: UIViewController {
         let vi = UIScrollView()
         vi.backgroundColor = .white
         vi.translatesAutoresizingMaskIntoConstraints = false
-        vi.contentSize.height = 890
+        vi.contentSize.height = 850
         return vi
     }()
     

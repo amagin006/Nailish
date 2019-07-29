@@ -12,7 +12,6 @@ class MainTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         viewControllers = [
             createViewController(viewController: CustomerCollectionViewController(), title: "Customer", imageName: "customer", headerLarge: false),
             createViewController(viewController: MainCalenderViewController(), title: "Calender", imageName: "calendar", headerLarge: false),

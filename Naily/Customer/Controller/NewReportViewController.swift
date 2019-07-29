@@ -18,7 +18,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     var reportImages = [UIImage]()
     var selectImageNum = 0
     var client: ClientInfo?
-    var reload: ((ReportItem) -> ())?
+    var reload: ((ReportItem, Set<SelectedMenuItem>) -> ())?
     var selectedMenuItemArray = [SelectedMenuItem]()
     var selectedMenuItems: Set<SelectedMenuItem> = []
     let manageContext = CoreDataManager.shared.persistentContainer.viewContext
@@ -62,6 +62,13 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
             if let menuItems = report?.selectedMenuItems {
                 selectedMenuItemArray = Array(menuItems) as! [SelectedMenuItem]
                 menuTableView.reloadData()
+            }
+            if let tips = report.tips {
+                let fm = NumberFormatter()
+                fm.numberStyle = .decimal
+                fm.maximumFractionDigits = 2
+                fm.minimumFractionDigits = 2
+                tipsLable.text = fm.string(from: tips)
             }
             if let memo = report.memo {
                 memoTextView.text = memo
@@ -262,7 +269,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         }
         
         dismiss(animated: true) { [unowned self] in
-            self.reload?(self.report!)
+            self.reload?(self.report!, self.selectedMenuItems)
         }
     }
     
@@ -448,7 +455,7 @@ extension NewReportViewController: MenuSelectTableViewControllerDelegate {
     func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>) {
         selectedMenuItems = selectMenu
         selectedMenuItemArray.removeAll()
-        selectedMenuItemArray = Array(selectMenu)
+        selectedMenuItemArray = Array(selectMenu).sorted { $0.tag < $1.tag }
         menuTableView.reloadData()
     }
     

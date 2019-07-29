@@ -15,6 +15,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     
     var selectedMenuItems: Set<SelectedMenuItem> = []
     var selectedMenuItemArray = [SelectedMenuItem]()
+    var selectClient: ClientInfo?
     var selectedDate: Date? {
         didSet {
             let formatter = DateFormatter()
@@ -40,22 +41,21 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
                 endTextView.text = formatter.string(from: endTime)
             }
             if let menu = reportItem.selectedMenuItems {
-                selectedMenuItemArray = Array(menu) as! [SelectedMenuItem]
+                let newArray = Array(menu) as! [SelectedMenuItem]
+                selectedMenuItemArray = newArray.sorted { $0.tag < $1.tag }
                 menuTableView.reloadData()
             }
             if let memo = reportItem.memo {
                 memoTextView.text = memo
             }
-        }
-    }
-
-    var selectClient: ClientInfo! {
-        didSet {
-            if let image = selectClient.clientImage {
+            if let image = reportItem.client!.clientImage {
                 clientImageView.image = UIImage(data: image)
             }
-            if let firstName = selectClient.firstName {
-                nameLabel.text = "\(firstName) \(selectClient.lastName ?? "")"
+            if let firstName = reportItem.client!.firstName {
+                nameLabel.text = "\(firstName) \(reportItem.client!.lastName ?? "")"
+            }
+            if let client = reportItem.client {
+                selectClient = client
             }
         }
     }
@@ -229,6 +229,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
                 let imageData = iv.image?.jpegData(compressionQuality: 0.1)
                 newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
             }
+            
             newReport.setValue(selectClient, forKey: "client")
             let formatter = DateFormatter()
             formatter.dateFormat = "YYYY/MM/dd"
@@ -253,12 +254,10 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
             self.navigationController?.popViewController(animated: true)
         } else {
             print("reportItem != nil")
-            if let client = selectClient {
-                reportItem.client = client
-            }
-            reportItem.visitDate = dateTextView.toolbar.datePicker.date
-            
+            reportItem.client = selectClient
             let formatter = DateFormatter()
+            formatter.dateFormat = "YYYY/MM/dd"
+            reportItem.visitDate = formatter.date(from: dateTextView.text)
             formatter.dateFormat = "HH:mm"
             if startTextView.text != nil {
                 let time = formatter.date(from: startTextView.text)
@@ -270,7 +269,6 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
             }
             reportItem.selectedMenuItems = NSSet(set: selectedMenuItems)
             reportItem.memo = memoTextView.text ?? ""
-            
             do {
                 try fetchedReportItemResultsController.managedObjectContext.save()
             } catch let err {
@@ -292,18 +290,14 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
-//
-//        guard let userInfo = notification.userInfo else { return }
-//        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+        guard let userInfo = notification.userInfo else { return }
+        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         
-//        let keyboardFrameHeight = keyboardSize.cgRectValue.height
-        
-//        if menuTextView.isFirstResponder || memoTextView.isFirstResponder {
-//            self.view.frame.origin.y = -keyboardFrameHeight
-//        }
-//        else {
-//            self.view.frame.origin.y = -keyboardFrameHeight
-//        }
+        let keyboardFrameHeight = keyboardSize.cgRectValue.height
+        if memoTextView.isFirstResponder {
+            self.view.frame.origin.y = -keyboardFrameHeight
+        }
     }
     
     @objc func keyboardWillBeHidden(notification: NSNotification) {
@@ -341,7 +335,6 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 40
     }
-    
     
     // UIParts
     private let formScrollView: UIScrollView = {
@@ -491,7 +484,7 @@ extension AddAppointmentViewController: MenuSelectTableViewControllerDelegate, C
     func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>) {
         selectedMenuItems = selectMenu
         selectedMenuItemArray.removeAll()
-        selectedMenuItemArray = Array(selectMenu)
+        selectedMenuItemArray = Array(selectMenu).sorted { $0.tag < $1.tag }
         menuTableView.reloadData()
     }
     

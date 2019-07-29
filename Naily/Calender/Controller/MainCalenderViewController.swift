@@ -17,6 +17,10 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     let gregorian: Calendar = Calendar(identifier: .gregorian)
     var selectDate = Date()
     
+    override func viewWillAppear(_ animated: Bool) {
+        calendarView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let addButton: UIBarButtonItem = {
@@ -79,9 +83,8 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     
     private func getAppointmentdata(date: Date) {
         let predicate = NSPredicate(format: "%@ =< visitDate AND visitDate < %@", getBeginingAndEndOfDay(date).begining as CVarArg, getBeginingAndEndOfDay(date).end as CVarArg)
-        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: false)
         let startTimeDescriptors = NSSortDescriptor(key: "startTime", ascending: true)
-        fetchedReportItemResultsController.fetchRequest.sortDescriptors = [visitDateDescriptors, startTimeDescriptors]
+        fetchedReportItemResultsController.fetchRequest.sortDescriptors = [startTimeDescriptors]
         fetchedReportItemResultsController.fetchRequest.predicate = predicate
         do {
             try fetchedReportItemResultsController.performFetch()
@@ -99,8 +102,8 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     // appointTableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
-//        getAppointmentdata(date: selectDate)
         cell.appointmentReport = fetchedReportItemResultsController.object(at: indexPath)
+        
         return cell
     }
     
@@ -116,14 +119,16 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        if let count = fetchedReportItemResultsController.sections?.count {
+            return count
+        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let addAppointmentVC = AddAppointmentViewController()
-        getAppointmentdata(date: selectDate)
+//        getAppointmentdata(date: selectDate)
         let appointment = fetchedReportItemResultsController.object(at: indexPath)
-        addAppointmentVC.selectClient = appointment.client
         addAppointmentVC.reportItem = appointment
         self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }

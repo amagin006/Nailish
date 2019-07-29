@@ -33,7 +33,7 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
     
     lazy var fetchedSelectedMenuItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<SelectedMenuItem> in
         let fetchRequest = NSFetchRequest<SelectedMenuItem>(entityName: "SelectedMenuItem")
-        let menuItemDescriptors = NSSortDescriptor(key: "color", ascending: false)
+        let menuItemDescriptors = NSSortDescriptor(key: "tag", ascending: true)
         fetchRequest.sortDescriptors = [menuItemDescriptors]
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
@@ -84,7 +84,4 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
             fatalError()
         }
     }
-    
-    
-    
 }

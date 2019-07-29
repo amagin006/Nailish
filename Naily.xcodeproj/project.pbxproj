@@ -27,7 +27,7 @@
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
 		437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75B7229FBF8B0032E371 /* MainTabBarController.swift */; };
-		437A75BA229FCA760032E371 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 437A75B9229FCA760032E371 /* Assets.xcassets */; };
+		43A28B0A22EFB39F00F57860 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A28B0922EFB39F00F57860 /* Assets.xcassets */; };
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
 		43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */; };
 		43A2F49F22A7B315003A07ED /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49E22A7B315003A07ED /* MyTextField.swift */; };
@@ -85,7 +85,7 @@
 		437A75AE229FAC010032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		437A75B0229FAC010032E371 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		437A75B7229FBF8B0032E371 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
-		437A75B9229FCA760032E371 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		43A28B0922EFB39F00F57860 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewCell.swift; sourceTree = "<group>"; };
 		43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClientViewController.swift; sourceTree = "<group>"; };
 		43A2F49E22A7B315003A07ED /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
@@ -240,7 +240,7 @@
 			children = (
 				437A75A4229FABFF0032E371 /* AppDelegate.swift */,
 				437A75A8229FABFF0032E371 /* Main.storyboard */,
-				437A75B9229FCA760032E371 /* Assets.xcassets */,
+				43A28B0922EFB39F00F57860 /* Assets.xcassets */,
 				437A75AD229FAC010032E371 /* LaunchScreen.storyboard */,
 			);
 			path = "Supporting Files";
@@ -323,8 +323,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				437A75BA229FCA760032E371 /* Assets.xcassets in Resources */,
 				437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */,
+				43A28B0A22EFB39F00F57860 /* Assets.xcassets in Resources */,
 				437A75AA229FABFF0032E371 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
