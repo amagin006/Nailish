@@ -68,8 +68,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         menuTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         menuTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: cellId)
-        menuTableView.allowsMultipleSelectionDuringEditing = true
-        menuTableView.setEditing(true, animated: true)
+        
     }
     
     func fetchMenuItem() {
@@ -104,26 +103,41 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
+        cell.isFromSelectedMenuView = true
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
-    
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
             guard let menuItem = cell.menuItem else { return }
-            selectedCell.insert(menuItem)
+            if !cell.tapped {
+                selectedCell.insert(menuItem)
+                cell.tapped = true
+                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
+            } else {
+                selectedCell.remove(menuItem)
+                cell.tapped = false
+                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
+            }
         }
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
-            guard let menuItem = cell.menuItem else { return }
-            selectedCell.remove(menuItem)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let manageContext = CoreDataManager.shared.viewContext
+            manageContext.delete(fetchedSelectedMenuItemResultsController.object(at: indexPath))
+            do {
+                try fetchedSelectedMenuItemResultsController.managedObjectContext.save()
+            } catch let err {
+                print("Failed delete selectitem \(err)")
+            }
         }
+        
     }
     
     @objc func addButtonPressed() {
