@@ -11,10 +11,11 @@ import CoreData
 
 private let appointmentCellId = "appointmentCellId"
 
-class AddAppointmentViewController: UIViewController, UITableViewDataSource {
+class AddAppointmentViewController: FetchTableViewController, UITableViewDataSource {
     
     var selectedMenuItems: Set<SelectedMenuItem> = []
     var selectedMenuItemArray = [SelectedMenuItem]()
+    var selectClient: ClientInfo?
     var selectedDate: Date? {
         didSet {
             let formatter = DateFormatter()
@@ -40,22 +41,21 @@ class AddAppointmentViewController: UIViewController, UITableViewDataSource {
                 endTextView.text = formatter.string(from: endTime)
             }
             if let menu = reportItem.selectedMenuItems {
-                selectedMenuItemArray = Array(menu) as! [SelectedMenuItem]
+                let newArray = Array(menu) as! [SelectedMenuItem]
+                selectedMenuItemArray = newArray.sorted { $0.tag < $1.tag }
                 menuTableView.reloadData()
             }
             if let memo = reportItem.memo {
                 memoTextView.text = memo
             }
-        }
-    }
-
-    var selectClient: ClientInfo! {
-        didSet {
-            if let image = selectClient.clientImage {
+            if let image = reportItem.client!.clientImage {
                 clientImageView.image = UIImage(data: image)
             }
-            if let firstName = selectClient.firstName {
-                nameLabel.text = "\(firstName) \(selectClient.lastName ?? "")"
+            if let firstName = reportItem.client!.firstName {
+                nameLabel.text = "\(firstName) \(reportItem.client!.lastName ?? "")"
+            }
+            if let client = reportItem.client {
+                selectClient = client
             }
         }
     }
@@ -63,6 +63,7 @@ class AddAppointmentViewController: UIViewController, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        self.tableView = menuTableView
         setupUI()
         setupNavigationUI()
     }
@@ -194,7 +195,7 @@ class AddAppointmentViewController: UIViewController, UITableViewDataSource {
         self.navigationController?.pushViewController(custmerVC, animated: true)
     }
     
-    @objc func deleteClient() {
+    @objc func deleteReport() {
         let alert: UIAlertController = UIAlertController(title: "Delete Report", message: "Are you sure you want to delete client?", preferredStyle: .alert)
         
         let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
@@ -216,34 +217,19 @@ class AddAppointmentViewController: UIViewController, UITableViewDataSource {
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
-        
-        
-        
     }
     
-    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
-        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
-        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: false)
-        fetchRequest.sortDescriptors = [visitDateDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                             managedObjectContext: context,
-                                             sectionNameKeyPath: nil,
-                                             cacheName: nil)
-        return frc
-    }()
-    
-    
     @objc func saveButtonPressed() {
-        print("save")
-        let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+        let manageContext = CoreDataManager.shared.viewContext
         if reportItem == nil {
+            print("reportItem == nil")
             let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
             for i in 0..<4 {
                 let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
                 let imageData = iv.image?.jpegData(compressionQuality: 0.1)
                 newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
             }
+            
             newReport.setValue(selectClient, forKey: "client")
             let formatter = DateFormatter()
             formatter.dateFormat = "YYYY/MM/dd"
@@ -267,19 +253,22 @@ class AddAppointmentViewController: UIViewController, UITableViewDataSource {
             }
             self.navigationController?.popViewController(animated: true)
         } else {
-            if let client = selectClient {
-                reportItem.client = client
-            }
-            reportItem.visitDate = dateTextView.toolbar.datePicker.date
+            print("reportItem != nil")
+            reportItem.client = selectClient
+            let formatter = DateFormatter()
+            formatter.dateFormat = "YYYY/MM/dd"
+            reportItem.visitDate = formatter.date(from: dateTextView.text)
+            formatter.dateFormat = "HH:mm"
             if startTextView.text != nil {
-                reportItem.startTime = startTextView.toolbar.datePicker.date
+                let time = formatter.date(from: startTextView.text)
+                reportItem.startTime = time
             }
             if endTextView.text != nil {
-                reportItem.endTime = endTextView.toolbar.datePicker.date
+                let time = formatter.date(from: endTextView.text)
+                reportItem.endTime = time
             }
             reportItem.selectedMenuItems = NSSet(set: selectedMenuItems)
             reportItem.memo = memoTextView.text ?? ""
-            
             do {
                 try fetchedReportItemResultsController.managedObjectContext.save()
             } catch let err {
@@ -290,7 +279,6 @@ class AddAppointmentViewController: UIViewController, UITableViewDataSource {
     }
     
     @objc func addMenu() {
-        
         let menuSelectTableVC = MenuSelectTableViewController()
         menuSelectTableVC.delegate = self
         let menuSelectTableNVC = LightStatusNavigationController(rootViewController: menuSelectTableVC)
@@ -302,24 +290,50 @@ class AddAppointmentViewController: UIViewController, UITableViewDataSource {
     }
     
     @objc func keyboardWillBeShown(notification: NSNotification) {
-//
-//        guard let userInfo = notification.userInfo else { return }
-//        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+        guard let userInfo = notification.userInfo else { return }
+        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
         
-//        let keyboardFrameHeight = keyboardSize.cgRectValue.height
-        
-//        if menuTextView.isFirstResponder || memoTextView.isFirstResponder {
-//            self.view.frame.origin.y = -keyboardFrameHeight
-//        }
-//        else {
-//            self.view.frame.origin.y = -keyboardFrameHeight
-//        }
+        let keyboardFrameHeight = keyboardSize.cgRectValue.height
+        if memoTextView.isFirstResponder {
+            self.view.frame.origin.y = -keyboardFrameHeight
+        }
     }
     
     @objc func keyboardWillBeHidden(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
         }
+    }
+    
+    // menuTableView
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !selectedMenuItemArray.isEmpty {
+            return selectedMenuItemArray.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: appointmentCellId, for: indexPath) as! MenuMasterTableViewCell
+        cell.selectionStyle = .none
+        if !selectedMenuItemArray.isEmpty {
+            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
+            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
+            cell.menuitemTagLabel.backgroundColor = color?.rawValue
+            // TODO: set price Label
+            let fm = NumberFormatter()
+            fm.numberStyle = .decimal
+            fm.maximumFractionDigits = 2
+            fm.minimumFractionDigits = 2
+            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
+        }
+        cell.backgroundColor = .white
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
     }
     
     // UIParts
@@ -458,53 +472,23 @@ class AddAppointmentViewController: UIViewController, UITableViewDataSource {
         bt.translatesAutoresizingMaskIntoConstraints = false
         bt.setTitle("Delete Report", for: .normal)
         bt.backgroundColor = .red
-        bt.addTarget(self, action: #selector(deleteClient), for: .touchUpInside)
+        bt.addTarget(self, action: #selector(deleteReport), for: .touchUpInside)
         bt.layer.cornerRadius = 10
         return bt
     }()
 
 }
 
-extension AddAppointmentViewController: UITableViewDelegate, MenuSelectTableViewControllerDelegate {
+extension AddAppointmentViewController: MenuSelectTableViewControllerDelegate, CustomerCollectionViewControllerDelegate {
+    // MenuSelectTableViewControllerDelegate
     func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>) {
         selectedMenuItems = selectMenu
         selectedMenuItemArray.removeAll()
-        selectedMenuItemArray = Array(selectMenu)
+        selectedMenuItemArray = Array(selectMenu).sorted { $0.tag < $1.tag }
         menuTableView.reloadData()
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !selectedMenuItemArray.isEmpty {
-            return selectedMenuItemArray.count
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: appointmentCellId, for: indexPath) as! MenuMasterTableViewCell
-        cell.selectionStyle = .none
-        if !selectedMenuItemArray.isEmpty {
-            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
-            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
-            cell.menuitemTagLabel.backgroundColor = color?.rawValue
-            // TODO: set price Label
-            let fm = NumberFormatter()
-            fm.numberStyle = .decimal
-            fm.maximumFractionDigits = 2
-            fm.minimumFractionDigits = 2
-            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
-        }
-        cell.backgroundColor = .white
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
-    }
-    
-}
-
-extension AddAppointmentViewController: CustomerCollectionViewControllerDelegate {
+    // CustomerCollectionViewControllerDelegate
     func selectedClient(client: ClientInfo) {
         self.selectClient = client
         if let image = client.clientImage {

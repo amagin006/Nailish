@@ -9,7 +9,15 @@
 import UIKit
 
 class MenuMasterTableViewCell: UITableViewCell {
-    
+
+    var tapped = false
+    var isFromSelectedMenuView: Bool? {
+        didSet {
+            if let _ = isFromSelectedMenuView {
+                menuAndCheckSV.insertArrangedSubview(selectCheckIcon, at: 0)
+            }
+        }
+    }
     var menuItem: SelectedMenuItem? {
         didSet {
             menuitemTagLabel.text = menuItem!.menuName ?? ""
@@ -46,31 +54,50 @@ class MenuMasterTableViewCell: UITableViewCell {
     }
 
     func setupUI() {
-        addSubview(menuitemTagLabel)
-
-        menuitemTagLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        menuitemTagLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        menuitemTagLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 60).isActive = true
+        addSubview(menuAndCheckSV)
+        menuAndCheckSV.spacing = 16
+        menuAndCheckSV.axis = .horizontal
+        menuAndCheckSV.alignment = .center
+        menuAndCheckSV.addArrangedSubview(menuitemTagLabel)
+        menuAndCheckSV.translatesAutoresizingMaskIntoConstraints = false
+        menuAndCheckSV.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        menuAndCheckSV.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        menuAndCheckSV.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
         
         let priceSV = UIStackView(arrangedSubviews: [dollar, priceLabel])
         priceSV.axis = .horizontal
+        priceSV.alignment = .center
         priceSV.spacing = 4
         addSubview(priceSV)
         priceSV.translatesAutoresizingMaskIntoConstraints = false
         priceSV.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        priceSV.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        priceSV.heightAnchor.constraint(equalToConstant: 50).isActive = true
         priceSV.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
         
     }
+    
+    let menuAndCheckSV: UIStackView = {
+        let sv = UIStackView()
+        return sv
+    }()
+    
+    let selectCheckIcon: UIImageView = {
+        let iv = UIImageView()
+        iv.image = #imageLiteral(resourceName: "check-icon4")
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.constraintWidth(equalToConstant: 27)
+        iv.constraintHeight(equalToConstant: 27)
+        return iv
+    }()
 
     let menuitemTagLabel: menuTagLabel = {
         let lb = menuTagLabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.constraintHeight(equalToConstant: 27)
         lb.backgroundColor = .blue
         lb.layer.cornerRadius = 12
         lb.clipsToBounds = true
         lb.textColor = .white
-        lb.text = "Design"
         return lb
     }()
     

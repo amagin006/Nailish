@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource {
+class ReportDetailViewController: FetchTableViewController, UITableViewDataSource {
     
     private let menuCellId = "menuCellId"
     
@@ -58,7 +58,8 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
                 tipsPrice.text = fm.string(from: tip)
             }
             if let reportDetailselectedMenus = report.selectedMenuItems {
-                selectedMenuItemArray = Array(reportDetailselectedMenus) as! [SelectedMenuItem]
+                let newArray = Array(reportDetailselectedMenus) as! [SelectedMenuItem]
+                selectedMenuItemArray = Array(newArray).sorted { $0.tag < $1.tag }
                 var subTotal:NSDecimalNumber = 0.00
                 let taxRate:NSDecimalNumber = 0.12
                 for item in selectedMenuItemArray {
@@ -76,12 +77,9 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView = menuTableView
         setupNavigationUI()
         setupUI()
     }
@@ -259,9 +257,10 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
             let editVC = NewReportViewController()
             editVC.report = self.report
             // callback closure when dismiss
-            editVC.reload = { [unowned self] (editReport) in
+            editVC.reload = { [unowned self] (editReport, selectedMenuItems) in
                 // set report -> didSet -> reload
                 self.report = editReport
+                self.selectedMenuItemArray = Array(selectedMenuItems).sorted { $0.tag < $1.tag }
                 self.menuTableView.reloadData()
             }
             let editNVC = LightStatusNavigationController(rootViewController: editVC)
@@ -270,21 +269,23 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         
         let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
             (action: UIAlertAction!) -> Void in
-            print("delete")
+           
             CoreDataManager.shared.viewContext.delete(self.report)
-            CoreDataManager.shared.saveContext()
+            do {
+                try self.fetchedReportItemResultsController.managedObjectContext.save()
+            } catch let err {
+                print("failed delete client - \(err)")
+            }
             self.navigationController?.popViewController(animated: true)
         })
-        
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
-            (action: UIAlertAction!) -> Void in
             
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
+            (action: UIAlertAction!) in
         })
-        
         alert.addAction(editAction)
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
-        present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -293,6 +294,40 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
     
     func updateCurrentPageDisplay() {
         print(pageControl.currentPage)
+    }
+    
+    // menuTableView
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !selectedMenuItemArray.isEmpty {
+            return selectedMenuItemArray.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
+        cell.selectionStyle = .none
+        if !selectedMenuItemArray.isEmpty {
+            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
+            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
+            cell.menuitemTagLabel.backgroundColor = color?.rawValue
+            let fm = NumberFormatter()
+            fm.numberStyle = .decimal
+            //        fm.currencySymbol = "$"
+            fm.maximumFractionDigits = 2
+            fm.minimumFractionDigits = 2
+            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
+        }
+        cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
     }
     
     // UI Parts
@@ -472,41 +507,5 @@ class ReportDetailViewController: UIViewController, UIScrollViewDelegate, UITabl
         return lb
     }()
 
-}
-
-
-extension ReportDetailViewController: UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !selectedMenuItemArray.isEmpty {
-            return selectedMenuItemArray.count
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: menuCellId, for: indexPath) as! MenuMasterTableViewCell
-        cell.selectionStyle = .none
-        if !selectedMenuItemArray.isEmpty {
-            cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
-            let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
-            cell.menuitemTagLabel.backgroundColor = color?.rawValue
-            let fm = NumberFormatter()
-            fm.numberStyle = .decimal
-            //        fm.currencySymbol = "$"
-            fm.maximumFractionDigits = 2
-            fm.minimumFractionDigits = 2
-            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
-        }
-        cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
-    }
 }
 

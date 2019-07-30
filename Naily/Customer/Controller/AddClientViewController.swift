@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Photos
 
 protocol AddClientViewControllerDelegate:class {
     func editClientDidFinish(client: ClientInfo)
@@ -50,6 +51,7 @@ class AddClientViewController: UIViewController {
     private func setupUI() {
         
         view.addSubview(clientFormView)
+        clientFormView.backgroundColor = UIColor.init(red: 255/255, green: 235/255, blue: 154/255, alpha: 1)
         clientFormView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         clientFormView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         clientFormView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -304,7 +306,38 @@ class AddClientViewController: UIViewController {
     }
     
     @objc func selectImage() {
-        print("press selectImage")
+        let status = PHPhotoLibrary.authorizationStatus()
+        switch status {
+        case .authorized:
+            // handle authorized status
+            self.editClientImage()
+        default:
+            // ask for permissions
+            PHPhotoLibrary.requestAuthorization { status in
+                switch status {
+                case .authorized:
+                    self.editClientImage()
+                default:
+                    // won't happen but still
+                    let cameraUnavailableAlertController = UIAlertController (title: "Photo Library Unavailable", message: "Please check to see if device settings doesn't allow photo library access", preferredStyle: .alert)
+                    
+                    let settingsAction = UIAlertAction(title: "Settings", style: .destructive) { (_) -> Void in
+                        let settingsUrl = NSURL(string:UIApplication.openSettingsURLString)
+                        if let url = settingsUrl {
+                            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+                        }
+                    }
+                    let cancelAction = UIAlertAction(title: "Okay", style: .default, handler: nil)
+                    cameraUnavailableAlertController.addAction(settingsAction)
+                    cameraUnavailableAlertController.addAction(cancelAction)
+                    self.present(cameraUnavailableAlertController , animated: true, completion: nil)
+                    break
+                }
+            }
+        }
+    }
+    
+    func editClientImage() {
         let imagePickController = UIImagePickerController()
         imagePickController.delegate = self
         imagePickController.allowsEditing = true
@@ -420,25 +453,20 @@ class AddClientViewController: UIViewController {
     }
 
     @objc func keyboardWillBeShown(notification: NSNotification) {
-        if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
-            guard let userInfo = notification.userInfo else { return }
-            guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-            let keyboardFrameHeight = keyboardSize.cgRectValue.height
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardFrameHeight
-            }
+        guard let userInfo = notification.userInfo else { return }
+        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        
+        let keyboardFrameHeight = keyboardSize.cgRectValue.height
+        
+        if !(firstNameTextField.isFirstResponder || lastNameTextField.isFirstResponder) {
+            self.view.frame.origin.y = -keyboardFrameHeight
         }
+        
     }
     
     @objc func keyboardWillBeHidden(notification: NSNotification) {
-        if mobileTextField.isFirstResponder || DOBTextField.isFirstResponder || memoTextField.isFirstResponder {
-            guard let userInfo = notification.userInfo else { return }
-            print(userInfo)
-            guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-            let keyboardFrame = keyboardSize.cgRectValue
-            if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y += keyboardFrame.height
-            }
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
         }
     }
     
@@ -457,7 +485,7 @@ class AddClientViewController: UIViewController {
         let vi = UIScrollView()
         vi.backgroundColor = .white
         vi.translatesAutoresizingMaskIntoConstraints = false
-        vi.contentSize.height = 890
+        vi.contentSize.height = 850
         return vi
     }()
     

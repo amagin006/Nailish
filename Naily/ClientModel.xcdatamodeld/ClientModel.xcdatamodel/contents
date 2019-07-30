@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Appointment" representedClassName="Appointment" syncable="YES" codeGenerationType="class">
-        <attribute name="appointmentDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="end" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="memo" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="menu" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="start" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="client" maxCount="1" deletionRule="Cascade" destinationEntity="ClientInfo" inverseName="appointment" inverseEntity="ClientInfo" syncable="YES"/>
-    </entity>
     <entity name="ClientInfo" representedClassName="ClientInfo" syncable="YES" codeGenerationType="class">
         <attribute name="clientImage" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="dateOfBirth" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -21,7 +13,6 @@
         <attribute name="mobileNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nameInitial" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitter" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="appointment" toMany="YES" deletionRule="Nullify" destinationEntity="Appointment" inverseName="client" inverseEntity="Appointment" syncable="YES"/>
         <relationship name="items" toMany="YES" deletionRule="Cascade" destinationEntity="ReportItem" inverseName="client" inverseEntity="ReportItem" syncable="YES"/>
     </entity>
     <entity name="ReportItem" representedClassName="ReportItem" syncable="YES" codeGenerationType="class">
@@ -41,12 +32,12 @@
         <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="menuName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tag" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="reportItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReportItem" inverseName="selectedMenuItems" inverseEntity="ReportItem" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Appointment" positionX="-39.01171875" positionY="-45.4609375" width="128" height="135"/>
-        <element name="ClientInfo" positionX="191.875" positionY="-20.02734375" width="128" height="253"/>
+        <element name="ClientInfo" positionX="-238.94921875" positionY="-8.26953125" width="128" height="238"/>
         <element name="ReportItem" positionX="-746.67578125" positionY="52.3203125" width="128" height="210"/>
-        <element name="SelectedMenuItem" positionX="-565.8046875" positionY="30.484375" width="128" height="105"/>
+        <element name="SelectedMenuItem" positionX="-545.6015625" positionY="318.01171875" width="128" height="118"/>
     </elements>
 </model>

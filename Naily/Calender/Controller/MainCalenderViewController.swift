@@ -12,7 +12,7 @@ import CoreData
 
 private let cellId = "cellId"
 
-class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+class MainCalenderViewController: FetchTableViewController, UITableViewDataSource {
 
     let gregorian: Calendar = Calendar(identifier: .gregorian)
     var selectDate = Date()
@@ -28,6 +28,7 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
             return bt
         }()
         navigationItem.rightBarButtonItem = addButton
+        self.tableView = appointTableView
         setupCalendar()
         setupTableViewUI()
         getAppointmentdata(date: selectDate)
@@ -52,7 +53,6 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
 //        swipDownGesture.direction = .down
 //        self.calendarView.addGestureRecognizer(swipUpGesture)
 //        self.calendarView.addGestureRecognizer(swipDownGesture)
-
     }
     
     private func setupTableViewUI() {
@@ -81,21 +81,10 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
         appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
-    lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
-        let fetchRequest = NSFetchRequest<ReportItem>(entityName: "ReportItem")
-        let visitDateDescriptors = NSSortDescriptor(key: "visitDate", ascending: false)
-        fetchRequest.sortDescriptors = [visitDateDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                             managedObjectContext: context,
-                                             sectionNameKeyPath: nil,
-                                             cacheName: nil)
-        frc.delegate = self
-        return frc
-    }()
-    
     private func getAppointmentdata(date: Date) {
         let predicate = NSPredicate(format: "%@ =< visitDate AND visitDate < %@", getBeginingAndEndOfDay(date).begining as CVarArg, getBeginingAndEndOfDay(date).end as CVarArg)
+        let startTimeDescriptors = NSSortDescriptor(key: "startTime", ascending: true)
+        fetchedReportItemResultsController.fetchRequest.sortDescriptors = [startTimeDescriptors]
         fetchedReportItemResultsController.fetchRequest.predicate = predicate
         do {
             try fetchedReportItemResultsController.performFetch()
@@ -109,16 +98,39 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
         addAppointmentVC.selectedDate = selectDate
         self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
-
-    // FetchTableview Update
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        appointTableView.beginUpdates()
-        print("appointTableView.beginUpdates()")
+    
+    // appointTableView
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
+        cell.appointmentReport = fetchedReportItemResultsController.object(at: indexPath)
+        
+        return cell
     }
     
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        appointTableView.endUpdates()
-        print("appointTableView.endUpdates()")
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let count = fetchedReportItemResultsController.sections?[section].numberOfObjects {
+            return count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if let count = fetchedReportItemResultsController.sections?.count {
+            return count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let addAppointmentVC = AddAppointmentViewController()
+        getAppointmentdata(date: selectDate)
+        let appointment = fetchedReportItemResultsController.object(at: indexPath)
+        addAppointmentVC.reportItem = appointment
+        self.navigationController?.pushViewController(addAppointmentVC, animated: true)
     }
     
     // UI Parts
@@ -159,74 +171,7 @@ class MainCalenderViewController: UIViewController, UITableViewDataSource, NSFet
         bt.addTarget(self, action: #selector(addAppointmentPressed), for: .touchUpInside)
         return bt
     }()
-}
 
-extension MainCalenderViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
-        getAppointmentdata(date: selectDate)
-        cell.appointment = fetchedReportItemResultsController.object(at: indexPath)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = fetchedReportItemResultsController.sections?[section].numberOfObjects {
-            return count
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let addAppointmentVC = AddAppointmentViewController()
-        getAppointmentdata(date: selectDate)
-        let appointment = fetchedReportItemResultsController.object(at: indexPath)
-        addAppointmentVC.selectClient = appointment.client
-        addAppointmentVC.reportItem = appointment
-        self.navigationController?.pushViewController(addAppointmentVC, animated: true)
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
-        switch (type) {
-        case .insert:
-            if let indexPath = newIndexPath {
-                appointTableView.insertRows(at: [indexPath], with: .fade)
-            }
-            print("insert")
-        case .delete:
-            if let indexPath = indexPath {
-                appointTableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            print("delete")
-        case .update:
-            if let indexPath = indexPath {
-                appointTableView.reloadRows(at: [indexPath], with: .automatic)
-            }
-            print("update")
-        case .move:
-            if let indexPath = indexPath {
-                appointTableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            print("move")
-            if let newIndexPath = newIndexPath {
-                appointTableView.insertRows(at: [newIndexPath], with: .fade)
-            }
-        @unknown default:
-            fatalError()
-        }
-    }
     
 }
 

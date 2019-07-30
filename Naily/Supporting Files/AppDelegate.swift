@@ -19,9 +19,9 @@ class LightStatusNavigationController: UINavigationController {
 
     var window: UIWindow?
     var mainTabBarController: MainTabBarController!
-
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        sleep(1)
         // Override point for customization after application launch.
         mainTabBarController = MainTabBarController()
         window?.rootViewController = mainTabBarController

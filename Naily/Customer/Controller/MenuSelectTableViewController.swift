@@ -15,18 +15,14 @@ protocol MenuSelectTableViewControllerDelegate: class {
 
 private let cellId = "AddMenuCell"
 
-class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
+class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSource {
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
     var selectedCell = Set<SelectedMenuItem>()
     
-    override func viewWillAppear(_ animated: Bool) {
-        fetchMenuItem()
-        menuTableView.reloadData()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView = menuTableView
         setupNavigationUI()
         setupUI()
         fetchMenuItem()
@@ -72,8 +68,7 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         menuTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         menuTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: cellId)
-        menuTableView.allowsMultipleSelectionDuringEditing = true
-        menuTableView.setEditing(true, animated: true)
+        
     }
     
     func fetchMenuItem() {
@@ -94,21 +89,63 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         }
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let count = fetchedSelectedMenuItemResultsController.sections?[section].numberOfObjects {
+            return count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
+        cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
+        cell.isFromSelectedMenuView = true
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
+            guard let menuItem = cell.menuItem else { return }
+            if !cell.tapped {
+                selectedCell.insert(menuItem)
+                cell.tapped = true
+                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
+            } else {
+                selectedCell.remove(menuItem)
+                cell.tapped = false
+                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let manageContext = CoreDataManager.shared.viewContext
+            manageContext.delete(fetchedSelectedMenuItemResultsController.object(at: indexPath))
+            do {
+                try fetchedSelectedMenuItemResultsController.managedObjectContext.save()
+            } catch let err {
+                print("Failed delete selectitem \(err)")
+            }
+        }
+        
+    }
+    
     @objc func addButtonPressed() {
         let newSelectVC = NewMenuViewController()
         let newSelectNVC = LightStatusNavigationController(rootViewController: newSelectVC)
         self.present(newSelectNVC, animated: true, completion: nil)
     }
-    
-    lazy var fetchedSelectedMenuItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<SelectedMenuItem> in
-        let fetchRequest = NSFetchRequest<SelectedMenuItem>(entityName: "SelectedMenuItem")
-        let menuItemDescriptors = NSSortDescriptor(key: "color", ascending: false)
-        fetchRequest.sortDescriptors = [menuItemDescriptors]
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        return frc
-    }()
-    
+        
     let headerLable: UILabel = {
         let lb = UILabel()
         lb.text = "Select Menu"
@@ -136,43 +173,7 @@ class MenuSelectTableViewController: UIViewController, UITableViewDataSource {
         let tv = UITableView()
         return tv
     }()
-}
-
-extension MenuSelectTableViewController: UITableViewDelegate, NSFetchedResultsControllerDelegate {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = fetchedSelectedMenuItemResultsController.sections?[section].numberOfObjects {
-            return count
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
-        cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
-    }
     
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
-            guard let menuItem = cell.menuItem else { return }
-            selectedCell.insert(menuItem)
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
-            guard let menuItem = cell.menuItem else { return }
-            selectedCell.remove(menuItem)
-        }
-    }
+   
 }
