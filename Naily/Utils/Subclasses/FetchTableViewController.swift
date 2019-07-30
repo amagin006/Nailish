@@ -39,6 +39,8 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         return frc
     }()
+    
+    
 
     // FetchTableview Update
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -50,37 +52,33 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
         tableView.endUpdates()
         print("TableView.endUpdates()")
     }
+    public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
+    {
+        switch type {
+        case .insert: tableView.insertSections([sectionIndex], with: .fade)
+            print("TableView.section.insert")
+        case .delete: tableView.deleteSections([sectionIndex], with: .fade)
+            print("TableView.section.delete")
+        default: break
+        }
+    }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
-        switch (type) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
+    {
+        switch type {
         case .insert:
-            if let indexPath = newIndexPath {
-                tableView.insertRows(at: [indexPath], with: .fade)
-            }
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
             print("TableView.insert")
         case .delete:
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
-                
-            }
+            tableView.deleteRows(at: [indexPath!], with: .fade)
             print("TableView.delete")
         case .update:
-            if let indexPath = indexPath {
-                tableView.reloadRows(at: [indexPath], with: .automatic)
-            }
+            tableView.reloadRows(at: [indexPath!], with: .fade)
             print("TableView.update")
         case .move:
-            if let indexPath = indexPath {
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
             print("TableView.move")
-            if let newIndexPath = newIndexPath {
-                tableView.insertRows(at: [newIndexPath], with: .fade)
-            }
         @unknown default:
             fatalError()
         }

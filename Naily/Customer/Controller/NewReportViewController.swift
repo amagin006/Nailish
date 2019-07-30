@@ -22,6 +22,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     var selectedMenuItemArray = [SelectedMenuItem]()
     var selectedMenuItems: Set<SelectedMenuItem> = []
     let manageContext = CoreDataManager.shared.persistentContainer.viewContext
+    let paymentList = ["", "Cash", "CreditCard"]
     
     var menuSVRow = [UIView]()
     var report: ReportItem! {
@@ -170,7 +171,19 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         let tipsSV = UIStackView(arrangedSubviews: [tipsTitleLabel, tipsPriceSV])
         tipsSV.axis = .horizontal
         
-        let tipAndMemoSV = UIStackView(arrangedSubviews: [tipsSV, memoLabel, memoTextView])
+        let paymentPicker = UIPickerView()
+        paymentPicker.dataSource = self
+        paymentPicker.delegate = self
+        
+        paymentTextField.inputView = paymentPicker
+        
+        let paymentSV = UIStackView(arrangedSubviews: [paymentLabel, paymentTextField])
+        paymentSV.translatesAutoresizingMaskIntoConstraints = false
+        paymentSV.axis = .horizontal
+        paymentSV.distribution = .fill
+        
+        
+        let tipAndMemoSV = UIStackView(arrangedSubviews: [tipsSV, paymentSV, memoLabel, memoTextView])
         formScrollView.addSubview(tipAndMemoSV)
         tipAndMemoSV.translatesAutoresizingMaskIntoConstraints = false
         tipAndMemoSV.spacing = 10
@@ -248,8 +261,11 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         dismiss(animated: true)
     }
     
+    @objc func doneButtonAction() {
+        paymentTextField.endEditing(true)
+    }
+    
     @objc func reportSeveButtonPressed() {
-        print("reportSeveButtonPressed")
 //        if report == nil { return } // enter required fields
         for i in 0..<reportImageViews.count {
             let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
@@ -259,7 +275,12 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         report?.startTime = startTimeTextField.toolbar.datePicker.date
         report?.endTime = endTimeTextField.toolbar.datePicker.date
         report?.tips = tipsLable.amountDecimalNumber
-        report?.memo = memoTextView.text
+        if memoTextView.text != "" && memoTextView.text != nil {
+            report?.memo = memoTextView.text
+        }
+        if paymentTextField.text != "" && paymentTextField.text != nil {
+            report?.payment = paymentTextField.text
+        }
         report?.client = client
         report?.selectedMenuItems = NSSet(set: selectedMenuItems)
         do {
@@ -274,7 +295,6 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     }
     
     @objc func tapMenu() {
-        print("tapmenu")
         let menuSelectTableVC = MenuSelectTableViewController()
         menuSelectTableVC.delegate = self
         let menuSelectTableNVC = LightStatusNavigationController(rootViewController: menuSelectTableVC)
@@ -435,6 +455,21 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         return tf
     }()
     
+    let paymentLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Payment"
+        lb.font = UIFont.boldSystemFont(ofSize: 12)
+        return lb
+    }()
+    
+    let paymentTextField: MyTextField = {
+        let tf = MyTextField()
+        tf.textAlignment = .right
+        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+        tf.constraintWidth(equalToConstant: 120)
+        return tf
+    }()
+    
     let memoLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Memo"
@@ -524,6 +559,23 @@ extension NewReportViewController: UIImagePickerControllerDelegate, UINavigation
         
         picker.dismiss(animated: true, completion: nil)
     }
+}
+
+extension NewReportViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+       return paymentList.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return paymentList[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        paymentTextField.text = paymentList[row]
+    }
     
 }
