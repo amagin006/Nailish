@@ -127,7 +127,7 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let addAppointmentVC = AddAppointmentViewController()
-//        getAppointmentdata(date: selectDate)
+        getAppointmentdata(date: selectDate)
         let appointment = fetchedReportItemResultsController.object(at: indexPath)
         addAppointmentVC.reportItem = appointment
         self.navigationController?.pushViewController(addAppointmentVC, animated: true)

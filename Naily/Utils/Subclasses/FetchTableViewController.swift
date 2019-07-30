@@ -65,6 +65,7 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
         case .delete:
             if let indexPath = indexPath {
                 tableView.deleteRows(at: [indexPath], with: .fade)
+                
             }
             print("TableView.delete")
         case .update:

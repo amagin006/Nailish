@@ -19,7 +19,6 @@ class LightStatusNavigationController: UINavigationController {
 
     var window: UIWindow?
     var mainTabBarController: MainTabBarController!
-
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         sleep(1)

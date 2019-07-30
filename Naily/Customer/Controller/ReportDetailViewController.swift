@@ -269,21 +269,23 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         
         let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
             (action: UIAlertAction!) -> Void in
-            print("delete")
+           
             CoreDataManager.shared.viewContext.delete(self.report)
-            CoreDataManager.shared.saveContext()
+            do {
+                try self.fetchedReportItemResultsController.managedObjectContext.save()
+            } catch let err {
+                print("failed delete client - \(err)")
+            }
             self.navigationController?.popViewController(animated: true)
         })
-        
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
-            (action: UIAlertAction!) -> Void in
             
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
+            (action: UIAlertAction!) in
         })
-        
         alert.addAction(editAction)
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
-        present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
