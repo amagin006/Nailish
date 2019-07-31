@@ -21,9 +21,13 @@ class CalendarTableViewCell: UITableViewCell {
             formatter.dateFormat = "HH:mm"
             if let startTime = appointmentReport.startTime {
                 startTimeLabel.text = formatter.string(from: startTime)
+            } else {
+                startTimeLabel.text = "00:00"
             }
             if let endTime = appointmentReport.endTime {
                 endTimeLabel.text = formatter.string(from: endTime)
+            } else {
+                endTimeLabel.text = "00:00"
             }
         }
     }

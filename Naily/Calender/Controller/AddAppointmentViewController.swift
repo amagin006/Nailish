@@ -235,17 +235,28 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
             formatter.dateFormat = "YYYY/MM/dd"
             let date = formatter.date(from: dateTextView.text)
             newReport.setValue(date, forKey: "visitDate")
-            if startTextView.text != nil {
-                newReport.setValue(startTextView.toolbar.datePicker.date, forKey: "startTime")
+            formatter.dateFormat = "HH:mm"
+            if startTextView.text != nil && startTextView.text != "" {
+                let start = formatter.date(from: startTextView.text)
+                newReport.setValue(start, forKey: "startTime")
             }
-            if endTextView.text != nil {
-                newReport.setValue(endTextView.toolbar.datePicker.date, forKey: "endTime")
+            else {
+                let start = startTextView.toolbar.datePicker.date
+                newReport.setValue(start, forKey: "startTime")
             }
+            if endTextView.text != nil && endTextView.text != "" {
+                let end = formatter.date(from: endTextView.text)
+                newReport.setValue(end, forKey: "endTime")
+            }
+            else {
+                let end = endTextView.toolbar.datePicker.date
+                newReport.setValue(end, forKey: "endTime")
+            }
+        
             newReport.setValue(selectedMenuItems, forKey: "selectedMenuItems")
             if let memo = memoTextView.text {
                 newReport.setValue(memo, forKey: "memo")
             }
-            
             do {
                 try fetchedReportItemResultsController.managedObjectContext.save()
             } catch let err {
