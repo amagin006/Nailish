@@ -72,7 +72,8 @@ class CustomTimeToolbar: UIToolbar {
         let datePicker = UIDatePicker()
         datePicker.date = Date()
         datePicker.datePickerMode = .time
-        datePicker.locale = Locale(identifier: "en_GB")
+        datePicker.timeZone = NSTimeZone.local
+        datePicker.locale = Locale.current
         return datePicker
     }()
     

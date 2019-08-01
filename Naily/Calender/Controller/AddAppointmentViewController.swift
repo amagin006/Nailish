@@ -56,6 +56,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
             }
             if let client = reportItem.client {
                 selectClient = client
+                clientInfoView.backgroundColor = UIColor(red: 255/255, green: 238/255, blue: 173/255, alpha: 1)
             }
         }
     }
@@ -505,6 +506,7 @@ extension AddAppointmentViewController: MenuSelectTableViewControllerDelegate, C
         if let image = client.clientImage {
             clientImageView.image = UIImage(data: image)
         }
+        clientInfoView.backgroundColor = UIColor(red: 255/255, green: 238/255, blue: 173/255, alpha: 1)
         nameLabel.text = "\(client.firstName!) \(client.lastName ?? "")"
         saveButton.isEnabled = true
     }    

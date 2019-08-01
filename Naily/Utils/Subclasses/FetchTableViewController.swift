@@ -17,6 +17,7 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
         super.viewDidLoad()
         fetchedReportItemResultsController.delegate = self
         fetchedSelectedMenuItemResultsController.delegate = self
+        
     }
     
     lazy var fetchedReportItemResultsController: NSFetchedResultsController = { () -> NSFetchedResultsController<ReportItem> in
@@ -39,8 +40,6 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
         return frc
     }()
-    
-    
 
     // FetchTableview Update
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -52,7 +51,8 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
         tableView.endUpdates()
         print("TableView.endUpdates()")
     }
-    public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
     {
         switch type {
         case .insert: tableView.insertSections([sectionIndex], with: .fade)
@@ -65,6 +65,11 @@ class FetchTableViewController: UIViewController, UITableViewDelegate, NSFetched
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
     {
+        print("+controller++ \(controller)")
+        print("+anObject++ \(anObject)")
+        print("+indexPath++ \(indexPath)")
+        print("+type++ \(type)")
+        print("+newIndexPath++ \(newIndexPath)")
         switch type {
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .fade)

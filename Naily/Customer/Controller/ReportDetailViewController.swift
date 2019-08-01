@@ -72,6 +72,9 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
                 totalPrice.text = fm.string(from: taxTipsTotal.adding(report.tips ?? 0))
 
             }
+            if let payment = report.payment {
+                paymentLabel.text = payment
+            }
             memoLabel.text = report.memo ?? ""
             addImageToScrollView(images: snapshotImages)
         }
@@ -220,13 +223,23 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         totalPriceSV.widthAnchor.constraint(equalTo: priceView.widthAnchor).isActive = true
         totalPriceSV.centerXAnchor.constraint(equalTo: priceView.centerXAnchor).isActive = true
         
+        let paymentSV = UIStackView(arrangedSubviews: [paymentTitleLabel, paymentLabel])
+        paymentSV.axis = .horizontal
+        paymentSV.distribution = .fill
+        
+        scrollView.addSubview(paymentSV)
+        paymentSV.translatesAutoresizingMaskIntoConstraints = false
+        paymentSV.topAnchor.constraint(equalTo: totalPrice.bottomAnchor, constant: 20).isActive = true
+        paymentSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.9).isActive = true
+        paymentSV.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        
         let memoSV = UIStackView(arrangedSubviews: [memoTitleLable, memoLabel])
         memoSV.axis = .vertical
         memoSV.spacing = 4
         
         scrollView.addSubview(memoSV)
         memoSV.translatesAutoresizingMaskIntoConstraints = false
-        memoSV.topAnchor.constraint(equalTo: totalPrice.bottomAnchor, constant: 20).isActive = true
+        memoSV.topAnchor.constraint(equalTo: paymentSV.bottomAnchor, constant: 20).isActive = true
         memoSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.9).isActive = true
         memoSV.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
@@ -488,6 +501,18 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         lb.textAlignment = .right
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
+        return lb
+    }()
+    
+    let paymentTitleLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "Payment"
+        lb.textColor = UIColor(red: 145/255, green: 145/255, blue: 145/255, alpha: 1)
+        return lb
+    }()
+    
+    let paymentLabel: UILabel = {
+        let lb = UILabel()
         return lb
     }()
 

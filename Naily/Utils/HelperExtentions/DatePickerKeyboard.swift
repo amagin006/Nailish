@@ -17,7 +17,7 @@ class DatePickerKeyboard: UITextView, UITextViewDelegate {
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         setupDatePicker()
-        // closure (function without name)
+        
         toolbar.didSelectDate = { (text, dismiss) in
             self.text = text
             if dismiss {
