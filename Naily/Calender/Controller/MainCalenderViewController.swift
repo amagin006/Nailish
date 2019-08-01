@@ -81,7 +81,7 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
         appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
     }
     
-    private func getAppointmentdata(date: Date) {
+    func getAppointmentdata(date: Date) {
         let predicate = NSPredicate(format: "%@ =< visitDate AND visitDate < %@", getBeginingAndEndOfDay(date).begining as CVarArg, getBeginingAndEndOfDay(date).end as CVarArg)
         let startTimeDescriptors = NSSortDescriptor(key: "startTime", ascending: true)
         fetchedReportItemResultsController.fetchRequest.sortDescriptors = [startTimeDescriptors]
