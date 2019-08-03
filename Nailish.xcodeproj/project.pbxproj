@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4313075922E1327A00A2A804 /* MenuSelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */; };
+		431D155C22F63A1500C86C1A /* FSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435C903022C419D1009D6D4E /* FSCalendar.framework */; };
+		431D155E22F63A7400C86C1A /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431D155D22F63A7300C86C1A /* ReportCollectionViewCell.swift */; };
 		4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */; };
 		4337059D22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4337059C22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift */; };
 		433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */; };
@@ -19,7 +21,6 @@
 		435C903D22C50CF8009D6D4E /* MyUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435C903C22C50CF8009D6D4E /* MyUILabel.swift */; };
 		435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */; };
 		435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */; };
-		435D0EC422DE6D0F00BB7F55 /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */; };
 		435D0EC622DE844200BB7F55 /* ReportDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */; };
 		4376D08222E3B0BA00A4671D /* MenuMasterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */; };
 		4376D08422E57B3000A4671D /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4376D08322E57B3000A4671D /* NewMenuViewController.swift */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		4313075722E12F1A00A2A804 /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSelectTableViewController.swift; sourceTree = "<group>"; };
+		431D155D22F63A7300C86C1A /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCollectionViewCell.swift; sourceTree = "<group>"; };
 		4327315622A0C15100BE2792 /* CustomerCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomerCollectionViewController.swift; path = ../CustomerCollectionViewController.swift; sourceTree = "<group>"; };
 		4337059C22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientDetailCollectionViewController.swift; sourceTree = "<group>"; };
 		433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewController.swift; sourceTree = "<group>"; };
@@ -58,11 +60,10 @@
 		435C903C22C50CF8009D6D4E /* MyUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUILabel.swift; sourceTree = "<group>"; };
 		435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDoneToolbar.swift; sourceTree = "<group>"; };
 		435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNormalTextField.swift; sourceTree = "<group>"; };
-		435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReportCollectionViewCell.swift; path = Naily/Customer/View/ReportCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailViewController.swift; sourceTree = "<group>"; };
 		4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuMasterTableViewCell.swift; sourceTree = "<group>"; };
 		4376D08322E57B3000A4671D /* NewMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMenuViewController.swift; sourceTree = "<group>"; };
-		437A75A1229FABFF0032E371 /* Naily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Naily.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		437A75A1229FABFF0032E371 /* Nailish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nailish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		437A75A4229FABFF0032E371 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		437A75A9229FABFF0032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		437A75AE229FAC010032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -89,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				431D155C22F63A1500C86C1A /* FSCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +111,7 @@
 			children = (
 				43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */,
 				433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */,
-				435D0EC322DE6D0F00BB7F55 /* ReportCollectionViewCell.swift */,
+				431D155D22F63A7300C86C1A /* ReportCollectionViewCell.swift */,
 				4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */,
 			);
 			path = View;
@@ -186,34 +188,34 @@
 		437A7598229FABFE0032E371 = {
 			isa = PBXGroup;
 			children = (
-				437A75A3229FABFF0032E371 /* Naily */,
-				437A75A2229FABFF0032E371 /* Products */,
+				437A75A3229FABFF0032E371 /* Nailish */,
+				437A75A2229FABFF0032E371 /* Product */,
 				435C902F22C419D1009D6D4E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		437A75A2229FABFF0032E371 /* Products */ = {
+		437A75A2229FABFF0032E371 /* Product */ = {
 			isa = PBXGroup;
 			children = (
-				437A75A1229FABFF0032E371 /* Naily.app */,
+				437A75A1229FABFF0032E371 /* Nailish.app */,
 			);
-			name = Products;
+			name = Product;
 			sourceTree = "<group>";
 		};
-		437A75A3229FABFF0032E371 /* Naily */ = {
+		437A75A3229FABFF0032E371 /* Nailish */ = {
 			isa = PBXGroup;
 			children = (
 				4327315522A09EF900BE2792 /* Customer */,
 				435C903522C41B92009D6D4E /* Calender */,
 				437A75B0229FAC010032E371 /* Info.plist */,
+				4313075722E12F1A00A2A804 /* Model.h */,
 				437A75B7229FBF8B0032E371 /* MainTabBarController.swift */,
 				43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */,
 				435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */,
 				435C903E22C512BA009D6D4E /* Utils */,
 				437A75B6229FAC4F0032E371 /* Supporting Files */,
-				4313075722E12F1A00A2A804 /* Model.h */,
 			);
-			path = Naily;
+			path = Nailish;
 			sourceTree = "<group>";
 		};
 		437A75B6229FAC4F0032E371 /* Supporting Files */ = {
@@ -246,9 +248,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		437A75A0229FABFF0032E371 /* Naily */ = {
+		437A75A0229FABFF0032E371 /* Nailish */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 437A75B3229FAC010032E371 /* Build configuration list for PBXNativeTarget "Naily" */;
+			buildConfigurationList = 437A75B3229FAC010032E371 /* Build configuration list for PBXNativeTarget "Nailish" */;
 			buildPhases = (
 				437A759D229FABFF0032E371 /* Sources */,
 				437A759E229FABFF0032E371 /* Frameworks */,
@@ -259,9 +261,9 @@
 			);
 			dependencies = (
 			);
-			name = Naily;
+			name = Nailish;
 			productName = Naily;
-			productReference = 437A75A1229FABFF0032E371 /* Naily.app */;
+			productReference = 437A75A1229FABFF0032E371 /* Nailish.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -279,7 +281,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 437A759C229FABFE0032E371 /* Build configuration list for PBXProject "Naily" */;
+			buildConfigurationList = 437A759C229FABFE0032E371 /* Build configuration list for PBXProject "Nailish" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -288,11 +290,11 @@
 				Base,
 			);
 			mainGroup = 437A7598229FABFE0032E371;
-			productRefGroup = 437A75A2229FABFF0032E371 /* Products */;
+			productRefGroup = 437A75A2229FABFF0032E371 /* Product */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				437A75A0229FABFF0032E371 /* Naily */,
+				437A75A0229FABFF0032E371 /* Nailish */,
 			);
 		};
 /* End PBXProject section */
@@ -356,7 +358,7 @@
 				43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */,
 				433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */,
 				43ED0B0322BD8D5B00781893 /* Extensions.swift in Sources */,
-				435D0EC422DE6D0F00BB7F55 /* ReportCollectionViewCell.swift in Sources */,
+				431D155E22F63A7400C86C1A /* ReportCollectionViewCell.swift in Sources */,
 				43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */,
 				437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */,
 				435D0EC622DE844200BB7F55 /* ReportDetailViewController.swift in Sources */,
@@ -518,12 +520,12 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = Naily/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Nailish/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "work.shota-iwamoto.Naily";
+				PRODUCT_BUNDLE_IDENTIFIER = "work.shota-iwamoto.Nailish";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -540,12 +542,12 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = Naily/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Nailish/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "work.shota-iwamoto.Naily";
+				PRODUCT_BUNDLE_IDENTIFIER = "work.shota-iwamoto.Nailish";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -555,7 +557,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		437A759C229FABFE0032E371 /* Build configuration list for PBXProject "Naily" */ = {
+		437A759C229FABFE0032E371 /* Build configuration list for PBXProject "Nailish" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				437A75B1229FAC010032E371 /* Debug */,
@@ -564,7 +566,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		437A75B3229FAC010032E371 /* Build configuration list for PBXNativeTarget "Naily" */ = {
+		437A75B3229FAC010032E371 /* Build configuration list for PBXNativeTarget "Nailish" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				437A75B4229FAC010032E371 /* Debug */,
