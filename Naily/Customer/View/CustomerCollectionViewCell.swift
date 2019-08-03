@@ -72,7 +72,7 @@ class CustomerCollectionViewCell: UICollectionViewCell {
     
     
     let cellImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
+        let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 30
         iv.widthAnchor.constraint(equalToConstant: 60).isActive = true

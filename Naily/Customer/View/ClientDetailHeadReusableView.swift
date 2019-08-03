@@ -189,7 +189,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
     }()
     
     var clientImage: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
+        let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.layer.cornerRadius = 60
         iv.widthAnchor.constraint(equalToConstant: 120).isActive = true
