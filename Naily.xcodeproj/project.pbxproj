@@ -27,8 +27,6 @@
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
 		437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75B7229FBF8B0032E371 /* MainTabBarController.swift */; };
-		4383C15222F5546900B56BBD /* FSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435C903022C419D1009D6D4E /* FSCalendar.framework */; };
-		4383C15322F5546900B56BBD /* FSCalendar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 435C903022C419D1009D6D4E /* FSCalendar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43A28B0A22EFB39F00F57860 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A28B0922EFB39F00F57860 /* Assets.xcassets */; };
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
 		43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */; };
@@ -44,20 +42,6 @@
 		43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0822BD998900781893 /* CustomDateToolbar.swift */; };
 		43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		4383C15422F5546900B56BBD /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				4383C15322F5546900B56BBD /* FSCalendar.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4313075722E12F1A00A2A804 /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
@@ -105,7 +89,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4383C15222F5546900B56BBD /* FSCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,8 +253,7 @@
 				437A759D229FABFF0032E371 /* Sources */,
 				437A759E229FABFF0032E371 /* Frameworks */,
 				437A759F229FABFF0032E371 /* Resources */,
-				435C903222C41A00009D6D4E /* ShellScript */,
-				4383C15422F5546900B56BBD /* Embed Frameworks */,
+				4383C15A22F55AED00B56BBD /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -329,7 +311,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		435C903222C41A00009D6D4E /* ShellScript */ = {
+		4383C15A22F55AED00B56BBD /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
