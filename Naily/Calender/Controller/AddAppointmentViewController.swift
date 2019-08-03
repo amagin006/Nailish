@@ -12,7 +12,6 @@ import CoreData
 private let appointmentCellId = "appointmentCellId"
 
 class AddAppointmentViewController: FetchTableViewController, UITableViewDataSource {
-    
     var selectedMenuItems: Set<SelectedMenuItem> = []
     var selectedMenuItemArray = [SelectedMenuItem]()
     var selectClient: ClientInfo?

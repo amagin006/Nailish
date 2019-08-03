@@ -16,11 +16,7 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
 
     let gregorian: Calendar = Calendar(identifier: .gregorian)
     var selectDate = Date()
-    
-    override func viewWillAppear(_ animated: Bool) {
-        calendarView.reloadData()
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let addButton: UIBarButtonItem = {
@@ -31,7 +27,13 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
         self.tableView = appointTableView
         setupCalendar()
         setupTableViewUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        calendarView.select(selectDate)
         getAppointmentdata(date: selectDate)
+        calendarView.reloadData()
+        appointTableView.reloadData()
     }
     
     private func setupCalendar() {
@@ -47,12 +49,6 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
         calendarView.appearance.headerTitleFont = UIFont.boldSystemFont(ofSize: 20)
         calendarView.appearance.headerTitleColor = UIColor(cgColor: #colorLiteral(red: 0.1657347977, green: 0.4068609476, blue: 0.3094298542, alpha: 1))
         calendarView.appearance.weekdayTextColor = UIColor(cgColor: #colorLiteral(red: 0.1657347977, green: 0.4068609476, blue: 0.3094298542, alpha: 1))
-//        let swipUpGesture: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipUp))
-//        swipUpGesture.direction = .up
-//        let swipDownGesture: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipDown))
-//        swipDownGesture.direction = .down
-//        self.calendarView.addGestureRecognizer(swipUpGesture)
-//        self.calendarView.addGestureRecognizer(swipDownGesture)
     }
     
     private func setupTableViewUI() {
@@ -103,7 +99,6 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
         cell.appointmentReport = fetchedReportItemResultsController.object(at: indexPath)
-        
         return cell
     }
     
@@ -171,8 +166,6 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
         bt.addTarget(self, action: #selector(addAppointmentPressed), for: .touchUpInside)
         return bt
     }()
-
-    
 }
 
 extension MainCalenderViewController: FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance {
@@ -216,17 +209,5 @@ extension MainCalenderViewController: FSCalendarDelegate, FSCalendarDataSource, 
         let end = begining + 24*60*60
         return (begining, end)
     }
-    //    @objc func swipUp() {
-    //        self.calendarView.setScope(.week, animated: true)
-    //    }
-    //
-    //    @objc func swipDown() {
-    //        self.calendarView.setScope(.month, animated: true)
-    //    }
-    //
-    //    func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
-    //        calendarView.heightAnchor.constraint(equalToConstant: bounds.height)
-    //        self.calendarView.layoutIfNeeded()
-    //    }
 
 }

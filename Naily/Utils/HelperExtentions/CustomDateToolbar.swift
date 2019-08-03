@@ -49,7 +49,6 @@ class CustomDateToolbar: UIToolbar {
         return formatter.string(from: datePicker.date)
     }
     
-    
     @objc func doneButtonAction() {
         didSelectDate!(getDateStr(), true)
     }
