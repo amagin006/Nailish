@@ -18,16 +18,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iPhone XR-XS Max – 1" translatesAutoresizingMaskIntoConstraints="NO" id="x37-Na-gfH">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iPhone XR-XS  Max – 1" translatesAutoresizingMaskIntoConstraints="NO" id="5AH-r9-MYg">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="x37-Na-gfH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="4KN-cC-OPQ"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="x37-Na-gfH" secondAttribute="trailing" id="MNk-Lb-D3r"/>
-                            <constraint firstItem="x37-Na-gfH" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Vgq-ae-li9"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="x37-Na-gfH" secondAttribute="bottom" id="sCK-Gc-Ewh"/>
+                            <constraint firstAttribute="bottom" secondItem="5AH-r9-MYg" secondAttribute="bottom" id="2Xi-XW-UZh"/>
+                            <constraint firstItem="5AH-r9-MYg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="fx3-EB-DUL"/>
+                            <constraint firstItem="5AH-r9-MYg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="tuo-DL-Ro7"/>
+                            <constraint firstItem="5AH-r9-MYg" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="yb3-Yi-IEc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -38,6 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="iPhone XR-XS Max – 1" width="414" height="896"/>
+        <image name="iPhone XR-XS  Max – 1" width="414" height="896"/>
     </resources>
 </document>
