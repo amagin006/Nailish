@@ -222,7 +222,6 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     @objc func saveButtonPressed() {
         let manageContext = CoreDataManager.shared.viewContext
         if reportItem == nil {
-            print("reportItem == nil")
             let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
             for i in 0..<4 {
                 let iv = UIImageView(image: #imageLiteral(resourceName: "imagePlaceholder"))
@@ -264,7 +263,6 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
             }
             self.navigationController?.popViewController(animated: true)
         } else {
-            print("reportItem != nil")
             reportItem.client = selectClient
             let formatter = DateFormatter()
             formatter.dateFormat = "YYYY/MM/dd"

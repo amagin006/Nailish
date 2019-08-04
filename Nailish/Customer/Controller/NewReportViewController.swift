@@ -324,7 +324,6 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
             }
             report?.client = client
             report?.selectedMenuItems = NSSet(set: selectedMenuItems)
-        
         }
         
         do {

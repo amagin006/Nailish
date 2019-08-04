@@ -350,12 +350,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     }
     
     // UI Parts
-//    lazy var submenuButton: UIBarButtonItem = {
-//        let bt = UIBarButtonItem(image: #imageLiteral(resourceName: "menudot"), style: .plain, target: self, action: #selector(submenuButtonPressed))
-//        bt.tintColor = .white
-//        return bt
-//    }()
-    
+
     let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.backgroundColor = .white
