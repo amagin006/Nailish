@@ -28,18 +28,18 @@ class MyTextView: UITextView, UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == "Memo here..." && textView.textColor == .lightGray {
-            textView.text = ""
-            textView.textColor = .black
-        }
+//        if textView.text == "Memo here..." && textView.textColor == .lightGray {
+//            textView.text = ""
+//            textView.textColor = .black
+//        }
         textView.becomeFirstResponder()
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text == "" {
-            textView.text = "Memo here..."
-            textView.textColor = .lightGray
-        }
+//        if textView.text == "" {
+//            textView.text = "Memo here..."
+//            textView.textColor = .lightGray
+//        }
         textView.resignFirstResponder()
     }
 }

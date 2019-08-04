@@ -130,7 +130,12 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         navigationController?.navigationBar.barTintColor = UIColor(red: 217/255, green: 83/255, blue: 79/255, alpha: 1)
         navigationItem.title = "Detail"
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.rightBarButtonItem = submenuButton
+        let editButton: UIBarButtonItem = {
+            let bb = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonPressed))
+            return bb
+        }()
+//        navigationItem.rightBarButtonItem = submenuButton
+        navigationItem.rightBarButtonItem = editButton
        
     }
     
@@ -243,8 +248,14 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         memoSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.9).isActive = true
         memoSV.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         
+        scrollView.addSubview(deleteButton)
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        deleteButton.topAnchor.constraint(equalTo: memoSV.bottomAnchor, constant: 30).isActive = true
+        deleteButton.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.6).isActive = true
+        deleteButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        
         // natural contentSize
-        let height = memoLabel.intrinsicContentSize.height + 980
+        let height = memoLabel.intrinsicContentSize.height + 1100
         scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: height)
         
     }
@@ -263,26 +274,23 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         }
     }
     
-    @objc func submenuButtonPressed() {
-        let alert: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle:  UIAlertController.Style.actionSheet)
-        let editAction: UIAlertAction = UIAlertAction(title: "Edit", style: .default, handler:{
-            (action: UIAlertAction!) -> Void in
-            let editVC = NewReportViewController()
-            editVC.report = self.report
-            // callback closure when dismiss
-            editVC.reload = { [unowned self] (editReport, selectedMenuItems) in
-                // set report -> didSet -> reload
-                self.report = editReport
-                self.selectedMenuItemArray = Array(selectedMenuItems).sorted { $0.tag < $1.tag }
-                self.menuTableView.reloadData()
-            }
-            let editNVC = LightStatusNavigationController(rootViewController: editVC)
-            self.present(editNVC, animated: true, completion: nil)
-        })
-        
-        let deleteAction: UIAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler:{
-            (action: UIAlertAction!) -> Void in
-           
+    @objc func editButtonPressed() {
+        let editVC = NewReportViewController()
+        editVC.report = self.report
+        // callback closure when dismiss
+        editVC.reload = { [unowned self] (editReport, selectedMenuItems) in
+            // set report -> didSet -> reload
+            self.report = editReport
+            self.selectedMenuItemArray = Array(selectedMenuItems).sorted { $0.tag < $1.tag }
+            self.menuTableView.reloadData()
+        }
+        let editNVC = LightStatusNavigationController(rootViewController: editVC)
+        self.present(editNVC, animated: true, completion: nil)
+    }
+    
+    @objc func deleteReport() {
+        let alert = UIAlertController(title: "Delete Report", message: "Are you sure you want to delete Report?", preferredStyle: .alert)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action: UIAlertAction!) in
             CoreDataManager.shared.viewContext.delete(self.report)
             do {
                 try self.fetchedReportItemResultsController.managedObjectContext.save()
@@ -290,12 +298,10 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
                 print("failed delete client - \(err)")
             }
             self.navigationController?.popViewController(animated: true)
-        })
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action: UIAlertAction) in
             
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler:{
-            (action: UIAlertAction!) in
-        })
-        alert.addAction(editAction)
+        }
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
@@ -344,12 +350,11 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     }
     
     // UI Parts
-    
-    lazy var submenuButton: UIBarButtonItem = {
-        let bt = UIBarButtonItem(image: #imageLiteral(resourceName: "menudot"), style: .plain, target: self, action: #selector(submenuButtonPressed))
-        bt.tintColor = .white
-        return bt
-    }()
+//    lazy var submenuButton: UIBarButtonItem = {
+//        let bt = UIBarButtonItem(image: #imageLiteral(resourceName: "menudot"), style: .plain, target: self, action: #selector(submenuButtonPressed))
+//        bt.tintColor = .white
+//        return bt
+//    }()
     
     let scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -358,7 +363,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     }()
     
     let clientImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "beautiful-blur-blurred-background-733872"))
+        let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.constraintWidth(equalToConstant: 45)
         iv.layer.cornerRadius = 23
@@ -368,14 +373,12 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     
     let fullNameLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "Andrew Samanth"
         lb.font = UIFont.boldSystemFont(ofSize: 16)
         return lb
     }()
     
     let visitDateLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "2019/07/01"
         lb.font = UIFont.systemFont(ofSize: 14)
         lb.textColor = UIColor.init(red: 156/255, green: 166/255, blue: 181/255, alpha: 1)
         return lb
@@ -383,7 +386,6 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     
     let timeLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "12:00 ~ 14:00"
         lb.font = UIFont.systemFont(ofSize: 14)
         lb.textColor = UIColor(red: 156/255, green: 166/255, blue: 181/255, alpha: 1)
         return lb
@@ -433,7 +435,6 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     
     let subtotalPrice: UILabel = {
         let lb = UILabel()
-        lb.text = "120.00"
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
         lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
@@ -457,7 +458,6 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     
     let tipsPrice: UILabel = {
         let lb = UILabel()
-        lb.text = "12.00"
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
         lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
@@ -481,7 +481,6 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     
     let taxPrice: UILabel = {
         let lb = UILabel()
-        lb.text = "12.00"
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
         lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
@@ -530,6 +529,16 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         lb.frame.origin.x = 0
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
         return lb
+    }()
+    
+    let deleteButton: UIButton = {
+        let bt = UIButton()
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.setTitle("Delete Report", for: .normal)
+        bt.backgroundColor = .red
+        bt.addTarget(self, action: #selector(deleteReport), for: .touchUpInside)
+        bt.layer.cornerRadius = 10
+        return bt
     }()
 
 }

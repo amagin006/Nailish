@@ -62,6 +62,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
             }
             if let menuItems = report?.selectedMenuItems {
                 selectedMenuItemArray = Array(menuItems) as! [SelectedMenuItem]
+                selectedMenuItems = menuItems as! Set<SelectedMenuItem>
                 menuTableView.reloadData()
             }
             if let tips = report.tips {
@@ -70,6 +71,10 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
                 fm.maximumFractionDigits = 2
                 fm.minimumFractionDigits = 2
                 tipsLable.text = fm.string(from: tips)
+            }
+            if let payment = report.payment  {
+                let index = paymentList.firstIndex(of: payment)
+                paymentTextField.text = paymentList[index ?? 0]
             }
             if let memo = report.memo {
                 memoTextView.text = memo
@@ -182,7 +187,6 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         paymentSV.axis = .horizontal
         paymentSV.distribution = .fill
         
-        
         let tipAndMemoSV = UIStackView(arrangedSubviews: [tipsSV, paymentSV, memoLabel, memoTextView])
         formScrollView.addSubview(tipAndMemoSV)
         tipAndMemoSV.translatesAutoresizingMaskIntoConstraints = false
@@ -192,7 +196,6 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         tipAndMemoSV.topAnchor.constraint(equalTo: menuTableView.bottomAnchor, constant: 20).isActive = true
         tipAndMemoSV.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
         tipAndMemoSV.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
-        
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -266,23 +269,64 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     }
     
     @objc func reportSeveButtonPressed() {
-//        if report == nil { return } // enter required fields
-        for i in 0..<reportImageViews.count {
-            let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
-            report?.setValue(imageData, forKey: "snapshot\(i + 1)")
+        if report == nil {
+            let newReport = NSEntityDescription.insertNewObject(forEntityName: "ReportItem", into: manageContext)
+            for i in 0..<reportImageViews.count {
+                let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
+                newReport.setValue(imageData, forKey: "snapshot\(i + 1)")
+            }
+            let formatter = DateFormatter()
+            formatter.dateFormat = "YYYY/MM/dd"
+            if let date = visitTextField.text {
+                if date == "" {
+                    newReport.setValue(visitTextField.toolbar.datePicker.date, forKey: "visitDate")
+                } else {
+                    newReport.setValue(formatter.date(from: date), forKey: "visitDate")
+                }
+            }
+            formatter.dateFormat = "HH:mm"
+            if var start = startTimeTextField.text {
+                if start == "" {
+                    start = "00:00"
+                }
+                newReport.setValue(formatter.date(from: start), forKey: "startTime")
+            }
+            if var end = endTimeTextField.text {
+                if endTimeTextField.text == "" {
+                    end = "00:00"
+                }
+                newReport.setValue(formatter.date(from: end), forKey: "endTime")
+            }
+            if memoTextView.text != "" && memoTextView.text != nil {
+                newReport.setValue(memoTextView.text, forKey: "memo")
+            }
+            if paymentTextField.text != "" && paymentTextField.text != nil {
+                newReport.setValue(paymentTextField.text, forKey: "payment")
+            }
+            newReport.setValue(tipsLable.amountDecimalNumber, forKey: "tips")
+            newReport.setValue(client, forKey: "client")
+            newReport.setValue(NSSet(set: selectedMenuItems), forKey: "selectedMenuItems")
+            
+        }  else {
+            for i in 0..<reportImageViews.count {
+                let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
+                report?.setValue(imageData, forKey: "snapshot\(i + 1)")
+            }
+            report?.visitDate = visitTextField.toolbar.datePicker.date
+            report?.startTime = startTimeTextField.toolbar.datePicker.date
+            report?.endTime = endTimeTextField.toolbar.datePicker.date
+            report?.tips = tipsLable.amountDecimalNumber
+            if memoTextView.text != "" && memoTextView.text != nil {
+                report?.memo = memoTextView.text
+            }
+            if paymentTextField.text != "" && paymentTextField.text != nil {
+                report?.payment = paymentTextField.text
+            }
+            report?.client = client
+            report?.selectedMenuItems = NSSet(set: selectedMenuItems)
+        
         }
-        report?.visitDate = visitTextField.toolbar.datePicker.date
-        report?.startTime = startTimeTextField.toolbar.datePicker.date
-        report?.endTime = endTimeTextField.toolbar.datePicker.date
-        report?.tips = tipsLable.amountDecimalNumber
-        if memoTextView.text != "" && memoTextView.text != nil {
-            report?.memo = memoTextView.text
-        }
-        if paymentTextField.text != "" && paymentTextField.text != nil {
-            report?.payment = paymentTextField.text
-        }
-        report?.client = client
-        report?.selectedMenuItems = NSSet(set: selectedMenuItems)
+        
         do {
             try fetchedReportItemResultsController.managedObjectContext.save()
         } catch let err {

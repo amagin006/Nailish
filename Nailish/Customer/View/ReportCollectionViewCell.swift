@@ -89,13 +89,11 @@ class ReportCollectionViewCell: UICollectionViewCell {
     
     let lastVisitDate: UILabel = {
         let lb = UILabel()
-        lb.text = "2019/07/01"
         return lb
     }()
     
     let startTime: UILabel = {
         let lb = UILabel()
-        lb.text = "12:00"
         lb.font = UIFont.systemFont(ofSize: 14)
         lb.textColor = UIColor.init(red: 156/255, green: 166/255, blue: 181/255, alpha: 1)
         return lb
@@ -111,7 +109,6 @@ class ReportCollectionViewCell: UICollectionViewCell {
     
     let endTime: UILabel = {
         let lb = UILabel()
-        lb.text = "14:00"
         lb.font = UIFont.systemFont(ofSize: 14)
         lb.textColor = UIColor.init(red: 156/255, green: 166/255, blue: 181/255, alpha: 1)
         return lb
