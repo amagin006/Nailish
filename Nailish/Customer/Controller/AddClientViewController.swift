@@ -29,7 +29,7 @@ class AddClientViewController: UIViewController {
             mobileTextField.text = client.mobileNumber ?? ""
             if let date = client?.dateOfBirth {
                 let formatter = DateFormatter()
-                formatter.dateStyle = .medium
+                formatter.dateFormat = "YYYY/MM/dd"
                 DOBTextField.text = formatter.string(from: date)
             }
             memoTextField.text = client?.memo ?? ""
@@ -374,8 +374,15 @@ class AddClientViewController: UIViewController {
             }
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
             newClient.setValue(mobileTextField.text ?? "", forKey: "mobileNumber")
-            if DOBTextField.text != "" {
-                newClient.setValue(DOBTextField.toolbar.datePicker.date, forKey: "dateOfBirth")
+            if let DOB = DOBTextField.text {
+                print("DOB new \(DOB)")
+                if DOB == "" {
+                    newClient.setValue(DOBTextField.toolbar.datePicker.date, forKey: "dateOfBirth")
+                } else {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "YYYY/MM/dd"
+                    newClient.setValue(formatter.date(from: DOB), forKey: "dateOfBirth")
+                }
             }
             newClient.setValue(memoTextField.text ?? "" , forKey: "memo")
             do {
@@ -403,10 +410,15 @@ class AddClientViewController: UIViewController {
                 client.twitter = noSpaceString
             }
             client.mobileNumber = mobileTextField.text ?? ""
-            if DOBTextField.text != "" {
-                let formatter = DateFormatter()
-                formatter.dateStyle = .medium
-                client?.dateOfBirth = formatter.date(from: DOBTextField.text)
+            if let DOB = DOBTextField.text {
+                print("DOB old \(DOB)")
+                if DOB == "" {
+                    client.dateOfBirth = DOBTextField.toolbar.datePicker.date
+                } else {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "YYYY/MM/dd"
+                    client.dateOfBirth = formatter.date(from: DOB)
+                }
             }
             client?.memo = memoTextField.text ?? ""
             if let image = personImageView.image {
