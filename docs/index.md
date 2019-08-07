@@ -1,5 +1,4 @@
-iimagin006.github.io
-licy
+amagin006.github.io
 
 Shota built the nailish app as a Free app. This SERVICE is provided by Shota at no cost and is intended for use as is.
 
