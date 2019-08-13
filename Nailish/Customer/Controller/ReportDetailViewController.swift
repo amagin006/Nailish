@@ -336,7 +336,6 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
             cell.menuitemTagLabel.backgroundColor = color?.rawValue
             let fm = NumberFormatter()
             fm.numberStyle = .decimal
-            //        fm.currencySymbol = "$"
             fm.maximumFractionDigits = 2
             fm.minimumFractionDigits = 2
             cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)

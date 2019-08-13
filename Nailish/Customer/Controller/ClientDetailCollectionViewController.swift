@@ -137,7 +137,6 @@ extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDe
     func newReportButtonPressed() {
         let newReportVC = NewReportViewController()
         newReportVC.client = client
-//        newReportVC.report = ReportItem(context: CoreDataManager.shared.viewContext)
         let newReportNVC = LightStatusNavigationController(rootViewController: newReportVC)
         present(newReportNVC, animated: true, completion: nil)
     }
