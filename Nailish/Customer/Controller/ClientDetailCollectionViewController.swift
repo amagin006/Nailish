@@ -104,13 +104,13 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     // MARK: UICollectionView flow layout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let emptyLabel = UILabel(frame: .init(x: 0, y: 0, width: collectionView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+        let emptyLabel = UILabel(frame: .init(x: 0, y: 0, width: collectionView.frame.width * 0.5, height: CGFloat.greatestFiniteMagnitude))
         emptyLabel.numberOfLines = 0
         emptyLabel.lineBreakMode = .byWordWrapping
         // font
         emptyLabel.text = client.memo
         emptyLabel.sizeToFit()
-
+        print("emptyLabel.height --- \(emptyLabel.frame.height)")
         return .init(width: view.frame.width, height: emptyLabel.frame.height + 400)
     }
     

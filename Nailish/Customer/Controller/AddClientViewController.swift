@@ -364,12 +364,19 @@ class AddClientViewController: UIViewController {
             newClient.setValue(nameInitial, forKey: "nameInitial")
             if let instagram = instagramTextField.text {
                 let trimmedString = instagram.trimmingCharacters(in: .whitespacesAndNewlines)
-                let noSpaceString = trimmedString.remove(characterSet: .whitespacesAndNewlines)
+                var noSpaceString = trimmedString.remove(characterSet: .whitespacesAndNewlines)
+                if instagram.first == "@" {
+                    noSpaceString = String(noSpaceString.dropFirst(1))
+                }
+                print(noSpaceString)
                 newClient.setValue(noSpaceString, forKey: "instagram")
             }
             if let twitter = twitterTextField.text {
                 let trimmedString = twitter.trimmingCharacters(in: .whitespacesAndNewlines)
-                let noSpaceString = trimmedString.remove(characterSet: .whitespacesAndNewlines)
+                var noSpaceString = trimmedString.remove(characterSet: .whitespacesAndNewlines)
+                if twitter.first == "@" {
+                    noSpaceString = String(noSpaceString.dropFirst(1))
+                }
                 newClient.setValue(noSpaceString, forKey: "twitter")
             }
             newClient.setValue(mailTextField.text ?? "", forKey: "mailAdress")
@@ -401,12 +408,18 @@ class AddClientViewController: UIViewController {
             client.mailAdress = mailTextField.text ?? ""
             if let instagram = instagramTextField.text {
                 let trimmedString = instagram.trimmingCharacters(in: .whitespacesAndNewlines)
-                let noSpaceString = trimmedString.remove(characterSet: .whitespaces)
+                var noSpaceString = trimmedString.remove(characterSet: .whitespaces)
+                if instagram.first == "@" {
+                    noSpaceString = String(noSpaceString.dropFirst(1))
+                }
                 client.instagram = noSpaceString
             }
             if let twitter = twitterTextField.text {
                 let trimmedString = twitter.trimmingCharacters(in: .whitespacesAndNewlines)
-                let noSpaceString = trimmedString.remove(characterSet: .whitespaces)
+                var noSpaceString = trimmedString.remove(characterSet: .whitespaces)
+                if twitter.first == "@" {
+                    noSpaceString = String(noSpaceString.dropFirst(1))
+                }
                 client.twitter = noSpaceString
             }
             client.mobileNumber = mobileTextField.text ?? ""
