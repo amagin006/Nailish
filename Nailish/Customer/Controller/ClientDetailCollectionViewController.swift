@@ -110,7 +110,6 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         // font
         emptyLabel.text = client.memo
         emptyLabel.sizeToFit()
-        print("emptyLabel.height --- \(emptyLabel.frame.height)")
         return .init(width: view.frame.width, height: emptyLabel.frame.height + 400)
     }
     

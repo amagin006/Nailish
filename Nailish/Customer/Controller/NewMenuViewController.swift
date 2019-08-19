@@ -47,7 +47,16 @@ class NewMenuViewController: UIViewController {
         priceSV.distribution = .fillEqually
         priceSV.spacing = 10
         
-        let menuBoxSV = UIStackView(arrangedSubviews: [menuNameSV, priceSV])
+        taxLabel.addTarget(self, action: #selector(saveButtonValidation), for: .editingChanged)
+        let taxAmountSV = UIStackView(arrangedSubviews: [taxLabel, percent])
+        taxAmountSV.axis = .horizontal
+        taxAmountSV.spacing = 3
+        let taxSV = UIStackView(arrangedSubviews: [taxTitleLable, taxAmountSV])
+        taxSV.axis = .horizontal
+        taxSV.distribution = .fillEqually
+        taxSV.spacing = 16
+        
+        let menuBoxSV = UIStackView(arrangedSubviews: [menuNameSV, priceSV, taxSV])
         menuBoxSV.axis = .vertical
         menuBoxSV.spacing = 10
         
@@ -78,7 +87,6 @@ class NewMenuViewController: UIViewController {
     }
     
     @objc func newMenuCancelButton() {
-        print("newMenuCancelButton")
         dismiss(animated: true, completion: nil)
     }
     
@@ -105,6 +113,7 @@ class NewMenuViewController: UIViewController {
         newSelectedItem.price = priceLabel.amountDecimalNumber
         newSelectedItem.color = selectColor
         newSelectedItem.tag = Int16(selectedColorTag)
+        newSelectedItem.tax = Decimal(string: taxLabel.text!) as NSDecimalNumber?
         do {
             try manageContext.save()
         } catch let err {
@@ -114,8 +123,8 @@ class NewMenuViewController: UIViewController {
     }
     
     @objc func saveButtonValidation() {
-        guard menuNameTextField.text != nil, priceLabel.text != nil else { return }
-        if menuNameTextField.text != "" && priceLabel.text != "" && colorSelected{
+        guard menuNameTextField.text != nil, priceLabel.text != nil, taxLabel.text != nil else { return }
+        if menuNameTextField.text != "" && priceLabel.text != "" && taxLabel.text != "" && colorSelected {
             saveButton.isEnabled = true
         } else {
             saveButton.isEnabled = false
@@ -157,6 +166,31 @@ class NewMenuViewController: UIViewController {
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
+    
+    let taxTitleLable: UILabel = {
+        let lb = UILabel()
+        lb.text = "Tax"
+        return lb
+    }()
+    
+    let percent: UILabel = {
+        let lb = UILabel()
+        lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.text = "%"
+        lb.font = UIFont.systemFont(ofSize: 16)
+        return lb
+    }()
+    
+    let taxLabel: taxTextField = {
+        let tf = taxTextField()
+        tf.placeholder = "5"
+        tf.textAlignment = .right
+        tf.keyboardType = .numberPad
+        tf.constraintWidth(equalToConstant: 120)
+        tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+        return tf
+    }()
+    
 
     let saveButton: UIButton = {
         let bt = UIButton()

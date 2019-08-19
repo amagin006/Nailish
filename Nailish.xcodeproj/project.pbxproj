@@ -53,6 +53,7 @@
 		433705A122ADFA7C00EBC58B /* BaseCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewController.swift; sourceTree = "<group>"; };
 		433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientDetailHeadReusableView.swift; sourceTree = "<group>"; };
 		433705AB22AEEFF900EBC58B /* UIView+ConstraintLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+ConstraintLayout.swift"; sourceTree = "<group>"; };
+		433B535C230A1ECB0051B944 /* ClientModel v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClientModel v2.xcdatamodel"; sourceTree = "<group>"; };
 		435C902D22C3557B009D6D4E /* ClientModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ClientModel.xcdatamodel; sourceTree = "<group>"; };
 		435C903022C419D1009D6D4E /* FSCalendar.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FSCalendar.framework; path = Carthage/Build/iOS/FSCalendar.framework; sourceTree = SOURCE_ROOT; };
 		435C903722C41CB0009D6D4E /* MainCalenderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCalenderViewController.swift; sourceTree = "<group>"; };
@@ -587,9 +588,10 @@
 		435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				433B535C230A1ECB0051B944 /* ClientModel v2.xcdatamodel */,
 				435C902D22C3557B009D6D4E /* ClientModel.xcdatamodel */,
 			);
-			currentVersion = 435C902D22C3557B009D6D4E /* ClientModel.xcdatamodel */;
+			currentVersion = 433B535C230A1ECB0051B944 /* ClientModel v2.xcdatamodel */;
 			path = ClientModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

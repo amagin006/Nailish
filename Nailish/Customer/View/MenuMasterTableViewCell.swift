@@ -28,6 +28,7 @@ class MenuMasterTableViewCell: UITableViewCell {
                 fm.minimumFractionDigits = 2
                 priceLabel.text = fm.string(from: price)
             }
+            taxLabel.text = "\(menuItem?.tax ?? 0)%"
             let color = TagColor.stringToSGColor(str: menuItem!.color!)
             menuitemTagLabel.backgroundColor = color!.rawValue
         }
@@ -63,16 +64,20 @@ class MenuMasterTableViewCell: UITableViewCell {
         menuAndCheckSV.heightAnchor.constraint(equalToConstant: 30).isActive = true
         menuAndCheckSV.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         menuAndCheckSV.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
-        
-        let priceSV = UIStackView(arrangedSubviews: [dollar, priceLabel])
-        priceSV.axis = .horizontal
+        let taxSV = UIStackView(arrangedSubviews: [taxTitleLabal, taxLabel])
+        taxSV.alignment = .center
+        taxSV.spacing = 4
+        let itemPriceSV = UIStackView(arrangedSubviews: [dollar, priceLabel])
+        itemPriceSV.alignment = .center
+        itemPriceSV.spacing = 4
+        let priceSV = UIStackView(arrangedSubviews: [itemPriceSV, taxSV])
         priceSV.alignment = .center
-        priceSV.spacing = 4
+        priceSV.spacing = 8
         addSubview(priceSV)
         priceSV.translatesAutoresizingMaskIntoConstraints = false
         priceSV.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         priceSV.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        priceSV.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+        priceSV.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
         
     }
     
@@ -98,6 +103,20 @@ class MenuMasterTableViewCell: UITableViewCell {
         lb.layer.cornerRadius = 12
         lb.clipsToBounds = true
         lb.textColor = .white
+        return lb
+    }()
+    
+    let taxTitleLabal: UILabel = {
+        let lb = UILabel()
+        lb.text = "tax"
+        lb.font = UIFont.systemFont(ofSize: 12)
+        return lb
+    }()
+    
+    let taxLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "0%"
+        lb.font = UIFont.systemFont(ofSize: 12)
         return lb
     }()
     

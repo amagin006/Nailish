@@ -61,14 +61,26 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
                 let newArray = Array(reportDetailselectedMenus) as! [SelectedMenuItem]
                 selectedMenuItemArray = Array(newArray).sorted { $0.tag < $1.tag }
                 var subTotal:NSDecimalNumber = 0.00
-                let taxRate:NSDecimalNumber = 0.12
+                // divide same tax rate
+                var taxDic = [NSDecimalNumber: NSDecimalNumber]()
                 for item in selectedMenuItemArray {
                     subTotal = subTotal.adding(item.price!)
+                    if let tax = item.tax {
+                        if let taxSum = taxDic[tax] {
+                            taxDic.updateValue(taxSum.adding(item.price!), forKey: tax)
+                        } else {
+                            taxDic.updateValue(item.price!, forKey: tax)
+                        }
+                        
+                    }
                 }
-                let tax:NSDecimalNumber = subTotal.multiplying(by: taxRate)
+                var taxSum: NSDecimalNumber = 0.00
+                for (key, value) in taxDic {
+                    taxSum = taxSum.adding(value.multiplying(by: key.dividing(by: 100)))
+                }
                 subtotalPrice.text = fm.string(from: subTotal)
-                taxPrice.text = fm.string(from: tax)
-                let taxTipsTotal = subTotal.adding(tax)
+                taxPrice.text = fm.string(from: taxSum)
+                let taxTipsTotal = subTotal.adding(taxSum)
                 totalPrice.text = fm.string(from: taxTipsTotal.adding(report.tips ?? 0))
 
             }
@@ -339,6 +351,8 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
             fm.maximumFractionDigits = 2
             fm.minimumFractionDigits = 2
             cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
+            cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
+            cell.taxLabel.text = "\(String(describing: selectedMenuItemArray[indexPath.row].tax!))%"
         }
         cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         return cell

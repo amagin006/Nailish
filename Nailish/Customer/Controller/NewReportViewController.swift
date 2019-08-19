@@ -49,7 +49,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
                 reportMainImageView.image = reportImages[0]
             }
             let formatter = DateFormatter()
-            formatter.dateStyle = .medium
+            formatter.dateFormat = "YYYY/MM/dd"
             if let date = report?.visitDate {
                 visitTextField.text = formatter.string(from: date)
             }
@@ -312,9 +312,28 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
                 let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
                 report?.setValue(imageData, forKey: "snapshot\(i + 1)")
             }
-            report?.visitDate = visitTextField.toolbar.datePicker.date
-            report?.startTime = startTimeTextField.toolbar.datePicker.date
-            report?.endTime = endTimeTextField.toolbar.datePicker.date
+            let formatter = DateFormatter()
+            formatter.dateFormat = "YYYY/MM/dd"
+            if let date = visitTextField.text {
+                if date == "" {
+                    report?.visitDate = visitTextField.toolbar.datePicker.date
+                } else {
+                    report?.visitDate = formatter.date(from: date)
+                }
+            }
+            formatter.dateFormat = "HH:mm"
+            if var start = startTimeTextField.text {
+                if start == "" {
+                    start = "00:00"
+                }
+                report?.startTime = formatter.date(from: start)
+            }
+            if var end = endTimeTextField.text {
+                if endTimeTextField.text == "" {
+                    end = "00:00"
+                }
+                report?.endTime = formatter.date(from: end)
+            }
             report?.tips = tipsLable.amountDecimalNumber
             if memoTextView.text != "" && memoTextView.text != nil {
                 report?.memo = memoTextView.text
@@ -559,6 +578,7 @@ extension NewReportViewController: MenuSelectTableViewControllerDelegate {
             fm.maximumFractionDigits = 2
             fm.minimumFractionDigits = 2
             cell.priceLabel.text = fm.string(from: selectedMenuItemArray[indexPath.row].price!)
+            cell.taxLabel.text = "\(String(describing: selectedMenuItemArray[indexPath.row].tax!))%"
         }
         cell.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
         return cell

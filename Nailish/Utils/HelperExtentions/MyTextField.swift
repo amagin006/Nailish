@@ -69,8 +69,26 @@ class CurrencyTextField: MyTextField {
             self.amountDecimalNumber = amountDecimal
         }
     }
-    
-    
-    
 }
 
+class taxTextField: MyTextField {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.keyboardType = .decimalPad
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let textFieldText = textField.text,
+            let rangeOfTextToReplace = Range(range, in: textFieldText) else {
+                return false
+        }
+        let substringToReplace = textFieldText[rangeOfTextToReplace]
+        let count = textFieldText.count - substringToReplace.count + string.count
+        return count <= 3
+    }
+}
