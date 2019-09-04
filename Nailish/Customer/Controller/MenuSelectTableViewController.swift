@@ -19,6 +19,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
     var selectedCell = Set<SelectedMenuItem>()
+    var selectedCellIndex = [Int: Bool]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,6 +105,12 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
         cell.isFromSelectedMenuView = true
+        if let _ = selectedCellIndex[indexPath.row] {
+            cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
+        } else {
+            cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
+        }
+        
         return cell
     }
 
@@ -115,17 +122,18 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
             guard let menuItem = cell.menuItem else { return }
-            if !cell.tapped {
-                selectedCell.insert(menuItem)
-                cell.tapped = true
-                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
-            } else {
+            if let _ = selectedCellIndex[indexPath.row] {
                 selectedCell.remove(menuItem)
-                cell.tapped = false
                 cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
+                selectedCellIndex.removeValue(forKey: indexPath.row)
+            } else {
+                selectedCell.insert(menuItem)
+                selectedCellIndex[indexPath.row] = true
+                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
             }
         }
     }
+    
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {

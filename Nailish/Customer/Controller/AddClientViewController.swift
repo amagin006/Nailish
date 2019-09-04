@@ -352,7 +352,7 @@ class AddClientViewController: UIViewController {
             let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
             
             if let newClientImage = personImageView.image {
-                let imageData = newClientImage.jpegData(compressionQuality: 0.1)
+                let imageData = newClientImage.jpegData(compressionQuality: 0.8)
                 newClient.setValue(imageData, forKey: "clientImage")
             }
             let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
@@ -435,7 +435,7 @@ class AddClientViewController: UIViewController {
             }
             client?.memo = memoTextField.text ?? ""
             if let image = personImageView.image {
-                client?.clientImage = image.jpegData(compressionQuality: 0.1)
+                client?.clientImage = image.jpegData(compressionQuality: 0.8)
             }
             do {
                 try fetchedClientInfoResultsController.managedObjectContext.save()

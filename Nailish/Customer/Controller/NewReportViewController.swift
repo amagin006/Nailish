@@ -309,7 +309,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
             
         }  else {
             for i in 0..<reportImageViews.count {
-                let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.1)
+                let imageData = reportImageViews[i].image?.jpegData(compressionQuality: 0.8)
                 report?.setValue(imageData, forKey: "snapshot\(i + 1)")
             }
             let formatter = DateFormatter()

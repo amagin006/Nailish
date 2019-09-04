@@ -10,7 +10,6 @@ import UIKit
 
 class MenuMasterTableViewCell: UITableViewCell {
 
-    var tapped = false
     var isFromSelectedMenuView: Bool? {
         didSet {
             if let _ = isFromSelectedMenuView {
