@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G87" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ClientInfo" representedClassName="ClientInfo" syncable="YES" codeGenerationType="class">
+        <attribute name="clientImage" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="dateOfBirth" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="instagram" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastVistDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="mailAdress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="memo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mobileNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nameInitial" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="twitter" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="items" toMany="YES" deletionRule="Cascade" destinationEntity="ReportItem" inverseName="client" inverseEntity="ReportItem" syncable="YES"/>
+    </entity>
+    <entity name="MenuItem" representedClassName=".MenuItem" syncable="YES" codeGenerationType="class">
+        <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="menuName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="tag" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="tax" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="reportItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReportItem" inverseName="menuItem" inverseEntity="ReportItem" syncable="YES"/>
+    </entity>
+    <entity name="ReportItem" representedClassName=".ReportItem" syncable="YES" codeGenerationType="class">
+        <attribute name="endTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="memo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="payment" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="snapshot1" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="snapshot2" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="snapshot3" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="snapshot4" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="tips" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="visitDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="client" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ClientInfo" inverseName="items" inverseEntity="ClientInfo" syncable="YES"/>
+        <relationship name="menuItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MenuItem" inverseName="reportItem" inverseEntity="MenuItem" syncable="YES"/>
+    </entity>
+    <entity name="SelectedMenuItem" representedClassName="SelectedMenuItem" syncable="YES" codeGenerationType="class">
+        <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="menuName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="tag" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="tax" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ClientInfo" positionX="-238.94921875" positionY="-8.26953125" width="128" height="238"/>
+        <element name="MenuItem" positionX="-526.609375" positionY="16.78515625" width="128" height="148"/>
+        <element name="ReportItem" positionX="-746.67578125" positionY="52.3203125" width="128" height="223"/>
+        <element name="SelectedMenuItem" positionX="-454.15625" positionY="269.4609375" width="128" height="133"/>
+    </elements>
+</model>

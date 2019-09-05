@@ -39,7 +39,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
             if let endTime = reportItem.endTime {
                 endTextView.text = formatter.string(from: endTime)
             }
-            if let menu = reportItem.selectedMenuItems {
+            if let menu = reportItem.menuItem {
                 let newArray = Array(menu) as! [SelectedMenuItem]
                 selectedMenuItemArray = newArray.sorted { $0.tag < $1.tag }
                 menuTableView.reloadData()
@@ -276,7 +276,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
                 let time = formatter.date(from: endTextView.text)
                 reportItem.endTime = time
             }
-            reportItem.selectedMenuItems = NSSet(set: selectedMenuItems)
+            reportItem.menuItem = NSSet(set: selectedMenuItems)
             reportItem.memo = memoTextView.text ?? ""
             do {
                 try fetchedReportItemResultsController.managedObjectContext.save()

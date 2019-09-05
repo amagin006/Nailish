@@ -14,7 +14,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     private let menuCellId = "menuCellId"
     
     var snapshotImages = [Data]()
-    var selectedMenuItemArray = [SelectedMenuItem]()
+    var selectedMenuItemArray = [MenuItem]()
     var report: ReportItem! {
         didSet {
             clientImageView.image = UIImage(data: report.client!.clientImage!)
@@ -57,8 +57,8 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
             if let tip = report.tips {
                 tipsPrice.text = fm.string(from: tip)
             }
-            if let reportDetailselectedMenus = report.selectedMenuItems {
-                let newArray = Array(reportDetailselectedMenus) as! [SelectedMenuItem]
+            if let reportDetailselectedMenus = report.menuItem {
+                let newArray = Array(reportDetailselectedMenus) as! [MenuItem]
                 selectedMenuItemArray = Array(newArray).sorted { $0.tag < $1.tag }
                 var subTotal:NSDecimalNumber = 0.00
                 // divide same tax rate
