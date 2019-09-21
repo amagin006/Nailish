@@ -20,6 +20,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     weak var delegate: MenuSelectTableViewControllerDelegate?
     var selectedCell = Set<SelectedMenuItem>()
     var selectedCellIndex = [Int: Bool]()
+    let popupViewController = PopupViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,13 +105,13 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
-        cell.isFromSelectedMenuView = true
-        if let _ = selectedCellIndex[indexPath.row] {
-            cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
-        } else {
-            cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
-        }
-        
+//        cell.isFromSelectedMenuView = true
+//        if let _ = selectedCellIndex[indexPath.row] {
+//            cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
+//        } else {
+//            cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
+//        }
+
         return cell
     }
 
@@ -120,18 +121,24 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        view.addSubview(popupViewController.view)
         if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
-            guard let menuItem = cell.menuItem else { return }
-            if let _ = selectedCellIndex[indexPath.row] {
-                selectedCell.remove(menuItem)
-                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
-                selectedCellIndex.removeValue(forKey: indexPath.row)
-            } else {
-                selectedCell.insert(menuItem)
-                selectedCellIndex[indexPath.row] = true
-                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
-            }
+          popupViewController.menuItemCell = cell
         }
+
+//        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
+//            guard let menuItem = cell.menuItem else { return }
+//            if let _ = selectedCellIndex[indexPath.row] {
+//                selectedCell.remove(menuItem)
+//                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
+//                selectedCellIndex.removeValue(forKey: indexPath.row)
+//            } else {
+//                selectedCell.insert(menuItem)
+//                selectedCellIndex[indexPath.row] = true
+//                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
+//            }
+//        }
     }
     
     
@@ -181,7 +188,146 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         let tv = UITableView()
         return tv
     }()
-    
-    
-   
+
+}
+
+class PopupViewController: UIViewController {
+
+  var quantity = 0
+  var menuItemCell = UITableViewCell()
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    setupUI()
+
+    let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(
+      target: self,
+      action: #selector(self.tapped(_:))
+    )
+
+    tapGesture.delegate = self as? UIGestureRecognizerDelegate
+
+    self.view.addGestureRecognizer(tapGesture)
+
+    self.view.backgroundColor = UIColor(
+      red: 150/255,
+      green: 150/255,
+      blue: 150/255,
+      alpha: 0.6
+    )
+  }
+
+  func setupUI() {
+    let screenWidth:CGFloat = self.view.frame.width
+    let screenHeight:CGFloat = self.view.frame.height
+
+    let popupWidth = (screenWidth * 3)/4
+    let popupHeight = (screenWidth * 4)/5
+
+    let amountUIView = UIView()
+    amountUIView.frame = CGRect(
+      x:screenWidth/8,
+      y:screenHeight/5,
+      width:popupWidth,
+      height:popupHeight
+    )
+
+    amountUIView.backgroundColor = UIColor.white
+    amountUIView.layer.cornerRadius = 10
+    self.view.addSubview(amountUIView)
+
+    let buttonSV = UIStackView(arrangedSubviews: [plusButton, minusButton])
+    buttonSV.spacing = 14
+    buttonSV.axis = .horizontal
+    buttonSV.distribution = .equalSpacing
+
+    let labeAndButtonSV = UIStackView(arrangedSubviews: [amountTitleLabel, amountLabel, buttonSV, doneButton])
+    amountUIView.addSubview(labeAndButtonSV)
+    labeAndButtonSV.axis = .vertical
+    labeAndButtonSV.alignment = .center
+    labeAndButtonSV.spacing = 16
+    labeAndButtonSV.translatesAutoresizingMaskIntoConstraints = false
+    labeAndButtonSV.topAnchor.constraint(equalTo: amountUIView.topAnchor, constant: 30).isActive = true
+    labeAndButtonSV.bottomAnchor.constraint(equalTo: amountUIView.bottomAnchor, constant: -30).isActive = true
+    labeAndButtonSV.leadingAnchor.constraint(equalTo: amountUIView.leadingAnchor, constant: 15).isActive = true
+    labeAndButtonSV.trailingAnchor.constraint(equalTo: amountUIView.trailingAnchor, constant: -15).isActive = true
+
+  }
+
+  @objc func tapped(_ sender: UITapGestureRecognizer){
+    quantity = 0
+    amountLabel.text = String(quantity)
+    self.view.removeFromSuperview()
+  }
+
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+  }
+
+  @objc func quantityPlusButtonPressed() {
+    quantity += 1
+    amountLabel.text = String(quantity)
+  }
+
+  @objc func quantityMinusButtonPressed() {
+    if quantity > 0 {
+      quantity -= 1
+      amountLabel.text = String(quantity)
+    }
+  }
+
+  @objc func quantityDoneButtonPressed() {
+    quantity = 0
+    amountLabel.text = String(quantity)
+    self.view.removeFromSuperview()
+  }
+
+  let amountTitleLabel: UILabel = {
+    let lb = UILabel()
+    lb.translatesAutoresizingMaskIntoConstraints = false
+    lb.text = "Enter quantity"
+    lb.heightAnchor.constraint(equalToConstant: 15).isActive = true
+    return lb
+  }()
+
+  let amountLabel: UILabel = {
+    let lb = UILabel()
+    lb.text = "0"
+    lb.font = UIFont.systemFont(ofSize: 20)
+    return lb
+  }()
+
+  let plusButton: UIButton = {
+    let bt = UIButton()
+    bt.setTitle("+", for: .normal)
+    bt.backgroundColor = .blue
+    bt.translatesAutoresizingMaskIntoConstraints = false
+    bt.widthAnchor.constraint(equalToConstant: 80).isActive = true
+    bt.addTarget(self, action: #selector(quantityPlusButtonPressed), for: .touchUpInside)
+    return bt
+  }()
+
+  let minusButton: UIButton = {
+    let bt = UIButton()
+    bt.setTitle("-", for: .normal)
+    bt.backgroundColor = .red
+    bt.translatesAutoresizingMaskIntoConstraints = false
+    bt.widthAnchor.constraint(equalToConstant: 80).isActive = true
+    bt.addTarget(self, action: #selector(quantityMinusButtonPressed), for: .touchUpInside)
+    return bt
+  }()
+
+  let doneButton: UIButton = {
+    let bt = UIButton()
+    bt.setTitle("OK", for: .normal)
+    bt.backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+    bt.translatesAutoresizingMaskIntoConstraints = false
+    bt.translatesAutoresizingMaskIntoConstraints = false
+    bt.widthAnchor.constraint(equalToConstant: 160).isActive = true
+    bt.clipsToBounds = true
+    bt.layer.cornerRadius = 12
+    bt.addTarget(self, action: #selector(quantityDoneButtonPressed), for: .touchUpInside)
+    return bt
+  }()
 }
