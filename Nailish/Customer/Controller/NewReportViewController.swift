@@ -18,9 +18,9 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     var reportImages = [UIImage]()
     var selectImageNum = 0
     var client: ClientInfo?
-    var reload: ((ReportItem, Set<SelectedMenuItem>) -> ())?
-    var selectedMenuItemArray = [SelectedMenuItem]()
-    var selectedMenuItems: Set<SelectedMenuItem> = []
+    var reload: ((ReportItem, Set<MenuItem>) -> ())?
+    var selectedMenuItemArray = [MenuItem]()
+    var selectedMenuItems: Set<MenuItem> = []
     let manageContext = CoreDataManager.shared.persistentContainer.viewContext
     let paymentList = ["", "Cash", "CreditCard"]
     
@@ -60,9 +60,9 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
             if let end = report?.endTime {
                 endTimeTextField.text = formatter.string(from: end)
             }
-            if let menuItems = report?.selectedMenuItems {
-                selectedMenuItemArray = Array(menuItems) as! [SelectedMenuItem]
-                selectedMenuItems = menuItems as! Set<SelectedMenuItem>
+            if let menuItems = report?.menuItem {
+                selectedMenuItemArray = Array(menuItems) as! [MenuItem]
+                selectedMenuItems = menuItems as! Set<MenuItem>
                 menuTableView.reloadData()
             }
             if let tips = report.tips {
@@ -342,7 +342,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
                 report?.payment = paymentTextField.text
             }
             report?.client = client
-            report?.selectedMenuItems = NSSet(set: selectedMenuItems)
+            report?.menuItem = NSSet(set: selectedMenuItems)
         }
         
         do {
@@ -550,9 +550,18 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
 
 extension NewReportViewController: MenuSelectTableViewControllerDelegate {
     func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>) {
-        selectedMenuItems = selectMenu
+        for item in selectMenu {
+            let menuItem: MenuItem = MenuItem(context: manageContext)
+            menuItem.color = item.color
+            menuItem.price = item.price
+            menuItem.menuName = item.menuName
+            menuItem.quantity = item.quantity
+            menuItem.tag = item.tag
+            menuItem.tax = item.tax
+            selectedMenuItems.insert(menuItem)
+        }
         selectedMenuItemArray.removeAll()
-        selectedMenuItemArray = Array(selectMenu).sorted { $0.tag < $1.tag }
+        selectedMenuItemArray = Array(selectedMenuItems).sorted { $0.tag < $1.tag }
         menuTableView.reloadData()
     }
     

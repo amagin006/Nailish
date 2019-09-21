@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4311350E231F9FB8007DF8AB /* MappingModelV2toV3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4311350D231F9FB8007DF8AB /* MappingModelV2toV3.xcmappingmodel */; };
 		4313075922E1327A00A2A804 /* MenuSelectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */; };
 		431D155C22F63A1500C86C1A /* FSCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 435C903022C419D1009D6D4E /* FSCalendar.framework */; };
 		431D155E22F63A7400C86C1A /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431D155D22F63A7300C86C1A /* ReportCollectionViewCell.swift */; };
@@ -45,6 +46,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4311350C231F9775007DF8AB /* ClientModel v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClientModel v3.xcdatamodel"; sourceTree = "<group>"; };
+		4311350D231F9FB8007DF8AB /* MappingModelV2toV3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModelV2toV3.xcmappingmodel; sourceTree = "<group>"; };
 		4313075722E12F1A00A2A804 /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSelectTableViewController.swift; sourceTree = "<group>"; };
 		431D155D22F63A7300C86C1A /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -222,6 +225,7 @@
 		437A75B6229FAC4F0032E371 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4311350D231F9FB8007DF8AB /* MappingModelV2toV3.xcmappingmodel */,
 				437A75A4229FABFF0032E371 /* AppDelegate.swift */,
 				437A75A8229FABFF0032E371 /* Main.storyboard */,
 				43A28B0922EFB39F00F57860 /* Assets.xcassets */,
@@ -347,6 +351,7 @@
 				435C903D22C50CF8009D6D4E /* MyUILabel.swift in Sources */,
 				43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */,
 				435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */,
+				4311350E231F9FB8007DF8AB /* MappingModelV2toV3.xcmappingmodel in Sources */,
 				43ED0B0522BD8D9100781893 /* MyTextView.swift in Sources */,
 				43ED0B0122BD8D4100781893 /* DatePickerKeyboard.swift in Sources */,
 				43C52F6122ED6ED600322342 /* FetchTableViewController.swift in Sources */,
@@ -588,10 +593,11 @@
 		435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				4311350C231F9775007DF8AB /* ClientModel v3.xcdatamodel */,
 				433B535C230A1ECB0051B944 /* ClientModel v2.xcdatamodel */,
 				435C902D22C3557B009D6D4E /* ClientModel.xcdatamodel */,
 			);
-			currentVersion = 433B535C230A1ECB0051B944 /* ClientModel v2.xcdatamodel */;
+			currentVersion = 4311350C231F9775007DF8AB /* ClientModel v3.xcdatamodel */;
 			path = ClientModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
