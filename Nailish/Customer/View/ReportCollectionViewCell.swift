@@ -43,7 +43,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
     }
     
     lazy var width: NSLayoutConstraint = {
-        let width = contentView.widthAnchor.constraint(equalToConstant: bounds.size.width)
+        let width = contentView.widthAnchor.constraint(equalToConstant: frame.size.width)
         width.isActive = true
         return width
     }()

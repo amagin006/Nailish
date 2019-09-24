@@ -20,7 +20,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     weak var delegate: MenuSelectTableViewControllerDelegate?
     var selectedCell = Set<SelectedMenuItem>()
     var selectedCellIndex = [Int: Bool]()
-    let popupViewController = PopupViewController()
+    var popupViewController: PopupViewController? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,11 +121,10 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        view.addSubview(popupViewController.view)
-        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
-          popupViewController.menuItemCell = cell
-        }
+        popupViewController = PopupViewController()
+        view.addSubview(popupViewController!.view)
+        popupViewController!.delegate = self
+        popupViewController!.menuItemIndex = indexPath
 
 //        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
 //            guard let menuItem = cell.menuItem else { return }
@@ -191,10 +190,29 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
 
 }
 
+extension MenuSelectTableViewController: popupViewControllerDelegate {
+  func popupViewDonetapped(indexPath: IndexPath, quantity: Int) {
+    let cell = tableView.cellForRow(at: indexPath) as! MenuMasterTableViewCell
+    print(indexPath, quantity)
+    tableView.beginUpdates()
+    cell.quantityLabel.text = String(quantity)
+    tableView.reloadRows(at: [indexPath], with: .automatic)
+    tableView.endUpdates()
+  }
+
+}
+
+
+
+protocol popupViewControllerDelegate: class {
+  func popupViewDonetapped(indexPath: IndexPath, quantity: Int)
+}
+
 class PopupViewController: UIViewController {
 
+  weak var delegate: popupViewControllerDelegate?
   var quantity = 0
-  var menuItemCell = UITableViewCell()
+  var menuItemIndex = IndexPath()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -256,8 +274,6 @@ class PopupViewController: UIViewController {
   }
 
   @objc func tapped(_ sender: UITapGestureRecognizer){
-    quantity = 0
-    amountLabel.text = String(quantity)
     self.view.removeFromSuperview()
   }
 
@@ -278,8 +294,7 @@ class PopupViewController: UIViewController {
   }
 
   @objc func quantityDoneButtonPressed() {
-    quantity = 0
-    amountLabel.text = String(quantity)
+    self.delegate?.popupViewDonetapped(indexPath: menuItemIndex, quantity: quantity)
     self.view.removeFromSuperview()
   }
 

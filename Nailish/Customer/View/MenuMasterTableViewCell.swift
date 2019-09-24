@@ -73,9 +73,10 @@ class MenuMasterTableViewCell: UITableViewCell {
       itemPriceSV.alignment = .center
       itemPriceSV.spacing = 4
       let priceSV = UIStackView(arrangedSubviews: [itemPriceSV, taxSV])
+      priceSV.translatesAutoresizingMaskIntoConstraints = false
       priceSV.alignment = .center
       priceSV.spacing = 8
-      priceSV.widthAnchor.constraint(equalToConstant: 115).isActive = true
+    
       let menuAndPriceSV = UIStackView(arrangedSubviews: [menuAndCheckSV, priceSV])
       addSubview(menuAndPriceSV)
       menuAndPriceSV.spacing = 8
