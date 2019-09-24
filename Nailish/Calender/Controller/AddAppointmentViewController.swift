@@ -12,9 +12,10 @@ import CoreData
 private let appointmentCellId = "appointmentCellId"
 
 class AddAppointmentViewController: FetchTableViewController, UITableViewDataSource {
-    var selectedMenuItems: Set<SelectedMenuItem> = []
-    var selectedMenuItemArray = [SelectedMenuItem]()
+    var selectedMenuItems: Set<MenuItem> = []
+    var selectedMenuItemArray = [MenuItem]()
     var selectClient: ClientInfo?
+    let manageContext = CoreDataManager.shared.persistentContainer.viewContext
     var selectedDate: Date? {
         didSet {
             let formatter = DateFormatter()
@@ -40,7 +41,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
                 endTextView.text = formatter.string(from: endTime)
             }
             if let menu = reportItem.menuItem {
-                let newArray = Array(menu) as! [SelectedMenuItem]
+                let newArray = Array(menu) as! [MenuItem]
                 selectedMenuItemArray = newArray.sorted { $0.tag < $1.tag }
                 menuTableView.reloadData()
             }
@@ -96,7 +97,6 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
         
         clientInfoView.addSubview(clientInfoViewContentSV)
         clientInfoViewContentSV.topAnchor.constraint(equalTo: clientInfoView.topAnchor, constant: 10).isActive = true
-        clientInfoViewContentSV.bottomAnchor.constraint(equalTo: clientInfoView.bottomAnchor, constant: 10)
         clientInfoViewContentSV.centerXAnchor.constraint(equalTo: clientInfoView.centerXAnchor).isActive = true
         clientInfoViewContentSV.widthAnchor.constraint(equalTo: clientInfoView.widthAnchor, multiplier: 0.9).isActive = true
         
@@ -252,7 +252,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
                 newReport.setValue(end, forKey: "endTime")
             }
         
-            newReport.setValue(selectedMenuItems, forKey: "selectedMenuItems")
+            newReport.setValue(NSSet(set: selectedMenuItems), forKey: "menuItem")
             if let memo = memoTextView.text {
                 newReport.setValue(memo, forKey: "memo")
             }
@@ -491,9 +491,18 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
 extension AddAppointmentViewController: MenuSelectTableViewControllerDelegate, CustomerCollectionViewControllerDelegate {
     // MenuSelectTableViewControllerDelegate
     func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>) {
-        selectedMenuItems = selectMenu
+        for item in selectMenu {
+            let menuItem: MenuItem = MenuItem(context: manageContext)
+            menuItem.color = item.color
+            menuItem.price = item.price
+            menuItem.menuName = item.menuName
+            menuItem.quantity = item.quantity
+            menuItem.tag = item.tag
+            menuItem.tax = item.tax
+            selectedMenuItems.insert(menuItem)
+        }
         selectedMenuItemArray.removeAll()
-        selectedMenuItemArray = Array(selectMenu).sorted { $0.tag < $1.tag }
+        selectedMenuItemArray = Array(selectedMenuItems).sorted { $0.tag < $1.tag }
         menuTableView.reloadData()
     }
     

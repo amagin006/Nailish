@@ -177,8 +177,6 @@ class CustomerCollectionViewController: FetchCollectionViewController, UICollect
     }
 }
 
-
-
 class SectionHeader: UICollectionReusableView {
     
     let headerLable: UILabel = {

@@ -39,7 +39,8 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         self.collectionView.register(ClientDetailHeaderReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         self.collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: reportIdentifier)
         
-        collectionView?.collectionViewLayout = layout
+//        collectionView?.collectionViewLayout = layout
+        
         self.title = "Client Report"
         let editButton: UIBarButtonItem = {
             let bb = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonPressed))
@@ -112,14 +113,18 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
         emptyLabel.sizeToFit()
         return .init(width: view.frame.width, height: emptyLabel.frame.height + 400)
     }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+      return CGSize(width: view.frame.width, height: 80)
+    }
     
-    var layout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        let width = UIScreen.main.bounds.size.width
-        layout.minimumLineSpacing = 2
-        layout.estimatedItemSize = CGSize(width: width, height: 10)
-        return layout
-    }()
+//    var layout: UICollectionViewFlowLayout = {
+//        let layout = UICollectionViewFlowLayout()
+//        let width = UIScreen.main.bounds.size.width
+//        layout.minimumLineSpacing = 2
+//        layout.estimatedItemSize = CGSize(width: width, height: 10)
+//        return layout
+//    }()
     
 }
 

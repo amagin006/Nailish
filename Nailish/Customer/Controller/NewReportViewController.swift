@@ -305,7 +305,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
             }
             newReport.setValue(tipsLable.amountDecimalNumber, forKey: "tips")
             newReport.setValue(client, forKey: "client")
-            newReport.setValue(NSSet(set: selectedMenuItems), forKey: "selectedMenuItems")
+            newReport.setValue(NSSet(set: selectedMenuItems), forKey: "menuItem")
             
         }  else {
             for i in 0..<reportImageViews.count {
