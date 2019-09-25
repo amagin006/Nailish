@@ -549,16 +549,17 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
 }
 
 extension NewReportViewController: MenuSelectTableViewControllerDelegate {
-    func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>) {
+    func newReportSaveTapped(selectMenu: Set<MenuItem>) {
+        selectedMenuItems.removeAll()
         for item in selectMenu {
-            let menuItem: MenuItem = MenuItem(context: manageContext)
-            menuItem.color = item.color
-            menuItem.price = item.price
-            menuItem.menuName = item.menuName
-            menuItem.quantity = item.quantity
-            menuItem.tag = item.tag
-            menuItem.tax = item.tax
-            selectedMenuItems.insert(menuItem)
+//            let menuItem: MenuItem = MenuItem(context: manageContext)
+//            menuItem.color = item.color
+//            menuItem.price = item.price
+//            menuItem.menuName = item.menuName
+//            menuItem.quantity = item.quantity
+//            menuItem.tag = item.tag
+//            menuItem.tax = item.tax
+            selectedMenuItems.insert(item)
         }
         selectedMenuItemArray.removeAll()
         selectedMenuItemArray = Array(selectedMenuItems).sorted { $0.tag < $1.tag }
@@ -580,7 +581,8 @@ extension NewReportViewController: MenuSelectTableViewControllerDelegate {
             cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
             let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
             cell.menuitemTagLabel.backgroundColor = color?.rawValue
-            // TODO: set price Label
+            cell.quantityLabel.text = String(selectedMenuItemArray[indexPath.row].quantity)
+
             let fm = NumberFormatter()
             fm.numberStyle = .decimal
             //        fm.currencySymbol = "$"
@@ -594,7 +596,7 @@ extension NewReportViewController: MenuSelectTableViewControllerDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
+        return 50
     }
     
 }
