@@ -10,13 +10,6 @@ import UIKit
 
 class MenuMasterTableViewCell: UITableViewCell {
 
-//  var isFromSelectedMenuView: Bool? {
-//      didSet {
-//          if let _ = isFromSelectedMenuView {
-//              menuAndCheckSV.insertArrangedSubview(selectCheckIcon, at: 0)
-//          }
-//      }
-//  }
   var menuItem: SelectedMenuItem? {
       didSet {
           menuitemTagLabel.text = menuItem!.menuName ?? ""
@@ -30,6 +23,11 @@ class MenuMasterTableViewCell: UITableViewCell {
           taxLabel.text = "\(menuItem?.tax ?? 0)%"
           let color = TagColor.stringToSGColor(str: menuItem!.color!)
           menuitemTagLabel.backgroundColor = color!.rawValue
+        if let quantity = menuItem?.quantity {
+          if quantity != 0 {
+            quantityLabel.text = String(quantity)
+          }
+        }
       }
   }
 
@@ -48,9 +46,10 @@ class MenuMasterTableViewCell: UITableViewCell {
   }
 
   override func setSelected(_ selected: Bool, animated: Bool) {
-      let color = self.menuitemTagLabel.backgroundColor
+      let tagcolor = self.menuitemTagLabel.backgroundColor
       super.setSelected(selected, animated: animated)
-      self.menuitemTagLabel.backgroundColor = color
+      self.menuitemTagLabel.backgroundColor = tagcolor
+      self.quantityLabel.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
   }
 
   func setupUI() {
@@ -60,11 +59,6 @@ class MenuMasterTableViewCell: UITableViewCell {
       menuAndCheckSV.alignment = .center
       menuAndCheckSV.addArrangedSubview(quantityLabel)
       menuAndCheckSV.addArrangedSubview(menuitemTagLabel)
-
-//      menuAndCheckSV.translatesAutoresizingMaskIntoConstraints = false
-//      menuAndCheckSV.heightAnchor.constraint(equalToConstant: 30).isActive = true
-//      menuAndCheckSV.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-//      menuAndCheckSV.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
 
       let taxSV = UIStackView(arrangedSubviews: [taxTitleLabal, taxLabel])
       taxSV.alignment = .center
@@ -86,11 +80,6 @@ class MenuMasterTableViewCell: UITableViewCell {
       menuAndPriceSV.heightAnchor.constraint(equalToConstant: 50).isActive = true
       menuAndPriceSV.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
       menuAndPriceSV.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
-//        priceSV.translatesAutoresizingMaskIntoConstraints = false
-//        priceSV.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-//        priceSV.heightAnchor.constraint(equalToConstant: 50).isActive = true
-//        priceSV.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
-
   }
 
   let menuAndCheckSV: UIStackView = {
@@ -107,11 +96,15 @@ class MenuMasterTableViewCell: UITableViewCell {
       return iv
   }()
 
-  let quantityLabel: UILabel = {
-      let lb = UILabel()
+  let quantityLabel: MyUILabel = {
+    let lb = MyUILabel()
       lb.font = UIFont.systemFont(ofSize: 22)
-      lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+      lb.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+      lb.textColor = .white
+      lb.layer.cornerRadius = 10
       lb.text = "0"
+      lb.clipsToBounds = true
+      lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
       return lb
   }()
 
