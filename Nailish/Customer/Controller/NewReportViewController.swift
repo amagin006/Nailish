@@ -419,12 +419,14 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         let lb = UILabel()
         lb.text = "Visit Day"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
     let visitTextField: DatePickerKeyboard = {
         let tf = DatePickerKeyboard()
         tf.contentInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
+        tf.textColor = UIColor(named: "PrimaryText")
         tf.sizeToFit()
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
@@ -433,6 +435,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     let startTimeTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Start Time"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
@@ -440,6 +443,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     let startTimeTextField: TimePickerKeyboard = {
         let lb = TimePickerKeyboard()
         lb.contentInset = UIEdgeInsets(top: 8, left: 4, bottom: 8, right: 4)
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.sizeToFit()
         lb.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return lb
@@ -448,6 +452,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     let endTimeTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "End Time"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
@@ -455,12 +460,14 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     let endTimeTextField: TimePickerKeyboard = {
         let lb = TimePickerKeyboard()
         lb.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
     let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.constraintWidth(equalToConstant: 60)
         lb.backgroundColor = .red
         lb.font = UIFont.boldSystemFont(ofSize: 12)
@@ -495,6 +502,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     
     let tipsTitleLabel: UILabel = {
         let lb = UILabel()
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.text = "tips"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
@@ -502,6 +510,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     
     let dollar: UILabel = {
         let lb = UILabel()
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.text = "$"
         lb.font = UIFont.systemFont(ofSize: 16)
@@ -520,6 +529,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     let paymentLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Payment"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
@@ -527,6 +537,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     let paymentTextField: MyTextField = {
         let tf = MyTextField()
         tf.textAlignment = .right
+        tf.textColor = UIColor(named: "PrimaryText")
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         tf.constraintWidth(equalToConstant: 120)
         return tf
@@ -535,6 +546,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
     let memoLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Memo"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()

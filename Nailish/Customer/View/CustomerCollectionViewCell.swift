@@ -85,13 +85,13 @@ class CustomerCollectionViewCell: UICollectionViewCell {
     
     let firstNameLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
     let lastNameLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     

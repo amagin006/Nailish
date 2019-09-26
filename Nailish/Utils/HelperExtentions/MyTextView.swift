@@ -18,6 +18,7 @@ class MyTextView: UITextView, UITextViewDelegate {
         self.backgroundColor = .white
         self.font = UIFont.systemFont(ofSize: 14)
         self.inputAccessoryView = toolbar
+        self.textColor = UIColor(named: "PrimaryText")
         toolbar.donePress = { () in
             self.endEditing(true)
         }

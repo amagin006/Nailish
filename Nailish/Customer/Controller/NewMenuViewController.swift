@@ -135,17 +135,20 @@ class NewMenuViewController: UIViewController {
     let menuNameTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu Name"
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
     let menuNameTextField: MyTextField = {
         let tf = MyTextField()
+        tf.textColor = UIColor(named: "PrimaryText")
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
     
     let priceTitleLable: UILabel = {
         let lb = UILabel()
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.text = "Price"
         return lb
     }()
@@ -153,6 +156,7 @@ class NewMenuViewController: UIViewController {
     let dollar: UILabel = {
         let lb = UILabel()
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.text = "$"
         lb.font = UIFont.systemFont(ofSize: 16)
         return lb
@@ -163,6 +167,7 @@ class NewMenuViewController: UIViewController {
         tf.placeholder = "20.00"
         tf.textAlignment = .right
         tf.constraintWidth(equalToConstant: 120)
+        tf.textColor = UIColor(named: "PrimaryText")
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf
     }()
@@ -170,6 +175,7 @@ class NewMenuViewController: UIViewController {
     let taxTitleLable: UILabel = {
         let lb = UILabel()
         lb.text = "Tax"
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -177,6 +183,7 @@ class NewMenuViewController: UIViewController {
         let lb = UILabel()
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.text = "%"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.systemFont(ofSize: 16)
         return lb
     }()
@@ -186,6 +193,7 @@ class NewMenuViewController: UIViewController {
         tf.placeholder = "5"
         tf.textAlignment = .right
         tf.keyboardType = .numberPad
+        tf.textColor = UIColor(named: "PrimaryText")
         tf.constraintWidth(equalToConstant: 120)
         tf.backgroundColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
         return tf

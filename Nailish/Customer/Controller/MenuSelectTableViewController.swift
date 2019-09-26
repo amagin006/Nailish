@@ -48,7 +48,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     func setupUI() {
         let headerView = UIView()
-        headerView.backgroundColor = .white
+        headerView.backgroundColor = UIColor(named: "BarBackground")
         view.addSubview(headerView)
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true

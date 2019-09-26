@@ -13,6 +13,7 @@ class MyUILabel: UILabel {
     
     override func drawText(in rect: CGRect) {
         super.drawText(in: rect.inset(by: padding))
+        self.textColor = UIColor(named: "PrimaryText")
     }
     
     override var intrinsicContentSize: CGSize {
@@ -30,6 +31,7 @@ class menuTagLabel: UILabel {
     
     override func drawText(in rect: CGRect) {
         super.drawText(in: rect.inset(by: padding))
+        self.textColor = UIColor(named: "PrimaryText")
     }
     
     override var intrinsicContentSize: CGSize {
@@ -53,3 +55,4 @@ class UnderlineUILabel: UILabel {
         }
     }
 }
+

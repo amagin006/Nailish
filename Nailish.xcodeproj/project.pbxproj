@@ -43,6 +43,7 @@
 		43ED0B0522BD8D9100781893 /* MyTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0422BD8D9100781893 /* MyTextView.swift */; };
 		43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0822BD998900781893 /* CustomDateToolbar.swift */; };
 		43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */; };
+		43F87A97233C9BA70098A47E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43F87A96233C9BA70098A47E /* Colors.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,7 @@
 		43ED0B0422BD8D9100781893 /* MyTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextView.swift; sourceTree = "<group>"; };
 		43ED0B0822BD998900781893 /* CustomDateToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDateToolbar.swift; sourceTree = "<group>"; };
 		43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCollectionViewController.swift; sourceTree = "<group>"; };
+		43F87A96233C9BA70098A47E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +230,7 @@
 				4311350D231F9FB8007DF8AB /* MappingModelV2toV3.xcmappingmodel */,
 				437A75A4229FABFF0032E371 /* AppDelegate.swift */,
 				437A75A8229FABFF0032E371 /* Main.storyboard */,
+				43F87A96233C9BA70098A47E /* Colors.xcassets */,
 				43A28B0922EFB39F00F57860 /* Assets.xcassets */,
 				437A75AD229FAC010032E371 /* LaunchScreen.storyboard */,
 			);
@@ -310,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */,
+				43F87A97233C9BA70098A47E /* Colors.xcassets in Resources */,
 				43A28B0A22EFB39F00F57860 /* Assets.xcassets in Resources */,
 				437A75AA229FABFF0032E371 /* Main.storyboard in Resources */,
 			);

@@ -387,6 +387,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     
     let fullNameLabel: UILabel = {
         let lb = UILabel()
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.boldSystemFont(ofSize: 16)
         return lb
     }()

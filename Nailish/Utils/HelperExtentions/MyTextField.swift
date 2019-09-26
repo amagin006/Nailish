@@ -55,6 +55,7 @@ class CurrencyTextField: MyTextField {
         super.init(frame: frame)
         self.addTarget(self, action: #selector(currencyFieldDidChange), for: .editingChanged)
         self.keyboardType = .decimalPad
+        self.textColor = UIColor(named: "PrimaryText")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -76,6 +77,7 @@ class taxTextField: MyTextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.keyboardType = .decimalPad
+        self.textColor = UIColor(named: "PrimaryText")
     }
     
     required init?(coder aDecoder: NSCoder) {

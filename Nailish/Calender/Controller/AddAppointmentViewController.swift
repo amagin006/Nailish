@@ -381,6 +381,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     private let nameLabel: UILabel = {
         let lb = UILabel()
         lb.text = "SELECT Client"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.translatesAutoresizingMaskIntoConstraints = false
         return lb
     }()
@@ -388,12 +389,14 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     private let dateTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Visit Date"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
     }()
     
     private let dateTextView: DatePickerKeyboard = {
         let dp = DatePickerKeyboard()
+        dp.textColor = UIColor(named: "PrimaryText")
         dp.widthAnchor.constraint(equalToConstant: 150).isActive = true
         dp.textAlignment = NSTextAlignment.center
         dp.font = UIFont.systemFont(ofSize: 18)
@@ -402,6 +405,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     
     private let startTitleLabel: UILabel = {
         let lb = UILabel()
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.text = "Start Time"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
@@ -409,6 +413,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     
     private let startTextView: TimePickerKeyboard = {
         let tp = TimePickerKeyboard()
+        tp.textColor = UIColor(named: "PrimaryText")
         tp.font = UIFont.systemFont(ofSize: 18)
         tp.textAlignment = NSTextAlignment.center
         return tp
@@ -416,6 +421,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     
     private let endTitleLabel: UILabel = {
         let lb = UILabel()
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.text = "End Time"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         return lb
@@ -423,6 +429,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     
     private let endTextView: TimePickerKeyboard = {
         let tp = TimePickerKeyboard()
+        tp.textColor = UIColor(named: "PrimaryText")
         tp.font = UIFont.systemFont(ofSize: 18)
         tp.textAlignment = NSTextAlignment.center
         return tp
@@ -431,6 +438,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
     private let menuTitleLabel: UILabel = {
         let lb = UILabel()
         lb.text = "Menu"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.boldSystemFont(ofSize: 12)
         lb.textColor = UIColor(red: 145/255, green: 145/255, blue: 145/255, alpha: 1)
         return lb
@@ -466,12 +474,13 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
         let lb = UILabel()
         lb.text = "MEMO"
         lb.font = UIFont.boldSystemFont(ofSize: 12)
-        lb.textColor = UIColor(red: 145/255, green: 145/255, blue: 145/255, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
     private let memoTextView: MyTextView = {
         let tv = MyTextView()
+        tv.textColor = UIColor(named: "PrimaryText")
         tv.constraintHeight(equalToConstant: 150)
         return tv
     }()
