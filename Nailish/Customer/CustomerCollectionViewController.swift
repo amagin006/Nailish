@@ -182,6 +182,7 @@ class SectionHeader: UICollectionReusableView {
     let headerLable: UILabel = {
         let lb = UILabel()
         lb.text = "section Title"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         return lb

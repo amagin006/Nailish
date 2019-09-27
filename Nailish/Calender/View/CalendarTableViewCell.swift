@@ -53,7 +53,7 @@ class CalendarTableViewCell: UITableViewCell {
     }
     
     lazy var backView: UIView = {
-        let bv = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
+      let bv = UIView(frame: CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: 80))
         return bv
     }()
 
