@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 protocol MenuSelectTableViewControllerDelegate: class {
-    func newReportSaveTapped(selectMenu: Set<SelectedMenuItem>)
+    func newReportSaveTapped(selectMenu: Set<MenuItem>)
 }
 
 private let cellId = "AddMenuCell"
@@ -18,9 +18,10 @@ private let cellId = "AddMenuCell"
 class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSource {
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
-    var selectedCell = Set<SelectedMenuItem>()
+    var selectedMenuItem = Set<MenuItem>()
     var selectedCellIndex = [Int: Bool]()
     var popupViewController: PopupViewController? = nil
+    let manageContext = CoreDataManager.shared.persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +48,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     func setupUI() {
         let headerView = UIView()
-        headerView.backgroundColor = .white
+        headerView.backgroundColor = UIColor(named: "BarBackground")
         view.addSubview(headerView)
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -87,7 +88,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     @objc func selectMenuSaveButtonPressed() {
         dismiss(animated: true) {
-            self.delegate?.newReportSaveTapped(selectMenu: self.selectedCell)
+            self.delegate?.newReportSaveTapped(selectMenu: self.selectedMenuItem)
         }
     }
     
@@ -105,13 +106,6 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
-//        cell.isFromSelectedMenuView = true
-//        if let _ = selectedCellIndex[indexPath.row] {
-//            cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
-//        } else {
-//            cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
-//        }
-
         return cell
     }
 
@@ -125,19 +119,9 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         view.addSubview(popupViewController!.view)
         popupViewController!.delegate = self
         popupViewController!.menuItemIndex = indexPath
-
-//        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
-//            guard let menuItem = cell.menuItem else { return }
-//            if let _ = selectedCellIndex[indexPath.row] {
-//                selectedCell.remove(menuItem)
-//                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon4")
-//                selectedCellIndex.removeValue(forKey: indexPath.row)
-//            } else {
-//                selectedCell.insert(menuItem)
-//                selectedCellIndex[indexPath.row] = true
-//                cell.selectCheckIcon.image = #imageLiteral(resourceName: "check-icon")
-//            }
-//        }
+        if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
+          popupViewController!.quantity = Int(cell.quantityLabel.text ?? "0")
+        }
     }
     
     
@@ -193,11 +177,21 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
 extension MenuSelectTableViewController: popupViewControllerDelegate {
   func popupViewDonetapped(indexPath: IndexPath, quantity: Int) {
     let cell = tableView.cellForRow(at: indexPath) as! MenuMasterTableViewCell
-    print(indexPath, quantity)
-    tableView.beginUpdates()
-    cell.quantityLabel.text = String(quantity)
-    tableView.reloadRows(at: [indexPath], with: .automatic)
-    tableView.endUpdates()
+    if quantity != 0 {
+      guard let cellMenuItem = cell.menuItem else { return }
+      let menuItem: MenuItem = MenuItem(context: manageContext)
+      menuItem.color = cellMenuItem.color
+      menuItem.price = cellMenuItem.price
+      menuItem.menuName = cellMenuItem.menuName
+      menuItem.quantity = Int16(quantity)
+      menuItem.tag = cellMenuItem.tag
+      menuItem.tax = cellMenuItem.tax
+      selectedMenuItem.insert(menuItem)
+      tableView.beginUpdates()
+      cell.quantityLabel.text = String(quantity)
+      tableView.reloadData()
+      tableView.endUpdates()
+    }
   }
 
 }
@@ -211,8 +205,12 @@ protocol popupViewControllerDelegate: class {
 class PopupViewController: UIViewController {
 
   weak var delegate: popupViewControllerDelegate?
-  var quantity = 0
   var menuItemIndex = IndexPath()
+  var quantity: Int! {
+    didSet {
+      amountLabel.text = String(quantity)
+    }
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -264,13 +262,13 @@ class PopupViewController: UIViewController {
     amountUIView.addSubview(labeAndButtonSV)
     labeAndButtonSV.axis = .vertical
     labeAndButtonSV.alignment = .center
+    labeAndButtonSV.distribution = .equalSpacing
     labeAndButtonSV.spacing = 16
     labeAndButtonSV.translatesAutoresizingMaskIntoConstraints = false
     labeAndButtonSV.topAnchor.constraint(equalTo: amountUIView.topAnchor, constant: 30).isActive = true
     labeAndButtonSV.bottomAnchor.constraint(equalTo: amountUIView.bottomAnchor, constant: -30).isActive = true
     labeAndButtonSV.leadingAnchor.constraint(equalTo: amountUIView.leadingAnchor, constant: 15).isActive = true
     labeAndButtonSV.trailingAnchor.constraint(equalTo: amountUIView.trailingAnchor, constant: -15).isActive = true
-
   }
 
   @objc func tapped(_ sender: UITapGestureRecognizer){
@@ -294,6 +292,7 @@ class PopupViewController: UIViewController {
   }
 
   @objc func quantityDoneButtonPressed() {
+    quantity = Int(self.amountLabel.text ?? "0")
     self.delegate?.popupViewDonetapped(indexPath: menuItemIndex, quantity: quantity)
     self.view.removeFromSuperview()
   }
@@ -306,11 +305,17 @@ class PopupViewController: UIViewController {
     return lb
   }()
 
-  let amountLabel: UILabel = {
-    let lb = UILabel()
-    lb.text = "0"
-    lb.font = UIFont.systemFont(ofSize: 20)
-    return lb
+  let amountLabel: UITextField = {
+    let tf = UITextField()
+    tf.text = "0"
+    tf.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+    tf.translatesAutoresizingMaskIntoConstraints = false
+    tf.textAlignment = .center
+    tf.keyboardType = .numberPad
+    tf.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    tf.widthAnchor.constraint(equalToConstant: 180).isActive = true
+    tf.font = UIFont.systemFont(ofSize: 20)
+    return tf
   }()
 
   let plusButton: UIButton = {

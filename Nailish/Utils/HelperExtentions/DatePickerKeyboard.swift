@@ -16,6 +16,7 @@ class DatePickerKeyboard: UITextView, UITextViewDelegate {
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
+        self.textColor = UIColor(named: "PrimaryColor")
         setupDatePicker()
         
         toolbar.didSelectDate = { (text, dismiss) in
@@ -70,6 +71,7 @@ class TimePickerKeyboard: UITextView, UITextViewDelegate {
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
+        self.textColor = UIColor(named: "PrimaryColor")
         setupDatePicker()
         // closure (function without name)
         toolbar.didSelectTime = { (text, dismiss) in

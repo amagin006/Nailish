@@ -207,6 +207,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 20)
         lb.textAlignment = .right
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
 
@@ -216,6 +217,7 @@ class ClientDetailHeaderReusableView: UICollectionReusableView {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.font = UIFont.systemFont(ofSize: 20)
         lb.textAlignment = .left
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     

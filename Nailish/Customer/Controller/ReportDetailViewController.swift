@@ -61,23 +61,28 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
                 let newArray = Array(reportDetailselectedMenus) as! [MenuItem]
                 selectedMenuItemArray = Array(newArray).sorted { $0.tag < $1.tag }
                 var subTotal:NSDecimalNumber = 0.00
-                // divide same tax rate
-                var taxDic = [NSDecimalNumber: NSDecimalNumber]()
-                for item in selectedMenuItemArray {
-                    subTotal = subTotal.adding(item.price!)
-                    if let tax = item.tax {
-                        if let taxSum = taxDic[tax] {
-                            taxDic.updateValue(taxSum.adding(item.price!), forKey: tax)
-                        } else {
-                            taxDic.updateValue(item.price!, forKey: tax)
-                        }
-                        
-                    }
-                }
                 var taxSum: NSDecimalNumber = 0.00
-                for (key, value) in taxDic {
-                    taxSum = taxSum.adding(value.multiplying(by: key.dividing(by: 100)))
+                // divide same tax rate
+                for item in selectedMenuItemArray {
+                  subTotal = (subTotal.adding(item.price!)).multiplying(by: NSDecimalNumber(value: item.quantity))
+                  taxSum = taxSum.adding((item.price)!.multiplying(by: item.tax!.dividing(by: 100)))
                 }
+//                var taxDic = [NSDecimalNumber: NSDecimalNumber]()
+//                for item in selectedMenuItemArray {
+//                    subTotal = subTotal.adding(item.price!)
+//                    if let tax = item.tax {
+//                        if let taxSum = taxDic[tax] {
+//                            taxDic.updateValue(taxSum.adding(item.price!), forKey: tax)
+//                        } else {
+//                            taxDic.updateValue(item.price!, forKey: tax)
+//                        }
+//
+//                    }
+//                }
+//                var taxSum: NSDecimalNumber = 0.00
+//                for (key, value) in taxDic {
+//                    taxSum = taxSum.adding(value.multiplying(by: key.dividing(by: 100)))
+//                }
                 subtotalPrice.text = fm.string(from: subTotal)
                 taxPrice.text = fm.string(from: taxSum)
                 let taxTipsTotal = subTotal.adding(taxSum)
@@ -346,6 +351,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
             cell.menuitemTagLabel.text = selectedMenuItemArray[indexPath.row].menuName
             let color = TagColor.stringToSGColor(str: selectedMenuItemArray[indexPath.row].color!)
             cell.menuitemTagLabel.backgroundColor = color?.rawValue
+            cell.quantityLabel.text = String(selectedMenuItemArray[indexPath.row].quantity)
             let fm = NumberFormatter()
             fm.numberStyle = .decimal
             fm.maximumFractionDigits = 2
@@ -359,7 +365,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
+        return 50
     }
     
     // UI Parts
@@ -381,6 +387,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     
     let fullNameLabel: UILabel = {
         let lb = UILabel()
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.boldSystemFont(ofSize: 16)
         return lb
     }()

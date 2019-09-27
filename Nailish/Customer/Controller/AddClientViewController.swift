@@ -564,7 +564,7 @@ class AddClientViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "First Name"
         lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -590,7 +590,7 @@ class AddClientViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Last Name"
         lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -615,7 +615,7 @@ class AddClientViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Instagram"
         lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -644,7 +644,7 @@ class AddClientViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Twitter"
         lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -673,7 +673,7 @@ class AddClientViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Mail address"
         lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -702,7 +702,7 @@ class AddClientViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Mobile Number"
         lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -730,7 +730,7 @@ class AddClientViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Date of Birth"
         lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -757,13 +757,13 @@ class AddClientViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Memo"
         lb.font = UIFont.systemFont(ofSize: 14)
-        lb.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
     let memoTextField: MyTextView = {
         let tv = MyTextView()
-        tv.textColor = .lightGray
+        tv.textColor = UIColor(named: "PrimaryText")
         tv.contentSize.height = 200
         return tv
     }()

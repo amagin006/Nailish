@@ -138,6 +138,7 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     
     lazy var appointTableView: UITableView = {
         let tv = UITableView()
+        tv.backgroundColor = UIColor(named: "BarBackground")
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
