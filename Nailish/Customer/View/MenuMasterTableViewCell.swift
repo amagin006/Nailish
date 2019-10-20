@@ -23,11 +23,11 @@ class MenuMasterTableViewCell: UITableViewCell {
           taxLabel.text = "\(menuItem?.tax ?? 0)%"
           let color = TagColor.stringToSGColor(str: menuItem!.color!)
           menuitemTagLabel.backgroundColor = color!.rawValue
-        if let quantity = menuItem?.quantity {
-          if quantity != 0 {
-            quantityLabel.text = String(quantity)
+          if let quantity = menuItem?.quantity {
+            if quantity != 0 {
+              quantityLabel.text = String(quantity)
+            }
           }
-        }
       }
   }
 
@@ -49,16 +49,21 @@ class MenuMasterTableViewCell: UITableViewCell {
       let tagcolor = self.menuitemTagLabel.backgroundColor
       super.setSelected(selected, animated: animated)
       self.menuitemTagLabel.backgroundColor = tagcolor
-      self.quantityLabel.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
   }
 
   func setupUI() {
+      let quantitySV = UIStackView(arrangedSubviews: [multipleLabel, quantityLabel])
+      quantitySV.axis = .horizontal
+      quantitySV.alignment = .lastBaseline
+      quantitySV.spacing = -8
+
       addSubview(menuAndCheckSV)
-      menuAndCheckSV.spacing = 16
+      menuAndCheckSV.spacing = 10
       menuAndCheckSV.axis = .horizontal
       menuAndCheckSV.alignment = .center
-      menuAndCheckSV.addArrangedSubview(quantityLabel)
+      menuAndCheckSV.addArrangedSubview(quantitySV)
       menuAndCheckSV.addArrangedSubview(menuitemTagLabel)
+      menuitemTagLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
       let taxSV = UIStackView(arrangedSubviews: [taxTitleLabal, taxLabel])
       taxSV.alignment = .center
@@ -67,9 +72,9 @@ class MenuMasterTableViewCell: UITableViewCell {
       itemPriceSV.alignment = .center
       itemPriceSV.spacing = 4
       let priceSV = UIStackView(arrangedSubviews: [itemPriceSV, taxSV])
-      priceSV.translatesAutoresizingMaskIntoConstraints = false
       priceSV.alignment = .center
       priceSV.spacing = 8
+      priceSV.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     
       let menuAndPriceSV = UIStackView(arrangedSubviews: [menuAndCheckSV, priceSV])
       addSubview(menuAndPriceSV)
@@ -87,24 +92,28 @@ class MenuMasterTableViewCell: UITableViewCell {
       return sv
   }()
 
-  let selectCheckIcon: UIImageView = {
-      let iv = UIImageView()
-      iv.image = #imageLiteral(resourceName: "check-icon4")
-      iv.translatesAutoresizingMaskIntoConstraints = false
-      iv.constraintWidth(equalToConstant: 27)
-      iv.constraintHeight(equalToConstant: 27)
-      return iv
+//  let selectCheckIcon: UIImageView = {
+//      let iv = UIImageView()
+//      iv.image = #imageLiteral(resourceName: "check-icon4")
+//      iv.translatesAutoresizingMaskIntoConstraints = false
+//      iv.constraintWidth(equalToConstant: 27)
+//      iv.constraintHeight(equalToConstant: 27)
+//      return iv
+//  }()
+
+  let multipleLabel: MyUILabel = {
+    let lb = MyUILabel()
+      lb.font = UIFont.systemFont(ofSize: 14)
+      lb.text = "x"
+      lb.textColor = UIColor(named: "PrimaryText")
+      return lb
   }()
 
   let quantityLabel: MyUILabel = {
     let lb = MyUILabel()
       lb.font = UIFont.systemFont(ofSize: 22)
-      lb.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
-      lb.textColor = .white
-      lb.layer.cornerRadius = 10
       lb.text = "0"
-      lb.clipsToBounds = true
-      lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+      lb.textColor = UIColor(named: "PrimaryText")
       return lb
   }()
 
@@ -113,13 +122,13 @@ class MenuMasterTableViewCell: UITableViewCell {
       lb.constraintHeight(equalToConstant: 27)
       lb.layer.cornerRadius = 12
       lb.clipsToBounds = true
-      lb.textColor = .white
       return lb
   }()
 
   let taxTitleLabal: UILabel = {
       let lb = UILabel()
       lb.text = "tax"
+      lb.textColor = UIColor(named: "PrimaryText")
       lb.font = UIFont.systemFont(ofSize: 12)
       return lb
   }()
@@ -127,6 +136,7 @@ class MenuMasterTableViewCell: UITableViewCell {
   let taxLabel: UILabel = {
       let lb = UILabel()
       lb.text = "0%"
+      lb.textColor = UIColor(named: "PrimaryText")
       lb.font = UIFont.systemFont(ofSize: 12)
       return lb
   }()
@@ -135,12 +145,14 @@ class MenuMasterTableViewCell: UITableViewCell {
       let lb = UILabel()
       lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
       lb.text = "$"
+      lb.textColor = UIColor(named: "PrimaryText")
       lb.font = UIFont.systemFont(ofSize: 16)
       return lb
   }()
     
   let priceLabel: UILabel = {
       let lb = UILabel()
+      lb.textColor = UIColor(named: "PrimaryText")
       lb.translatesAutoresizingMaskIntoConstraints = false
       return lb
   }()

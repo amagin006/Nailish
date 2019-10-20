@@ -29,13 +29,12 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
         setupTableViewUI()
         calendarView.select(selectDate)
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
 
+    override func viewWillAppear(_ animated: Bool) {
         getAppointmentdata(date: selectDate)
         calendarView.reloadData()
         appointTableView.reloadData()
-    }
+      }
     
     private func setupCalendar() {
         view.addSubview(calendarView)
@@ -69,7 +68,7 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
         
         view.addSubview(appointTableView)
         appointTableView.topAnchor.constraint(equalTo: appointTitleView.bottomAnchor).isActive = true
-        appointTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        appointTableView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         appointTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         appointTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         appointTableView.delegate = self

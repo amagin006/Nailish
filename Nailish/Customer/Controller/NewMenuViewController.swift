@@ -156,7 +156,7 @@ class NewMenuViewController: UIViewController {
     let dollar: UILabel = {
         let lb = UILabel()
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.textColor = UIColor(named: "PrimaryText")
+        lb.textColor = UIColor(named: "DrakText")
         lb.text = "$"
         lb.font = UIFont.systemFont(ofSize: 16)
         return lb
