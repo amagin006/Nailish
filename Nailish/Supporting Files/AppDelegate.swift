@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class LightStatusNavigationController: UINavigationController {
     override var preferredStatusBarStyle: UIStatusBarStyle {

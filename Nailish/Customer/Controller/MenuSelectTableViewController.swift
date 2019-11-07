@@ -106,6 +106,12 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
+        cell.quantityLabel.textColor = UIColor(named: "DrakText")
+        cell.multipleLabel.textColor = UIColor(named: "DrakText")
+        cell.priceLabel.textColor = UIColor(named: "DrakText")
+        cell.taxLabel.textColor = UIColor(named: "DrakText")
+        cell.quantityLabel.textColor = UIColor(named: "DrakText")
+        cell.taxTitleLabal.textColor = UIColor(named: "DrakText")
         return cell
     }
 
@@ -169,6 +175,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     let menuTableView: UITableView = {
         let tv = UITableView()
+        tv.backgroundColor = .white
         return tv
     }()
 

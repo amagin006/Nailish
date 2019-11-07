@@ -444,6 +444,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.text = "$"
         lb.textAlignment = .right
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.systemFont(ofSize: 16)
         return lb
     }()
@@ -452,7 +453,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
-        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -460,6 +461,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.text = "$"
         lb.textAlignment = .right
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.systemFont(ofSize: 16)
         return lb
     }()
@@ -475,7 +477,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
-        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -483,6 +485,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.text = "$"
         lb.textAlignment = .right
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.systemFont(ofSize: 16)
         return lb
     }()
@@ -498,7 +501,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lb.textAlignment = .right
-        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -506,6 +509,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.text = "$"
         lb.textAlignment = .right
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.systemFont(ofSize: 16)
         return lb
     }()
@@ -514,7 +518,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.textAlignment = .right
         lb.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        lb.textColor = UIColor(red: 85/255, green: 85/255, blue: 85/255, alpha: 1)
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
     
@@ -527,6 +531,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
     
     let paymentLabel: UILabel = {
         let lb = UILabel()
+        lb.textColor = UIColor(named: "PrimaryText")
         return lb
     }()
 
@@ -541,6 +546,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         let lb = UILabel()
         lb.numberOfLines = 0
         var labelframe = lb.frame
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.frame.origin.x = 0
         lb.frame.origin.y = labelframe.origin.y + labelframe.size.height
         return lb
