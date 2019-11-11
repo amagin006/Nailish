@@ -31,10 +31,13 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        getAppointmentdata(date: selectDate)
         calendarView.reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        getAppointmentdata(date: selectDate)
         appointTableView.reloadData()
-      }
+    }
     
     private func setupCalendar() {
         view.addSubview(calendarView)
