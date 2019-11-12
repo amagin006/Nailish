@@ -126,6 +126,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         popupViewController!.delegate = self
         popupViewController!.menuItemIndex = indexPath
         if let cell = tableView.cellForRow(at: indexPath) as? MenuMasterTableViewCell {
+          popupViewController!.menuTitle = cell.menuitemTagLabel.text
           popupViewController!.quantity = Int(cell.quantityLabel.text ?? "0")
         }
     }
@@ -209,27 +210,38 @@ protocol popupViewControllerDelegate: class {
   func popupViewDonetapped(indexPath: IndexPath, quantity: Int)
 }
 
-class PopupViewController: UIViewController {
+class PopupViewController: UIViewController, UIGestureRecognizerDelegate {
 
   weak var delegate: popupViewControllerDelegate?
   var menuItemIndex = IndexPath()
+  var amountUIView = UIView()
+
   var quantity: Int! {
     didSet {
       amountLabel.text = String(quantity)
     }
   }
 
+  var menuTitle: String! {
+    didSet {
+      amountTitleLabel.text = menuTitle
+    }
+  }
+
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
     setupUI()
+
 
     let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(
       target: self,
       action: #selector(self.tapped(_:))
     )
 
-    tapGesture.delegate = self as? UIGestureRecognizerDelegate
+    tapGesture.cancelsTouchesInView = false
+    tapGesture.delegate = self
 
     self.view.addGestureRecognizer(tapGesture)
 
@@ -248,7 +260,6 @@ class PopupViewController: UIViewController {
     let popupWidth = (screenWidth * 3)/4
     let popupHeight = (screenWidth * 4)/5
 
-    let amountUIView = UIView()
     amountUIView.frame = CGRect(
       x:screenWidth/8,
       y:screenHeight/5,
@@ -280,6 +291,13 @@ class PopupViewController: UIViewController {
 
   @objc func tapped(_ sender: UITapGestureRecognizer){
     self.view.removeFromSuperview()
+  }
+
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+    if (touch.view!.isDescendant(of: amountUIView)) {
+        return false
+    }
+    return true
   }
 
   override func didReceiveMemoryWarning() {

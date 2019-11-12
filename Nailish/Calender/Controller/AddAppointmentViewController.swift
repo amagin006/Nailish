@@ -54,6 +54,11 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
             if let firstName = reportItem.client!.firstName {
                 nameLabel.text = "\(firstName) \(reportItem.client!.lastName ?? "")"
             }
+            if let menuItems = reportItem.menuItem {
+                selectedMenuItemArray = Array(menuItems) as! [MenuItem]
+                selectedMenuItems = menuItems as! Set<MenuItem>
+                menuTableView.reloadData()
+            }
             if let client = reportItem.client {
                 selectClient = client
                 clientInfoView.backgroundColor = UIColor(red: 255/255, green: 238/255, blue: 173/255, alpha: 1)
@@ -448,7 +453,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
         let bt = UIButton()
         bt.translatesAutoresizingMaskIntoConstraints = false
         bt.backgroundColor = UIColor(red: 255/255, green: 162/255, blue: 162/255, alpha: 1)
-        bt.setTitle("SELECT MENU", for: .normal)
+        bt.setTitle("EDIT MENU", for: .normal)
         bt.setTitleColor(.white, for: .normal)
         bt.constraintWidth(equalToConstant: 200)
         bt.constraintHeight(equalToConstant: 40)
@@ -501,13 +506,6 @@ extension AddAppointmentViewController: MenuSelectTableViewControllerDelegate, C
     // MenuSelectTableViewControllerDelegate
     func newReportSaveTapped(selectMenu: Set<MenuItem>) {
         for item in selectMenu {
-//            let menuItem: MenuItem = MenuItem(context: manageContext)
-//            menuItem.color = item.color
-//            menuItem.price = item.price
-//            menuItem.menuName = item.menuName
-//            menuItem.quantity = item.quantity
-//            menuItem.tag = item.tag
-//            menuItem.tax = item.tax
             selectedMenuItems.insert(item)
         }
         selectedMenuItemArray.removeAll()

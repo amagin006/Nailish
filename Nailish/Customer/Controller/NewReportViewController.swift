@@ -478,7 +478,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         let bt = UIButton()
         bt.translatesAutoresizingMaskIntoConstraints = false
         bt.backgroundColor = UIColor(red: 255/255, green: 162/255, blue: 162/255, alpha: 1)
-        bt.setTitle("SELECT MENU", for: .normal)
+        bt.setTitle("EDIT MENU", for: .normal)
         bt.setTitleColor(.white, for: .normal)
         bt.constraintWidth(equalToConstant: 200)
         bt.constraintHeight(equalToConstant: 40)
