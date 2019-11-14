@@ -47,13 +47,20 @@ class CalendarTableViewCell: UITableViewCell {
         self.addSubview(backView)
         backView.addBorders(edges: .bottom, color: UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1), width: 1)
     }
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+      super.setHighlighted(highlighted, animated: animated)
+      let backgroundView = UIView()
+      backgroundView.backgroundColor = UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+      self.selectedBackgroundView = backgroundView
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     lazy var backView: UIView = {
-      let bv = UIView(frame: CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: 80))
+        let bv = UIView(frame: CGRect(x: 0, y: 0, width: self.superview!.frame.width, height: 80))
         return bv
     }()
 
@@ -104,6 +111,7 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Ashry"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.systemFont(ofSize: 20)
         return lb
     }()
@@ -112,6 +120,7 @@ class CalendarTableViewCell: UITableViewCell {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = " Henderson"
+        lb.textColor = UIColor(named: "PrimaryText")
         lb.font = UIFont.systemFont(ofSize: 20)
         return lb
     }()

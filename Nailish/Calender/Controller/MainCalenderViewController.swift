@@ -102,6 +102,7 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CalendarTableViewCell
         cell.appointmentReport = fetchedReportItemResultsController.object(at: indexPath)
+        cell.backgroundColor = UIColor(named: "White")
         return cell
     }
     
@@ -140,7 +141,7 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
     
     lazy var appointTableView: UITableView = {
         let tv = UITableView()
-        tv.backgroundColor = UIColor(named: "BarBackground")
+        tv.backgroundColor = UIColor(named: "White")
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
