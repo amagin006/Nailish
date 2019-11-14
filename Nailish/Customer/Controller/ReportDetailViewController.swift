@@ -183,6 +183,7 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
         menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: menuCellId)
         menuTableView.delegate = self
         menuTableView.dataSource = self
+        menuTableView.separatorInset = UIEdgeInsets.zero
         let menuSV = UIStackView(arrangedSubviews: [menuTitleLabel, menuTableView])
         menuSV.axis = .vertical
         menuSV.spacing = 6

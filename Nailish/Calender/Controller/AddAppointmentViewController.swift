@@ -142,6 +142,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
         menuTableView.backgroundColor = .white
         menuTableView.delegate = self
         menuTableView.dataSource = self
+        menuTableView.separatorInset = UIEdgeInsets.zero
         menuTableView.heightAnchor.constraint(equalToConstant: 240).isActive = true
         menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: appointmentCellId)
         
@@ -505,6 +506,7 @@ class AddAppointmentViewController: FetchTableViewController, UITableViewDataSou
 extension AddAppointmentViewController: MenuSelectTableViewControllerDelegate, CustomerCollectionViewControllerDelegate {
     // MenuSelectTableViewControllerDelegate
     func newReportSaveTapped(selectMenu: Set<MenuItem>) {
+        selectedMenuItems.removeAll()
         for item in selectMenu {
             selectedMenuItems.insert(item)
         }

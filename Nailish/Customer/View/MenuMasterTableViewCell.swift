@@ -51,18 +51,25 @@ class MenuMasterTableViewCell: UITableViewCell {
       self.menuitemTagLabel.backgroundColor = tagcolor
   }
 
+  override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+    super.setHighlighted(highlighted, animated: animated)
+    let backgroundView = UIView()
+    backgroundView.backgroundColor = UIColor.init(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
+    self.selectedBackgroundView = backgroundView
+  }
+
   func setupUI() {
       let quantitySV = UIStackView(arrangedSubviews: [multipleLabel, quantityLabel])
       quantitySV.axis = .horizontal
       quantitySV.alignment = .lastBaseline
       quantitySV.spacing = -8
 
-      addSubview(menuAndCheckSV)
-      menuAndCheckSV.spacing = 10
-      menuAndCheckSV.axis = .horizontal
-      menuAndCheckSV.alignment = .center
-      menuAndCheckSV.addArrangedSubview(quantitySV)
-      menuAndCheckSV.addArrangedSubview(menuitemTagLabel)
+      addSubview(quantityAndMenuSV)
+      quantityAndMenuSV.spacing = 10
+      quantityAndMenuSV.axis = .horizontal
+      quantityAndMenuSV.alignment = .center
+      quantityAndMenuSV.addArrangedSubview(quantitySV)
+      quantityAndMenuSV.addArrangedSubview(menuitemTagLabel)
       menuitemTagLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
       let taxSV = UIStackView(arrangedSubviews: [taxTitleLabal, taxLabel])
@@ -76,7 +83,7 @@ class MenuMasterTableViewCell: UITableViewCell {
       priceSV.spacing = 8
       priceSV.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     
-      let menuAndPriceSV = UIStackView(arrangedSubviews: [menuAndCheckSV, priceSV])
+      let menuAndPriceSV = UIStackView(arrangedSubviews: [quantityAndMenuSV, priceSV])
       addSubview(menuAndPriceSV)
       menuAndPriceSV.spacing = 8
       menuAndPriceSV.translatesAutoresizingMaskIntoConstraints = false
@@ -84,22 +91,13 @@ class MenuMasterTableViewCell: UITableViewCell {
       menuAndPriceSV.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
       menuAndPriceSV.heightAnchor.constraint(equalToConstant: 50).isActive = true
       menuAndPriceSV.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
-      menuAndPriceSV.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
+      menuAndPriceSV.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
   }
 
-  let menuAndCheckSV: UIStackView = {
+  let quantityAndMenuSV: UIStackView = {
       let sv = UIStackView()
       return sv
   }()
-
-//  let selectCheckIcon: UIImageView = {
-//      let iv = UIImageView()
-//      iv.image = #imageLiteral(resourceName: "check-icon4")
-//      iv.translatesAutoresizingMaskIntoConstraints = false
-//      iv.constraintWidth(equalToConstant: 27)
-//      iv.constraintHeight(equalToConstant: 27)
-//      return iv
-//  }()
 
   let multipleLabel: MyUILabel = {
     let lb = MyUILabel()
