@@ -71,7 +71,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         menuTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         menuTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: cellId)
-        
+        menuTableView.separatorInset = UIEdgeInsets.zero
     }
     
     func fetchMenuItem() {
@@ -106,12 +106,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
-        cell.quantityLabel.textColor = UIColor(named: "DrakText")
-        cell.multipleLabel.textColor = UIColor(named: "DrakText")
-        cell.priceLabel.textColor = UIColor(named: "DrakText")
-        cell.taxLabel.textColor = UIColor(named: "DrakText")
-        cell.quantityLabel.textColor = UIColor(named: "DrakText")
-        cell.taxTitleLabal.textColor = UIColor(named: "DrakText")
+        cell.backgroundColor = UIColor(named: "White")
         return cell
     }
 
@@ -326,7 +321,8 @@ class PopupViewController: UIViewController, UIGestureRecognizerDelegate {
     let lb = UILabel()
     lb.translatesAutoresizingMaskIntoConstraints = false
     lb.text = "Enter quantity"
-    lb.heightAnchor.constraint(equalToConstant: 15).isActive = true
+    lb.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    lb.textColor = UIColor(named: "PrimaryText")
     return lb
   }()
 

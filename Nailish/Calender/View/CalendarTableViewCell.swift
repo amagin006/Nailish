@@ -45,13 +45,13 @@ class CalendarTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         self.addSubview(backView)
-        backView.addBorders(edges: .bottom, color: UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1), width: 1)
+        backView.addBorders(edges: .bottom, color: UIColor.init(red: 235/255, green: 235/255, blue: 235/255, alpha: 1), width: 1)
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
       super.setHighlighted(highlighted, animated: animated)
       let backgroundView = UIView()
-      backgroundView.backgroundColor = UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+      backgroundView.backgroundColor = UIColor.init(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
       self.selectedBackgroundView = backgroundView
     }
     

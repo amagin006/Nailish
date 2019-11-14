@@ -169,6 +169,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
         menuTableView.widthAnchor.constraint(equalTo: formScrollView.widthAnchor, multiplier: 0.9).isActive = true
         menuTableView.centerXAnchor.constraint(equalTo: formScrollView.centerXAnchor).isActive = true
         menuTableView.register(MenuMasterTableViewCell.self, forCellReuseIdentifier: menuCellId)
+        menuTableView.separatorInset = UIEdgeInsets.zero
         
         let tipsPriceSV = UIStackView(arrangedSubviews: [dollar, tipsLable])
         tipsPriceSV.axis = .horizontal

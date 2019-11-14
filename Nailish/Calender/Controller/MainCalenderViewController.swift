@@ -76,8 +76,8 @@ class MainCalenderViewController: FetchTableViewController, UITableViewDataSourc
         appointTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         appointTableView.delegate = self
         appointTableView.dataSource = self
-        appointTableView.separatorColor = .clear
         appointTableView.register(CalendarTableViewCell.self, forCellReuseIdentifier: cellId)
+        appointTableView.separatorInset = UIEdgeInsets.zero
     }
     
     func getAppointmentdata(date: Date) {
