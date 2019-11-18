@@ -18,6 +18,7 @@ class MyNormalTextField: UITextField, UITextFieldDelegate {
         self.backgroundColor = .white
         self.inputAccessoryView = toolbar
         self.delegate = self
+        self.textColor = UIColor(named: "PrimaryText")
         toolbar.donePress = { () in
             self.endEditing(true)
         }

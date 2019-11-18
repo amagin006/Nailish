@@ -131,6 +131,7 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
 extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, AddClientViewControllerDelegate, MFMailComposeViewControllerDelegate {
     func editClientDidFinish(client: ClientInfo) {
         self.client = client
+        self.collectionView.reloadData()
     }
     
     func deleteClientButtonPressed() {

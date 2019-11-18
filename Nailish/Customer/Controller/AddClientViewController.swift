@@ -424,7 +424,6 @@ class AddClientViewController: UIViewController {
             }
             client.mobileNumber = mobileTextField.text ?? ""
             if let DOB = DOBTextField.text {
-                print("DOB old \(DOB)")
                 if DOB == "" {
                     client.dateOfBirth = DOBTextField.toolbar.datePicker.date
                 } else {
