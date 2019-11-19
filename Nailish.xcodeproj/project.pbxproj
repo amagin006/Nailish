@@ -23,6 +23,8 @@
 		435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */; };
 		435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */; };
 		435D0EC622DE844200BB7F55 /* ReportDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */; };
+		4366844F2383A0D100F2107C /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4366844E2383A0D100F2107C /* SettingTableViewController.swift */; };
+		436684512383B92300F2107C /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436684502383B92300F2107C /* SettingTableViewCell.swift */; };
 		4376D08222E3B0BA00A4671D /* MenuMasterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */; };
 		4376D08422E57B3000A4671D /* NewMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4376D08322E57B3000A4671D /* NewMenuViewController.swift */; };
 		437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75A4229FABFF0032E371 /* AppDelegate.swift */; };
@@ -66,6 +68,8 @@
 		435D0EBF22DC483000BB7F55 /* CustomDoneToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDoneToolbar.swift; sourceTree = "<group>"; };
 		435D0EC122DC548E00BB7F55 /* MyNormalTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNormalTextField.swift; sourceTree = "<group>"; };
 		435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailViewController.swift; sourceTree = "<group>"; };
+		4366844E2383A0D100F2107C /* SettingTableViewController.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = SettingTableViewController.swift; sourceTree = "<group>"; tabWidth = 2; };
+		436684502383B92300F2107C /* SettingTableViewCell.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; tabWidth = 2; };
 		4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuMasterTableViewCell.swift; sourceTree = "<group>"; };
 		4376D08322E57B3000A4671D /* NewMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMenuViewController.swift; sourceTree = "<group>"; };
 		437A75A1229FABFF0032E371 /* Nailish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nailish.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +123,7 @@
 				433705A922AEEDBA00EBC58B /* ClientDetailHeadReusableView.swift */,
 				431D155D22F63A7300C86C1A /* ReportCollectionViewCell.swift */,
 				4376D08122E3B0BA00A4671D /* MenuMasterTableViewCell.swift */,
+				436684502383B92300F2107C /* SettingTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -133,6 +138,7 @@
 				43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */,
 				4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */,
 				4376D08322E57B3000A4671D /* NewMenuViewController.swift */,
+				4366844E2383A0D100F2107C /* SettingTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -199,6 +205,8 @@
 				435C902F22C419D1009D6D4E /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 0;
 		};
 		437A75A2229FABFF0032E371 /* Product */ = {
 			isa = PBXGroup;
@@ -357,6 +365,7 @@
 				435D0EC022DC483000BB7F55 /* CustomDoneToolbar.swift in Sources */,
 				4311350E231F9FB8007DF8AB /* MappingModelV2toV3.xcmappingmodel in Sources */,
 				43ED0B0522BD8D9100781893 /* MyTextView.swift in Sources */,
+				436684512383B92300F2107C /* SettingTableViewCell.swift in Sources */,
 				43ED0B0122BD8D4100781893 /* DatePickerKeyboard.swift in Sources */,
 				43C52F6122ED6ED600322342 /* FetchTableViewController.swift in Sources */,
 				43C52F5822E6751600322342 /* TagColor.swift in Sources */,
@@ -365,6 +374,7 @@
 				43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */,
 				433705AC22AEEFF900EBC58B /* UIView+ConstraintLayout.swift in Sources */,
 				435D0EC222DC548E00BB7F55 /* MyNormalTextField.swift in Sources */,
+				4366844F2383A0D100F2107C /* SettingTableViewController.swift in Sources */,
 				43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */,
 				433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */,
 				43ED0B0322BD8D5B00781893 /* Extensions.swift in Sources */,

@@ -19,7 +19,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
     var selectedMenuItem = Set<MenuItem>()
-    var selectedCellIndex = [Int: Bool]()
+    var selectedCellIndex = [IndexPath: Int]()
     var popupViewController: PopupViewController? = nil
     let manageContext = CoreDataManager.shared.persistentContainer.viewContext
     
@@ -88,6 +88,21 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     @objc func selectMenuSaveButtonPressed() {
         dismiss(animated: true) {
+          for i in 0..<self.selectedCellIndex.count {
+            let menuItem: MenuItem = MenuItem(context: self.manageContext)
+            let key = Array(self.selectedCellIndex.keys)
+            let quantity = self.selectedCellIndex[key[i]]
+            let cell = self.tableView.cellForRow(at: key[i]) as! MenuMasterTableViewCell
+            guard let cellMenuItem = cell.menuItem else { return }
+            menuItem.color = cellMenuItem.color
+            menuItem.price = cellMenuItem.price
+            menuItem.menuName = cellMenuItem.menuName
+            menuItem.quantity = Int16(quantity!)
+            menuItem.tag = cellMenuItem.tag
+            menuItem.tax = cellMenuItem.tax
+            self.selectedMenuItem.insert(menuItem)
+          }
+
             self.delegate?.newReportSaveTapped(selectMenu: self.selectedMenuItem)
         }
     }
@@ -127,18 +142,18 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     }
     
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let manageContext = CoreDataManager.shared.viewContext
-            manageContext.delete(fetchedSelectedMenuItemResultsController.object(at: indexPath))
-            do {
-                try fetchedSelectedMenuItemResultsController.managedObjectContext.save()
-            } catch let err {
-                print("Failed delete selectitem \(err)")
-            }
-        }
-        
-    }
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            let manageContext = CoreDataManager.shared.viewContext
+//            manageContext.delete(fetchedSelectedMenuItemResultsController.object(at: indexPath))
+//            do {
+//                try fetchedSelectedMenuItemResultsController.managedObjectContext.save()
+//            } catch let err {
+//                print("Failed delete selectitem \(err)")
+//            }
+//        }
+//        
+//    }
     
     @objc func addButtonPressed() {
         let newSelectVC = NewMenuViewController()
@@ -180,21 +195,17 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
 extension MenuSelectTableViewController: popupViewControllerDelegate {
   func popupViewDonetapped(indexPath: IndexPath, quantity: Int) {
     let cell = tableView.cellForRow(at: indexPath) as! MenuMasterTableViewCell
+
     if quantity != 0 {
-      guard let cellMenuItem = cell.menuItem else { return }
-      let menuItem: MenuItem = MenuItem(context: manageContext)
-      menuItem.color = cellMenuItem.color
-      menuItem.price = cellMenuItem.price
-      menuItem.menuName = cellMenuItem.menuName
-      menuItem.quantity = Int16(quantity)
-      menuItem.tag = cellMenuItem.tag
-      menuItem.tax = cellMenuItem.tax
-      selectedMenuItem.insert(menuItem)
-      tableView.beginUpdates()
-      cell.quantityLabel.text = String(quantity)
-      tableView.reloadData()
-      tableView.endUpdates()
+      selectedCellIndex[indexPath] = quantity
+    } else {
+      selectedCellIndex[indexPath] = nil
     }
+    print("selectedCellIndex==== \(selectedCellIndex)" )
+    tableView.beginUpdates()
+    cell.quantityLabel.text = String(quantity)
+    tableView.reloadData()
+    tableView.endUpdates()
   }
 
 }
