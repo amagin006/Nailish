@@ -41,26 +41,27 @@ class SettingTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.textLabel?.text = "SOMETHING"
+        cell.textLabel?.text = "Menu Item Setting"
+        cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = UIColor(named: "White")
         cell.textLabel?.textColor = UIColor(named: "PrimaryText")
+        let image = UIImage(named:"arrow")?.withRenderingMode(.alwaysTemplate)
+        if let width = image?.size.width, let height = image?.size.height {
+            let disclosureImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+            disclosureImageView.image = image
+            cell.tintColor = UIColor(named: "PrimaryText")
+            cell.accessoryView = disclosureImageView
+        }
 
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0:
-            return " Setting"
-        default:
-            return ""
-        }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
-
-
 
 }
