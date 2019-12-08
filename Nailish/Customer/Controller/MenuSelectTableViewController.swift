@@ -19,7 +19,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
     var selectedMenuItem = Set<MenuItem>()
-    var selectedCellIndex = [Int: Bool]()
+    var selectedCellIndex = [IndexPath]()
     var popupViewController: PopupViewController? = nil
     let manageContext = CoreDataManager.shared.persistentContainer.viewContext
     
@@ -87,6 +87,20 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     }
     
     @objc func selectMenuSaveButtonPressed() {
+      for cellIndex in selectedCellIndex {
+        let cell = tableView.cellForRow(at: cellIndex) as! MenuMasterTableViewCell
+        print("cell \(cell.menuitemTagLabel)")
+        guard let cellMenuItem = cell.menuItem else { return }
+        let menuItem: MenuItem = MenuItem(context: manageContext)
+        menuItem.color = cellMenuItem.color
+        menuItem.price = cellMenuItem.price
+        menuItem.menuName = cellMenuItem.menuName
+        menuItem.quantity = Int16(cell.quantityLabel.text!)!
+        menuItem.tag = cellMenuItem.tag
+        menuItem.tax = cellMenuItem.tax
+        selectedMenuItem.insert(menuItem)
+      }
+
         dismiss(animated: true) {
             self.delegate?.newReportSaveTapped(selectMenu: self.selectedMenuItem)
         }
@@ -181,20 +195,18 @@ extension MenuSelectTableViewController: popupViewControllerDelegate {
   func popupViewDonetapped(indexPath: IndexPath, quantity: Int) {
     let cell = tableView.cellForRow(at: indexPath) as! MenuMasterTableViewCell
     if quantity != 0 {
-      guard let cellMenuItem = cell.menuItem else { return }
-      let menuItem: MenuItem = MenuItem(context: manageContext)
-      menuItem.color = cellMenuItem.color
-      menuItem.price = cellMenuItem.price
-      menuItem.menuName = cellMenuItem.menuName
-      menuItem.quantity = Int16(quantity)
-      menuItem.tag = cellMenuItem.tag
-      menuItem.tax = cellMenuItem.tax
-      selectedMenuItem.insert(menuItem)
-      tableView.beginUpdates()
-      cell.quantityLabel.text = String(quantity)
-      tableView.reloadData()
-      tableView.endUpdates()
+      if !selectedCellIndex.contains(indexPath) {
+        selectedCellIndex.append(indexPath)
+      }
+    } else {
+        if let deleteItem = selectedCellIndex.firstIndex(of: indexPath) {
+          selectedCellIndex.remove(at: deleteItem)
+        }
     }
+    tableView.beginUpdates()
+    cell.quantityLabel.text = String(quantity)
+    tableView.reloadData()
+    tableView.endUpdates()
   }
 
 }

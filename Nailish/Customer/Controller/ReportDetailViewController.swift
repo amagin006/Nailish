@@ -64,25 +64,11 @@ class ReportDetailViewController: FetchTableViewController, UITableViewDataSourc
                 var taxSum: NSDecimalNumber = 0.00
                 // divide same tax rate
                 for item in selectedMenuItemArray {
-                  subTotal = (subTotal.adding(item.price!)).multiplying(by: NSDecimalNumber(value: item.quantity))
-                  taxSum = taxSum.adding((item.price)!.multiplying(by: item.tax!.dividing(by: 100)))
+                  let itemTotal = item.price!.multiplying(by: NSDecimalNumber(value: item.quantity))
+                  let itemTax = itemTotal.multiplying(by: item.tax!.dividing(by: 100))
+                  subTotal = subTotal.adding(itemTotal)
+                  taxSum = taxSum.adding(itemTax)
                 }
-//                var taxDic = [NSDecimalNumber: NSDecimalNumber]()
-//                for item in selectedMenuItemArray {
-//                    subTotal = subTotal.adding(item.price!)
-//                    if let tax = item.tax {
-//                        if let taxSum = taxDic[tax] {
-//                            taxDic.updateValue(taxSum.adding(item.price!), forKey: tax)
-//                        } else {
-//                            taxDic.updateValue(item.price!, forKey: tax)
-//                        }
-//
-//                    }
-//                }
-//                var taxSum: NSDecimalNumber = 0.00
-//                for (key, value) in taxDic {
-//                    taxSum = taxSum.adding(value.multiplying(by: key.dividing(by: 100)))
-//                }
                 subtotalPrice.text = fm.string(from: subTotal)
                 taxPrice.text = fm.string(from: taxSum)
                 let taxTipsTotal = subTotal.adding(taxSum)
