@@ -24,9 +24,9 @@ class MenuMasterTableViewCell: UITableViewCell {
           let color = TagColor.stringToSGColor(str: menuItem!.color!)
           menuitemTagLabel.backgroundColor = color!.rawValue
           if let quantity = menuItem?.quantity {
-            if quantity != 0 {
+//            if quantity != 0 {
               quantityLabel.text = String(quantity)
-            }
+//            }
           }
       }
   }

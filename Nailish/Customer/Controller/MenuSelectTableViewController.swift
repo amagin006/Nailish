@@ -30,6 +30,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         setupUI()
         fetchMenuItem()
     }
+
     
     func setupNavigationUI() {
         navigationItem.title = "Select Menu"
@@ -89,13 +90,12 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     @objc func selectMenuSaveButtonPressed() {
       for cellIndex in selectedCellIndex {
         let cell = tableView.cellForRow(at: cellIndex) as! MenuMasterTableViewCell
-        print("cell \(cell.menuitemTagLabel)")
         guard let cellMenuItem = cell.menuItem else { return }
         let menuItem: MenuItem = MenuItem(context: manageContext)
         menuItem.color = cellMenuItem.color
         menuItem.price = cellMenuItem.price
         menuItem.menuName = cellMenuItem.menuName
-        menuItem.quantity = Int16(cell.quantityLabel.text!)!
+        menuItem.quantity = cellMenuItem.quantity
         menuItem.tag = cellMenuItem.tag
         menuItem.tax = cellMenuItem.tax
         selectedMenuItem.insert(menuItem)
@@ -121,6 +121,16 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
         cell.backgroundColor = UIColor(named: "White")
+
+        if cell.menuItem!.quantity != 0 {
+          if !selectedCellIndex.contains(indexPath) {
+            selectedCellIndex.append(indexPath)
+          }
+        } else {
+            if let deleteItem = selectedCellIndex.firstIndex(of: indexPath) {
+              selectedCellIndex.remove(at: deleteItem)
+            }
+        }
         return cell
     }
 
@@ -194,14 +204,17 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
 extension MenuSelectTableViewController: popupViewControllerDelegate {
   func popupViewDonetapped(indexPath: IndexPath, quantity: Int) {
     let cell = tableView.cellForRow(at: indexPath) as! MenuMasterTableViewCell
+    guard let cellMenuItem = cell.menuItem else { return }
     if quantity != 0 {
       if !selectedCellIndex.contains(indexPath) {
         selectedCellIndex.append(indexPath)
       }
+      cellMenuItem.quantity = Int16(quantity)
     } else {
         if let deleteItem = selectedCellIndex.firstIndex(of: indexPath) {
           selectedCellIndex.remove(at: deleteItem)
         }
+      cellMenuItem.quantity = Int16(0)
     }
     tableView.beginUpdates()
     cell.quantityLabel.text = String(quantity)
@@ -321,6 +334,7 @@ class PopupViewController: UIViewController, UIGestureRecognizerDelegate {
       quantity -= 1
       amountLabel.text = String(quantity)
     }
+
   }
 
   @objc func quantityDoneButtonPressed() {
