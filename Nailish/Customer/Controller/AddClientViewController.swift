@@ -352,7 +352,7 @@ class AddClientViewController: UIViewController {
             let newClient = NSEntityDescription.insertNewObject(forEntityName: "ClientInfo", into: manageContext)
             
             if let newClientImage = personImageView.image {
-                let imageData = newClientImage.jpegData(compressionQuality: 0.8)
+                let imageData = newClientImage.jpegData(compressionQuality: 1)
                 newClient.setValue(imageData, forKey: "clientImage")
             }
             let firstNameUpper = firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).firstUppercased
@@ -424,7 +424,6 @@ class AddClientViewController: UIViewController {
             }
             client.mobileNumber = mobileTextField.text ?? ""
             if let DOB = DOBTextField.text {
-                print("DOB old \(DOB)")
                 if DOB == "" {
                     client.dateOfBirth = DOBTextField.toolbar.datePicker.date
                 } else {
