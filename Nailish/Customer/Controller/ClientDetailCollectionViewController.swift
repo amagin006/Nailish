@@ -88,7 +88,6 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     // MARK: UICollectionViewDelegate
 
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier, for: indexPath) as! ClientDetailHeaderReusableView
         headerView.delegate = self
         headerView.client = client
@@ -117,20 +116,14 @@ class ClientDetailCollectionViewController: FetchCollectionViewController, UICol
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
       return CGSize(width: view.frame.width, height: 80)
     }
-    
-//    var layout: UICollectionViewFlowLayout = {
-//        let layout = UICollectionViewFlowLayout()
-//        let width = UIScreen.main.bounds.size.width
-//        layout.minimumLineSpacing = 2
-//        layout.estimatedItemSize = CGSize(width: width, height: 10)
-//        return layout
-//    }()
-    
+
 }
 
 extension ClientDetailCollectionViewController: ClientDetailHeaderReusableViewDelegate, AddClientViewControllerDelegate, MFMailComposeViewControllerDelegate {
+
     func editClientDidFinish(client: ClientInfo) {
         self.client = client
+        collectionView.reloadData()
     }
     
     func deleteClientButtonPressed() {
