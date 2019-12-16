@@ -564,16 +564,7 @@ class NewReportViewController: FetchTableViewController, UITableViewDataSource {
 extension NewReportViewController: MenuSelectTableViewControllerDelegate {
     func newReportSaveTapped(selectMenu: Set<MenuItem>) {
         selectedMenuItems.removeAll()
-        for item in selectMenu {
-//            let menuItem: MenuItem = MenuItem(context: manageContext)
-//            menuItem.color = item.color
-//            menuItem.price = item.price
-//            menuItem.menuName = item.menuName
-//            menuItem.quantity = item.quantity
-//            menuItem.tag = item.tag
-//            menuItem.tax = item.tax
-            selectedMenuItems.insert(item)
-        }
+        selectedMenuItems = selectMenu
         selectedMenuItemArray.removeAll()
         selectedMenuItemArray = Array(selectedMenuItems).sorted { $0.tag < $1.tag }
         menuTableView.reloadData()

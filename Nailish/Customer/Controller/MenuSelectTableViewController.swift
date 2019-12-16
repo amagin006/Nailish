@@ -19,7 +19,7 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     
     weak var delegate: MenuSelectTableViewControllerDelegate?
     var selectedMenuItem = Set<MenuItem>()
-    var selectedCellIndex = [IndexPath]()
+    var selectedCellIndex = [IndexPath: Int]()
     var popupViewController: PopupViewController? = nil
     let manageContext = CoreDataManager.shared.persistentContainer.viewContext
     
@@ -88,14 +88,14 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
     }
     
     @objc func selectMenuSaveButtonPressed() {
-      for cellIndex in selectedCellIndex {
+      for (cellIndex, quantity) in selectedCellIndex {
         let cell = tableView.cellForRow(at: cellIndex) as! MenuMasterTableViewCell
         guard let cellMenuItem = cell.menuItem else { return }
         let menuItem: MenuItem = MenuItem(context: manageContext)
         menuItem.color = cellMenuItem.color
         menuItem.price = cellMenuItem.price
         menuItem.menuName = cellMenuItem.menuName
-        menuItem.quantity = cellMenuItem.quantity
+        menuItem.quantity = Int16(quantity)
         menuItem.tag = cellMenuItem.tag
         menuItem.tax = cellMenuItem.tax
         selectedMenuItem.insert(menuItem)
@@ -121,15 +121,14 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
         cell.backgroundColor = UIColor(named: "White")
-
-        if cell.menuItem!.quantity != 0 {
-          if !selectedCellIndex.contains(indexPath) {
-            selectedCellIndex.append(indexPath)
-          }
-        } else {
-            if let deleteItem = selectedCellIndex.firstIndex(of: indexPath) {
-              selectedCellIndex.remove(at: deleteItem)
-            }
+//        cell.menuItem?.quantity = Int16(0)
+//        do {
+//             try fetchedReportItemResultsController.managedObjectContext.save()
+//        } catch let err {
+//           print("failed save Report - \(err)")
+//        }
+        if let quantityInCell = selectedCellIndex[indexPath] {
+          cell.quantityLabel.text = String(quantityInCell)
         }
         return cell
     }
@@ -204,20 +203,15 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
 extension MenuSelectTableViewController: popupViewControllerDelegate {
   func popupViewDonetapped(indexPath: IndexPath, quantity: Int) {
     let cell = tableView.cellForRow(at: indexPath) as! MenuMasterTableViewCell
-    guard let cellMenuItem = cell.menuItem else { return }
-    if quantity != 0 {
-      if !selectedCellIndex.contains(indexPath) {
-        selectedCellIndex.append(indexPath)
-      }
-      cellMenuItem.quantity = Int16(quantity)
-    } else {
-        if let deleteItem = selectedCellIndex.firstIndex(of: indexPath) {
-          selectedCellIndex.remove(at: deleteItem)
-        }
-      cellMenuItem.quantity = Int16(0)
-    }
+
     tableView.beginUpdates()
-    cell.quantityLabel.text = String(quantity)
+    if quantity != 0 {
+      selectedCellIndex[indexPath] = quantity
+      cell.quantityLabel.text = String(quantity)
+    } else {
+      selectedCellIndex[indexPath] = nil
+      cell.quantityLabel.text = "0"
+    }
     tableView.reloadData()
     tableView.endUpdates()
   }
