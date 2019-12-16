@@ -121,15 +121,18 @@ class MenuSelectTableViewController: FetchTableViewController, UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuMasterTableViewCell
         cell.menuItem = fetchedSelectedMenuItemResultsController.object(at: indexPath)
         cell.backgroundColor = UIColor(named: "White")
-//        cell.menuItem?.quantity = Int16(0)
-//        do {
-//             try fetchedReportItemResultsController.managedObjectContext.save()
-//        } catch let err {
-//           print("failed save Report - \(err)")
-//        }
+
+      /// remove some point
+        cell.menuItem?.quantity = Int16(0)
+        do {
+             try fetchedReportItemResultsController.managedObjectContext.save()
+        } catch let err {
+           print("failed save Report - \(err)")
+        }
         if let quantityInCell = selectedCellIndex[indexPath] {
           cell.quantityLabel.text = String(quantityInCell)
         }
+      ///
         return cell
     }
 
