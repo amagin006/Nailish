@@ -44,6 +44,7 @@
 		43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0822BD998900781893 /* CustomDateToolbar.swift */; };
 		43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */; };
 		43F87A97233C9BA70098A47E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43F87A96233C9BA70098A47E /* Colors.xcassets */; };
+		CC42ED7768DC4D1127C903AD /* Pods_Nailish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D7F6BCDF1DD08D3D4FF57C /* Pods_Nailish.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +90,9 @@
 		43ED0B0822BD998900781893 /* CustomDateToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDateToolbar.swift; sourceTree = "<group>"; };
 		43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCollectionViewController.swift; sourceTree = "<group>"; };
 		43F87A96233C9BA70098A47E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		4BDE12FAE40CC1B8224A4A29 /* Pods-Nailish.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nailish.release.xcconfig"; path = "Target Support Files/Pods-Nailish/Pods-Nailish.release.xcconfig"; sourceTree = "<group>"; };
+		89D7F6BCDF1DD08D3D4FF57C /* Pods_Nailish.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nailish.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1588EEC521CE11B7703E6EF /* Pods-Nailish.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nailish.debug.xcconfig"; path = "Target Support Files/Pods-Nailish/Pods-Nailish.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +101,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				431D155C22F63A1500C86C1A /* FSCalendar.framework in Frameworks */,
+				CC42ED7768DC4D1127C903AD /* Pods_Nailish.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		25EA0D06237956449CBB2681 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D1588EEC521CE11B7703E6EF /* Pods-Nailish.debug.xcconfig */,
+				4BDE12FAE40CC1B8224A4A29 /* Pods-Nailish.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		4327315522A09EF900BE2792 /* Customer */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				435C903022C419D1009D6D4E /* FSCalendar.framework */,
+				89D7F6BCDF1DD08D3D4FF57C /* Pods_Nailish.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -197,6 +213,7 @@
 				437A75A3229FABFF0032E371 /* Nailish */,
 				437A75A2229FABFF0032E371 /* Product */,
 				435C902F22C419D1009D6D4E /* Frameworks */,
+				25EA0D06237956449CBB2681 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -260,10 +277,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 437A75B3229FAC010032E371 /* Build configuration list for PBXNativeTarget "Nailish" */;
 			buildPhases = (
+				98334D5D8D24A94B52CA2B13 /* [CP] Check Pods Manifest.lock */,
 				437A759D229FABFF0032E371 /* Sources */,
 				437A759E229FABFF0032E371 /* Frameworks */,
 				437A759F229FABFF0032E371 /* Resources */,
 				4383C15A22F55AED00B56BBD /* ShellScript */,
+				2C9A93608DC7A9F415053E91 /* [CP] Embed Pods Frameworks */,
+				C078A04F5F6D9D8A3B5D60D6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -322,6 +342,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2C9A93608DC7A9F415053E91 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4383C15A22F55AED00B56BBD /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -339,6 +376,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+		98334D5D8D24A94B52CA2B13 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Nailish-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C078A04F5F6D9D8A3B5D60D6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -522,6 +598,7 @@
 		};
 		437A75B4229FAC010032E371 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D1588EEC521CE11B7703E6EF /* Pods-Nailish.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -549,6 +626,7 @@
 		};
 		437A75B5229FAC010032E371 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4BDE12FAE40CC1B8224A4A29 /* Pods-Nailish.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

@@ -1,3 +1,6 @@
+## Mac
+.DS_Store
+
 ### Xcode ###
 # Xcode
 #
@@ -30,4 +33,5 @@ DerivedData/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
-
+#CocoaPod
+Pods/*
