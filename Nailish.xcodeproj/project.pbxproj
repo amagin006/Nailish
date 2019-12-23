@@ -114,7 +114,6 @@
 				D1588EEC521CE11B7703E6EF /* Pods-Nailish.debug.xcconfig */,
 				4BDE12FAE40CC1B8224A4A29 /* Pods-Nailish.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
