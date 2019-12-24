@@ -9,6 +9,8 @@ target 'Nailish' do
 
 pod 'Firebase/Analytics'
 pod 'Firebase/Auth'
-pod 'FirebaseUI'
+pod 'GoogleSignIn'
+pod 'FirebaseUI/Auth'
+pod 'FirebaseUI/Google'
 
 end
