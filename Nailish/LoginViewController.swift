@@ -41,6 +41,7 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
                 print(error.localizedDescription)
             } else {
                 print("Login Successful.")
+                self.present(self.mainTabBarController, animated: true, completion: nil)
             }
         }
     }
@@ -52,7 +53,7 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
 
         let btnSignIn = GIDSignInButton(frame: CGRect(x: 0, y: 0, width: 230, height: 50))
         btnSignIn.center = view.center
-        btnSignIn.style = GIDSignInButtonStyle.standard
+        btnSignIn.style = .wide
 
         let inputSV = UIStackView(arrangedSubviews: [emailText, passwordText, loginButton, signUpButton, btnSignIn])
         view.addSubview(inputSV)

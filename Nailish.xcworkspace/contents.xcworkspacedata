@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/shota/Swift/My project/Nailish/Nailish/Customer/Controller/SettingTableViewController.swift">
+   </FileRef>
+   <FileRef
       location = "group:Nailish.xcodeproj">
    </FileRef>
    <FileRef

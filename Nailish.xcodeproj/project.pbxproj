@@ -31,6 +31,7 @@
 		437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75B7229FBF8B0032E371 /* MainTabBarController.swift */; };
 		4385EBE223B1D12F0012E104 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4385EBE123B1D12F0012E104 /* GoogleService-Info.plist */; };
 		4385EBE423B1DBB70012E104 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385EBE323B1DBB70012E104 /* SignUpViewController.swift */; };
+		4385EBE823B44DB60012E104 /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385EBE723B44DB60012E104 /* SettingTableViewController.swift */; };
 		4393AC5423B152360011B36F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4393AC5323B152360011B36F /* LoginViewController.swift */; };
 		43A28B0A22EFB39F00F57860 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A28B0922EFB39F00F57860 /* Assets.xcassets */; };
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
@@ -80,6 +81,7 @@
 		437A75B7229FBF8B0032E371 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		4385EBE123B1D12F0012E104 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4385EBE323B1DBB70012E104 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		4385EBE723B44DB60012E104 /* SettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingTableViewController.swift; path = "/Users/shota/Swift/My project/Nailish/Nailish/Customer/Controller/SettingTableViewController.swift"; sourceTree = "<absolute>"; };
 		4393AC5323B152360011B36F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		43A28B0922EFB39F00F57860 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */,
 				4376D08322E57B3000A4671D /* NewMenuViewController.swift */,
 				4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */,
+				4385EBE723B44DB60012E104 /* SettingTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				43C52F6122ED6ED600322342 /* FetchTableViewController.swift in Sources */,
 				43C52F5822E6751600322342 /* TagColor.swift in Sources */,
 				437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */,
+				4385EBE823B44DB60012E104 /* SettingTableViewController.swift in Sources */,
 				4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */,
 				43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */,
 				433705AC22AEEFF900EBC58B /* UIView+ConstraintLayout.swift in Sources */,
