@@ -35,3 +35,5 @@ DerivedData/
 **/xcshareddata/WorkspaceSettings.xcsettings
 #CocoaPod
 Pods/*
+
+GoogleService-Info.plist
