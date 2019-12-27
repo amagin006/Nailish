@@ -24,11 +24,11 @@ class SignUpViewController: UIViewController {
         view.addSubview(logo)
         logo.translatesAutoresizingMaskIntoConstraints = false
         logo.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
-        logo.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        logo.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        logo.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        logo.heightAnchor.constraint(equalToConstant: 200).isActive = true
         logo.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
 
-        let inputSV = UIStackView(arrangedSubviews: [emailText, passwordText, repeatPasswordText, signUpButton, cancelButton])
+        let inputSV = UIStackView(arrangedSubviews: [emailText, passwordText, repeatPasswordText, invalidText, signUpButton, cancelButton])
         view.addSubview(inputSV)
         inputSV.axis = .vertical
         inputSV.spacing = 20
@@ -47,18 +47,17 @@ class SignUpViewController: UIViewController {
     @objc func SignUpTapped() {
         print("SignUpTapped")
         if(emailText.text == "" || passwordText.text == "" || repeatPasswordText.text == "") {
-            displayMyAlertMessage(userMessage: "Please input all field")
+            invalidText.text = "Please input all field"
             return
         }
         if passwordText.text != repeatPasswordText.text {
-            displayMyAlertMessage(userMessage: "The password does not match!")
+            invalidText.text = "The password does not match!"
             return
         }
 
         if let email = emailText.text, let password = passwordText.text {
             Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
                 if (result?.user) != nil{
-                    print("=====login=====")
                     self.present(MainTabBarController(), animated: true, completion: nil)
                 }
             }
@@ -69,24 +68,16 @@ class SignUpViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
 
-
-    func displayMyAlertMessage(userMessage: String){
-        let myAlert = UIAlertController(title:"Alert", message: userMessage, preferredStyle: .alert)
-        let okAction = UIAlertAction(title:"OK", style: .default, handler:nil)
-        myAlert.addAction(okAction);
-        self.present(myAlert,animated:true, completion:nil)
-    }
-
     @objc func keyboardWillBeShown(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
-        let keyboardFrameHeight = keyboardSize.cgRectValue.height
-
-        if (passwordText.isFirstResponder || repeatPasswordText.isFirstResponder) {
-            self.view.frame.origin.y = -keyboardFrameHeight
+        if passwordText.isFirstResponder {
+            self.view.frame.origin.y = -100
+            return
         }
-
+        if repeatPasswordText.isFirstResponder {
+            self.view.frame.origin.y = -200
+            return
+        }
     }
 
     @objc func keyboardWillBeHidden(notification: NSNotification) {
@@ -127,6 +118,13 @@ class SignUpViewController: UIViewController {
         tf.placeholder = "Repeat Password"
         tf.isSecureTextEntry = true
         return  tf
+    }()
+
+    let invalidText: UILabel = {
+        let lb = UILabel()
+        lb.textColor = .red
+        lb.textAlignment = .center
+        return lb
     }()
 
     let signUpButton: UIButton = {

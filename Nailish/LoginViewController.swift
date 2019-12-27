@@ -55,15 +55,15 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
         view.addSubview(logo)
         logo.translatesAutoresizingMaskIntoConstraints = false
         logo.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
-        logo.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        logo.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        logo.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        logo.heightAnchor.constraint(equalToConstant: 200).isActive = true
         logo.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
 
         let googleBtnSignIn = GIDSignInButton(frame: CGRect(x: 0, y: 0, width: 230, height: 50))
         googleBtnSignIn.center = view.center
         googleBtnSignIn.style = .wide
 
-        let inputSV = UIStackView(arrangedSubviews: [emailText, passwordText, loginButton, googleBtnSignIn, orText, signUpButton])
+        let inputSV = UIStackView(arrangedSubviews: [emailText, passwordText, invalidText, loginButton, googleBtnSignIn, orText, signUpButton])
         view.addSubview(inputSV)
         inputSV.axis = .vertical
         inputSV.spacing = 20
@@ -80,12 +80,23 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
     }
 
     @objc func LoginTapped() {
-        mainTabBarController = MainTabBarController()
-        
+        guard let email = emailText.text, let password = passwordText.text else {
+            return
+        }
+        if email == "" || password == "" {
+            invalidText.text = "Incorrect username or password."
+            return
+        }
 
+        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+            if (user != nil && error == nil) {
+                self.mainTabBarController = MainTabBarController()
+                self.present(self.mainTabBarController, animated: true, completion: nil)
+            } else {
+                self.invalidText.text = "Incorrect username or password."
+            }
+        }
 
-
-        self.present(mainTabBarController, animated: true, completion: nil)
     }
 
     @objc func SignUpTapped() {
@@ -93,13 +104,9 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
     }
 
     @objc func keyboardWillBeShown(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else { return }
-        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-
-        let keyboardFrameHeight = keyboardSize.cgRectValue.height
 
         if passwordText.isFirstResponder {
-            self.view.frame.origin.y = -keyboardFrameHeight
+            self.view.frame.origin.y = -100
         }
 
     }
@@ -129,7 +136,15 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
         tf.layer.cornerRadius = 5
         tf.autocapitalizationType = .none
         tf.placeholder = "Password"
+        tf.isSecureTextEntry = true
         return  tf
+    }()
+
+    let invalidText: UILabel = {
+        let lb = UILabel()
+        lb.textColor = .red
+        lb.textAlignment = .center
+        return lb
     }()
 
     let orText: UILabel = {
