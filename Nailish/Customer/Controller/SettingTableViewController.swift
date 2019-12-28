@@ -63,6 +63,10 @@ class SettingTableViewController: UITableViewController {
             let firebaseAuth = Auth.auth()
             do {
                 try firebaseAuth.signOut()
+
+                let userDefaults = UserDefaults.standard
+                userDefaults.setValue(false, forKey: "login")
+                
                 self.dismiss(animated: true, completion: nil)
             } catch let signOutError as NSError {
                 print ("Error signing out: %@", signOutError)

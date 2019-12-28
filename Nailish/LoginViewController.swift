@@ -26,6 +26,14 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
         navigationController?.navigationBar.isHidden = true
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        let userDefaults = UserDefaults.standard
+        if userDefaults.bool(forKey: "login") == true {
+            self.present(self.mainTabBarController, animated: true, completion: nil)
+        }
+    }
+
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
 
         if let error = error {
@@ -41,6 +49,9 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
                 print(error.localizedDescription)
             } else {
                 print("Login Successful.")
+
+                let userDefaults = UserDefaults.standard
+                userDefaults.setValue(true, forKey: "login")
                 self.present(self.mainTabBarController, animated: true, completion: nil)
             }
         }
@@ -90,6 +101,8 @@ class LoginViewController: UIViewController, UIApplicationDelegate, GIDSignInDel
 
         Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
             if (user != nil && error == nil) {
+                let userDefaults = UserDefaults.standard
+                userDefaults.setValue(true, forKey: "login")
                 self.mainTabBarController = MainTabBarController()
                 self.present(self.mainTabBarController, animated: true, completion: nil)
             } else {
