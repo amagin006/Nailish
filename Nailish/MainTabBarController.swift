@@ -16,7 +16,7 @@ class MainTabBarController: UITabBarController {
             createViewController(viewController: CustomerCollectionViewController(), title: "Customer", imageName: "customer", headerLarge: false),
             createViewController(viewController: MainCalenderViewController(), title: "Calender", imageName: "calendar", headerLarge: false),
 //            createViewController(viewController: UIViewController(), title: "Analysis", imageName: "analysis", headerLarge: true),
-//            createViewController(viewController: UIViewController(), title: "Setting", imageName: "settings", headerLarge: true),
+            createViewController(viewController: SettingTableViewController(), title: "Setting", imageName: "settings", headerLarge: true),
         ]
         
     }
@@ -26,7 +26,7 @@ class MainTabBarController: UITabBarController {
         viewController.view.backgroundColor = .white
         viewController.navigationItem.title = title
         let navController = UINavigationController(rootViewController: viewController)
-        navController.navigationBar.barTintColor = UIColor.init(red: 217/255, green: 83/255, blue: 79/255, alpha: 1)
+        navController.navigationBar.barTintColor = UIColor(named: "TabNavColor")
         navController.navigationBar.barStyle = .black
         navController.navigationBar.tintColor = .white
         navController.navigationBar.prefersLargeTitles = headerLarge

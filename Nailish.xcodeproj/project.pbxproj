@@ -29,6 +29,10 @@
 		437A75AA229FABFF0032E371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75A8229FABFF0032E371 /* Main.storyboard */; };
 		437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437A75AD229FAC010032E371 /* LaunchScreen.storyboard */; };
 		437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A75B7229FBF8B0032E371 /* MainTabBarController.swift */; };
+		4385EBE223B1D12F0012E104 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4385EBE123B1D12F0012E104 /* GoogleService-Info.plist */; };
+		4385EBE423B1DBB70012E104 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385EBE323B1DBB70012E104 /* SignUpViewController.swift */; };
+		4385EBE823B44DB60012E104 /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4385EBE723B44DB60012E104 /* SettingTableViewController.swift */; };
+		4393AC5423B152360011B36F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4393AC5323B152360011B36F /* LoginViewController.swift */; };
 		43A28B0A22EFB39F00F57860 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A28B0922EFB39F00F57860 /* Assets.xcassets */; };
 		43A2F47222A1E815003A07ED /* CustomerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */; };
 		43A2F49722A5FFDA003A07ED /* AddClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */; };
@@ -44,6 +48,7 @@
 		43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0822BD998900781893 /* CustomDateToolbar.swift */; };
 		43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */; };
 		43F87A97233C9BA70098A47E /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43F87A96233C9BA70098A47E /* Colors.xcassets */; };
+		CC42ED7768DC4D1127C903AD /* Pods_Nailish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D7F6BCDF1DD08D3D4FF57C /* Pods_Nailish.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +79,10 @@
 		437A75AE229FAC010032E371 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		437A75B0229FAC010032E371 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		437A75B7229FBF8B0032E371 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		4385EBE123B1D12F0012E104 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4385EBE323B1DBB70012E104 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		4385EBE723B44DB60012E104 /* SettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingTableViewController.swift; path = "/Users/shota/Swift/My project/Nailish/Nailish/Customer/Controller/SettingTableViewController.swift"; sourceTree = "<absolute>"; };
+		4393AC5323B152360011B36F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		43A28B0922EFB39F00F57860 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43A2F47122A1E815003A07ED /* CustomerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCollectionViewCell.swift; sourceTree = "<group>"; };
 		43A2F49622A5FFDA003A07ED /* AddClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClientViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +98,9 @@
 		43ED0B0822BD998900781893 /* CustomDateToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDateToolbar.swift; sourceTree = "<group>"; };
 		43ED0B0E22C0351600781893 /* FetchCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCollectionViewController.swift; sourceTree = "<group>"; };
 		43F87A96233C9BA70098A47E /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		4BDE12FAE40CC1B8224A4A29 /* Pods-Nailish.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nailish.release.xcconfig"; path = "Target Support Files/Pods-Nailish/Pods-Nailish.release.xcconfig"; sourceTree = "<group>"; };
+		89D7F6BCDF1DD08D3D4FF57C /* Pods_Nailish.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nailish.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1588EEC521CE11B7703E6EF /* Pods-Nailish.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nailish.debug.xcconfig"; path = "Target Support Files/Pods-Nailish/Pods-Nailish.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +109,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				431D155C22F63A1500C86C1A /* FSCalendar.framework in Frameworks */,
+				CC42ED7768DC4D1127C903AD /* Pods_Nailish.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		25EA0D06237956449CBB2681 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D1588EEC521CE11B7703E6EF /* Pods-Nailish.debug.xcconfig */,
+				4BDE12FAE40CC1B8224A4A29 /* Pods-Nailish.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		4327315522A09EF900BE2792 /* Customer */ = {
 			isa = PBXGroup;
 			children = (
@@ -131,8 +153,9 @@
 				4337059C22ADEF3700EBC58B /* ClientDetailCollectionViewController.swift */,
 				435D0EC522DE844200BB7F55 /* ReportDetailViewController.swift */,
 				43E2D18C22B35AE300DCD9CA /* NewReportViewController.swift */,
-				4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */,
 				4376D08322E57B3000A4671D /* NewMenuViewController.swift */,
+				4313075822E1327A00A2A804 /* MenuSelectTableViewController.swift */,
+				4385EBE723B44DB60012E104 /* SettingTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -152,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				435C903022C419D1009D6D4E /* FSCalendar.framework */,
+				89D7F6BCDF1DD08D3D4FF57C /* Pods_Nailish.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -197,6 +221,7 @@
 				437A75A3229FABFF0032E371 /* Nailish */,
 				437A75A2229FABFF0032E371 /* Product */,
 				435C902F22C419D1009D6D4E /* Frameworks */,
+				25EA0D06237956449CBB2681 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -215,7 +240,10 @@
 				435C903522C41B92009D6D4E /* Calender */,
 				437A75B0229FAC010032E371 /* Info.plist */,
 				4313075722E12F1A00A2A804 /* Model.h */,
+				4385EBE123B1D12F0012E104 /* GoogleService-Info.plist */,
 				437A75B7229FBF8B0032E371 /* MainTabBarController.swift */,
+				4393AC5323B152360011B36F /* LoginViewController.swift */,
+				4385EBE323B1DBB70012E104 /* SignUpViewController.swift */,
 				43E6915322AB0B8A0097C2B6 /* CoreDataManager.swift */,
 				435C902C22C3557B009D6D4E /* ClientModel.xcdatamodeld */,
 				435C903E22C512BA009D6D4E /* Utils */,
@@ -260,10 +288,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 437A75B3229FAC010032E371 /* Build configuration list for PBXNativeTarget "Nailish" */;
 			buildPhases = (
+				98334D5D8D24A94B52CA2B13 /* [CP] Check Pods Manifest.lock */,
 				437A759D229FABFF0032E371 /* Sources */,
 				437A759E229FABFF0032E371 /* Frameworks */,
 				437A759F229FABFF0032E371 /* Resources */,
 				4383C15A22F55AED00B56BBD /* ShellScript */,
+				2C9A93608DC7A9F415053E91 /* [CP] Embed Pods Frameworks */,
+				C078A04F5F6D9D8A3B5D60D6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -314,6 +345,7 @@
 			files = (
 				437A75AF229FAC010032E371 /* LaunchScreen.storyboard in Resources */,
 				43F87A97233C9BA70098A47E /* Colors.xcassets in Resources */,
+				4385EBE223B1D12F0012E104 /* GoogleService-Info.plist in Resources */,
 				43A28B0A22EFB39F00F57860 /* Assets.xcassets in Resources */,
 				437A75AA229FABFF0032E371 /* Main.storyboard in Resources */,
 			);
@@ -322,6 +354,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2C9A93608DC7A9F415053E91 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4383C15A22F55AED00B56BBD /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -339,6 +388,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+		98334D5D8D24A94B52CA2B13 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Nailish-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C078A04F5F6D9D8A3B5D60D6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Nailish/Pods-Nailish-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -361,6 +449,7 @@
 				43C52F6122ED6ED600322342 /* FetchTableViewController.swift in Sources */,
 				43C52F5822E6751600322342 /* TagColor.swift in Sources */,
 				437A75A5229FABFF0032E371 /* AppDelegate.swift in Sources */,
+				4385EBE823B44DB60012E104 /* SettingTableViewController.swift in Sources */,
 				4327315722A0C15100BE2792 /* CustomerCollectionViewController.swift in Sources */,
 				43E2D18D22B35AE300DCD9CA /* NewReportViewController.swift in Sources */,
 				433705AC22AEEFF900EBC58B /* UIView+ConstraintLayout.swift in Sources */,
@@ -368,6 +457,8 @@
 				43ED0B0922BD998900781893 /* CustomDateToolbar.swift in Sources */,
 				433705A222ADFA7C00EBC58B /* BaseCollectionViewController.swift in Sources */,
 				43ED0B0322BD8D5B00781893 /* Extensions.swift in Sources */,
+				4393AC5423B152360011B36F /* LoginViewController.swift in Sources */,
+				4385EBE423B1DBB70012E104 /* SignUpViewController.swift in Sources */,
 				431D155E22F63A7400C86C1A /* ReportCollectionViewCell.swift in Sources */,
 				43ED0B0F22C0351600781893 /* FetchCollectionViewController.swift in Sources */,
 				437A75B8229FBF8B0032E371 /* MainTabBarController.swift in Sources */,
@@ -522,6 +613,7 @@
 		};
 		437A75B4229FAC010032E371 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D1588EEC521CE11B7703E6EF /* Pods-Nailish.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -549,6 +641,7 @@
 		};
 		437A75B5229FAC010032E371 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4BDE12FAE40CC1B8224A4A29 /* Pods-Nailish.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
